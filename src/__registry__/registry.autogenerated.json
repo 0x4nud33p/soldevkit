@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "soldevkit-ui",
+  "homepage": "https://soldevkit.com",
+  "items": [
+    {
+      "name": "floating-label-input",
+      "type": "registry:component",
+      "title": "Floating Label Input",
+      "description": "Material UI floating label input",
+      "dependencies": [
+        "@radix-ui/react-label"
+      ],
+      "registryDependencies": [
+        "input"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/ui/floating-label-input.tsx",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}
