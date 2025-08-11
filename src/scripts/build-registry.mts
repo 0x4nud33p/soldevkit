@@ -57,13 +57,13 @@ export const Index: Record<string, any> ={`;
       type: "${file.type}",
     }`;
       }),
-    )}],${
-      item.type === 'registry:example'
+    )}],${item.type === 'registry:example'
         ? `
     component: React.lazy(() => import("${componentPath}")),
     source: "${parseContent(await fs.readFile(sourcePath, 'utf-8'))}",`
         : ''
     }
+    command: "npx shadcn@latest add ${item.name}",
   },`;
   }
 
