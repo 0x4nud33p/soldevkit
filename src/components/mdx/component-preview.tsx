@@ -1,23 +1,83 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
-import * as React from "react";
-
 import { Index } from "@/__registry__";
+import { ComponentWrapper } from "@/components/mdx/component-wrapper";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  TabsContents,
+} from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { Loader } from "lucide-react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { DynamicCodeBlock } from "@/components/mdx/dynamic-codeblock";
+import ReactIcon from "@/components/icons/react-icon";
+import { type Binds, Tweakpane } from "@/components/mdx/tweakpane";
 
-interface ComponentPreviewProps {
+interface ComponentPreviewProps extends React.HTMLAttributes<HTMLDivElement> {
   name: string;
-  align?: "center" | "start" | "end";
-  className?: string;
+  iframe?: boolean;
+  bigScreen?: boolean;
 }
 
-export const ComponentPreview: React.FC<ComponentPreviewProps> = ({
+function flattenFirstLevel<T>(input: Record<string, any>): T {
+  return Object.values(input).reduce((acc, current) => {
+    return { ...acc, ...current };
+  }, {} as T);
+}
+
+function unwrapValues(obj: Record<string, any>): Record<string, any> {
+  if (obj !== null && typeof obj === "object" && !Array.isArray(obj)) {
+    if ("value" in obj) {
+      return obj.value;
+    }
+    const result: Record<string, any> = {};
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        result[key] = unwrapValues(obj[key]);
+      }
+    }
+    return result;
+  }
+  return obj;
+}
+
+export function ComponentPreview({
   name,
-  align = "center",
   className,
-}) => {
-  const Preview = React.useMemo(() => {
+  iframe = false,
+  bigScreen = false,
+  ...props
+}: ComponentPreviewProps) {
+  const [binds, setBinds] = useState<Binds | null>(null);
+  const [componentProps, setComponentProps] = useState<Record<
+    string,
+    unknown
+  > | null>(null);
+
+  const code = useMemo(() => {
+    const code = Index[name]?.files?.[0]?.content;
+
+    if (!code) {
+      console.error(`Component with name "${name}" not found in registry.`);
+      return null;
+    }
+
+    return code;
+  }, [name]);
+
+  const preview = useMemo(() => {
     const Component = Index[name]?.component;
+
+    if (Object.keys(Component?.demoProps ?? {}).length !== 0) {
+      if (componentProps === null)
+        setComponentProps(unwrapValues(Component?.demoProps));
+      if (binds === null) setBinds(Component?.demoProps);
+    }
 
     if (!Component) {
       console.error(`Component with name "${name}" not found in registry.`);
@@ -32,36 +92,90 @@ export const ComponentPreview: React.FC<ComponentPreviewProps> = ({
       );
     }
 
-    return <Component />;
-  }, [name]);
+    return <Component {...flattenFirstLevel(componentProps ?? {})} />;
+  }, [name, componentProps, binds]);
+
+  useEffect(() => {
+    if (!binds) return;
+    setComponentProps(unwrapValues(binds));
+  }, [binds]);
 
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-lg border p-8",
-        "bg-gradient-to-br from-background via-muted/20 to-background",
-        "before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_1px_1px,rgba(0,0,0,0.08)_1px,transparent_0)] before:bg-[length:20px_20px] before:opacity-90",
-        "dark:before:bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.1)_1px,transparent_0)] dark:before:opacity-50",
+        "relative my-4 flex flex-col space-y-2 lg:max-w-[120ch] not-prose",
         className,
       )}
+      {...props}
     >
-      <div
-        className={cn("relative z-10 flex h-[350px] w-full items-center p-10", {
-          "justify-center": align === "center",
-          "justify-start": align === "start",
-          "justify-end": align === "end",
-        })}
-      >
-        <React.Suspense
-          fallback={
-            <div className="flex items-center text-sm text-muted-foreground">
-              Loading...
+      <Tabs defaultValue="preview" className="relative mr-auto w-full">
+        <div className="flex items-center justify-between pb-2">
+          <TabsList
+            className="justify-start rounded-xl h-10 bg-transparent p-0"
+            activeClassName="bg-neutral-100 dark:bg-neutral-800 shadow-none rounded-lg"
+          >
+            <TabsTrigger
+              value="preview"
+              className="relative border-none rounded-lg px-4 py-2 h-full font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:text-foreground data-[state=active]:shadow-none"
+            >
+              Preview
+            </TabsTrigger>
+            <TabsTrigger
+              value="code"
+              className="relative border-none rounded-lg px-4 py-2 h-full font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:text-foreground data-[state=active]:shadow-none"
+            >
+              Code
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        <TabsContents>
+          <TabsContent
+            value="preview"
+            className="relative rounded-md h-full"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+          >
+            <ComponentWrapper
+              name={name}
+              iframe={iframe}
+              bigScreen={bigScreen}
+              tweakpane={
+                binds && <Tweakpane binds={binds} onBindsChange={setBinds} />
+              }
+            >
+              <Suspense
+                fallback={
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <Loader className="mr-2 size-4 animate-spin" />
+                    Loading...
+                  </div>
+                }
+              >
+                {preview}
+              </Suspense>
+            </ComponentWrapper>
+          </TabsContent>
+          <TabsContent
+            value="code"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+          >
+            <div className="flex flex-col space-y-4">
+              <div className="w-full rounded-md [&_pre]:my-0 [&_pre]:max-h-[400px] [&_pre]:overflow-auto">
+                <DynamicCodeBlock
+                  code={code}
+                  lang="tsx"
+                  title={`${name}.tsx`}
+                  icon={<ReactIcon />}
+                />
+              </div>
             </div>
-          }
-        >
-          {Preview}
-        </React.Suspense>
-      </div>
+          </TabsContent>
+        </TabsContents>
+      </Tabs>
     </div>
   );
-};
+}

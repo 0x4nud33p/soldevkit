@@ -4,19 +4,18 @@
   "homepage": "https://soldevkit.com",
   "items": [
     {
-      "name": "floating-label-input",
+      "name": "copy-button",
       "type": "registry:component",
-      "title": "Floating Label Input",
-      "description": "Material UI floating label input",
+      "title": "Copy Button",
+      "description": "A button with a copy to clipboard animation.",
       "dependencies": [
-        "@radix-ui/react-label"
-      ],
-      "registryDependencies": [
-        "input"
+        "motion",
+        "lucide-react",
+        "class-variance-authority"
       ],
       "files": [
         {
-          "path": "src/registry/default/ui/floating-label-input.tsx",
+          "path": "src/registry/default/ui/button.tsx",
           "type": "registry:component"
         }
       ]

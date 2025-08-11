@@ -1,7 +1,32 @@
-import { defineDocs, defineConfig } from 'fumadocs-mdx/config';
+import {
+  defineDocs,
+  defineConfig,
+  frontmatterSchema,
+} from "fumadocs-mdx/config";
+import { remarkInstall } from "fumadocs-docgen";
+import { z } from "zod";
 
 export const { docs, meta } = defineDocs({
-  dir: 'src/content/docs',
+  dir: "src/content/docs",
+  docs: {
+    schema: frontmatterSchema.extend({
+      new: z.boolean().optional(),
+      alpha: z.boolean().optional(),
+      updated: z.boolean().optional(),
+      deprecated: z.boolean().optional(),
+      author: z
+        .object({
+          name: z.string(),
+          url: z.string().optional(),
+        })
+        .optional(),
+    }),
+  },
 });
 
-export default defineConfig();
+export default defineConfig({
+  lastModifiedTime: "git",
+  mdxOptions: {
+    remarkPlugins: [remarkInstall],
+  },
+});

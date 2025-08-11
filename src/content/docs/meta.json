@@ -1,3 +1,13 @@
 {
-  "pages": ["get-started", "components"]
+  "title": "Soldevkit UI",
+  "root": true,
+  "pages": [
+    "---Getting Started---",
+    "introduction",
+    "CLI",
+    "manual-installation",
+    "license",
+    "---Components---",
+    "components/button"
+  ]
 }

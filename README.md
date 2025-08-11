@@ -1,39 +1,29 @@
-# Next.js + Shadcn + Fumadocs Registry Template
+<div align="center">
+  <h1 style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0">SolDevKit UI</h1>
+  <p align="center">
+    A fully animated, open-source component distribution built with React, TypeScript, Tailwind CSS.
+</p>
 
-This is a template project that uses Next.js, Fumadocs and Shadcn to create a registry and documentation. Feel free to fork or clone this repository to start your own registry with documentation.
+<a href="https://github.com/soldevkit-ui/soldevkit-ui/stargazers"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/soldevkit-ui/soldevkit-ui?style=for-the-badge"></a>
+<a href="https://twitter.com/soldevkit_ui"><img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/soldevkit_ui?style=for-the-badge&logo=x"></a>
+<a href="https://github.com/satyawaniaman/soldevkit-UI/LICENSE.md"><img alt="License" src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge"></a>
 
-## Getting Started
+</div>
 
-Run development server:
+![hero](https://soldevkit.com/og-image.png)
 
-```sh
-pnpm run dev
-```
+## v1.0
 
-Open http://localhost:3000 with your browser to see the result.
+SolDevKit UI is currently in **v1.0**, so it's possible that the components contain **bugs** and that these will be **modified regularly**.
 
-## Resources
+## Documentation
 
-- [Next.JS](https://nextjs.org/)
-- [shadcn/ui](https://ui.shadcn.com/docs/registry)
-- [Fumadocs](https://fumadocs.dev/)
+Visit [soldevkit.com](https://soldevkit.com/docs) to view the documentation.
 
-### shadcn/ui Registry
+## Contributing
 
-Build shadcn/ui registry:
+Visit our [contributing guide](https://github.com/satyawaniaman/soldevkit-UI/CONTRIBUTING.md) to learn how to contribute.
 
-```sh
-pnpm run build:registry
-```
+## License
 
-This build script compiles all the registry items into a json file that is compatible with both v0 and the shadcn/ui cli. Read the [documentation](https://ui.shadcn.com/docs/registry) for further details.
-
-### Fumadocs MDX
-
-Build fumadocs mdx:
-
-```sh
-pnpm run build:docs
-```
-
-A `source.config.ts` config file has been included, you can customize different options like frontmatter schema. Read the [Introduction](https://fumadocs.dev/docs/mdx) for further details.
+Licensed under the [MIT license](https://github.com/satyawaniaman/soldevkit-UI/main/LICENSE.md).

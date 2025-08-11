@@ -1,0 +1,180 @@
+---
+title: Manual Installation
+description: Install and configure SoldevKit UI manually.
+---
+
+## Requirements
+
+- Node.js 16.8 or later
+- React 18 or later
+- Tailwind CSS 3.0 or later
+
+## Installation
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+  <Tab value="npm">
+    ```bash
+    # Core dependencies
+    npm install @solana/web3.js @solana/wallet-adapter-react @solana/wallet-adapter-react-ui
+
+    # Additional wallet adapters (choose based on your needs)
+    npm install @solana/wallet-adapter-phantom @solana/wallet-adapter-solflare @solana/wallet-adapter-wallets
+
+    # UI dependencies
+    npm install clsx tailwind-merge class-variance-authority
+
+    # Utility dependencies
+    npm install @radix-ui/react-slot lucide-react
+    ```
+
+  </Tab>
+  <Tab value="pnpm">
+    ```bash
+    # Core dependencies
+    pnpm add @solana/web3.js @solana/wallet-adapter-react @solana/wallet-adapter-react-ui
+
+    # Additional wallet adapters (choose based on your needs)
+    pnpm add @solana/wallet-adapter-phantom @solana/wallet-adapter-solflare @solana/wallet-adapter-wallets
+
+    # UI dependencies
+    pnpm add clsx tailwind-merge class-variance-authority
+
+    # Utility dependencies
+    pnpm add @radix-ui/react-slot lucide-react
+    ```
+
+  </Tab>
+  <Tab value="yarn">
+    ```bash
+    # Core dependencies
+    yarn add @solana/web3.js @solana/wallet-adapter-react @solana/wallet-adapter-react-ui
+
+    # Additional wallet adapters (choose based on your needs)
+    yarn add @solana/wallet-adapter-phantom @solana/wallet-adapter-solflare @solana/wallet-adapter-wallets
+
+    # UI dependencies
+    yarn add clsx tailwind-merge class-variance-authority
+
+    # Utility dependencies
+    yarn add @radix-ui/react-slot lucide-react
+    ```
+
+  </Tab>
+</Tabs>
+
+## Configuration
+
+### 1. Add CSS Variables
+
+Add these CSS variables to your `globals.css`:
+
+```css
+@import "tailwindcss";
+@source "./app/**/*.{js,ts,jsx,tsx,mdx}";
+@source "./pages/**/*.{js,ts,jsx,tsx,mdx}";
+@source "./components/**/*.{js,ts,jsx,tsx,mdx}";
+@source "./components/soldevkit-ui/**/*.{js,ts,jsx,tsx}";
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+```
+
+### 2. Create Utils File
+
+Create `lib/utils.ts`:
+
+```ts
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+### 3. Copy Component Files
+
+1. Create the components directory:
+
+   ```bash
+   mkdir -p components/soldevkit-ui
+   ```
+
+2. Copy component files from the [SoldevKit UI repository](https://github.com/your-repo/soldevkit-ui) to your `components/soldevkit-ui/` directory.
+
+3. Update import paths in the copied components to match your project structure.
+
+## Usage
+
+Once configured, import and use components:
+
+```tsx
+import { CopyButton } from "@/components/soldevkit-ui/button";
+import { WalletConnectButton } from "@/components/soldevkit-ui/wallet-connect-button";
+
+export default function App() {
+  return (
+    <div>
+      <CopyButton content="Hello World" />
+      <WalletConnectButton />
+    </div>
+  );
+}
+```
+
+## TypeScript Configuration
+
+Optionally, add a path mapping in your `tsconfig.json` for cleaner imports:
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/soldevkit-ui/*": ["./components/soldevkit-ui/*"]
+    }
+  }
+}
+```
+
+Then you can import like:
+
+```tsx
+import { CopyButton } from "@/soldevkit-ui/button";
+```

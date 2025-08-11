@@ -1,30 +1,17 @@
-import type { Registry } from 'shadcn/registry';
+import type { Registry } from "shadcn/registry";
 
-export const ui: Registry['items'] = [
+export const ui: Registry["items"] = [
   {
-    name: 'base',
-    type: 'registry:style',
-    title: 'Base Styles',
-    description: 'Base styles and CSS variables for SolDevKit UI',
+    name: "copy-button",
+    type: "registry:component",
+    title: "Copy Button",
+    description: "A button with a copy to clipboard animation.",
+    dependencies: ["motion", "lucide-react", "class-variance-authority"],
     files: [
       {
-        path: 'styles/base.css',
-        type: 'registry:style',
+        path: "default/ui/button.tsx",
+        type: "registry:component",
       },
     ],
-  },
-  {
-    name: 'floating-label-input',
-    type: 'registry:component',
-    title: 'Floating Label Input',
-    description: 'Material UI floating label input',
-    files: [
-      {
-        path: 'default/ui/floating-label-input.tsx',
-        type: 'registry:component',
-      },
-    ],
-    dependencies: ['@radix-ui/react-label'],
-    registryDependencies: ['input'],
   },
 ];

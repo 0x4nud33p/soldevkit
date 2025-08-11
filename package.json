@@ -27,17 +27,23 @@
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.6",
+    "@radix-ui/react-slot": "^1.2.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "fumadocs-core": "^15.3.4",
+    "fumadocs-docgen": "^2.1.0",
     "fumadocs-mdx": "^11.6.5",
     "fumadocs-ui": "^15.3.4",
     "lucide-react": "^0.510.0",
+    "motion": "^12.23.12",
     "next": "15.3.2",
+    "next-themes": "^0.4.6",
+    "radix-ui": "^1.4.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "shiki": "^3.9.2",
-    "tailwind-merge": "^3.3.0"
+    "tailwind-merge": "^3.3.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

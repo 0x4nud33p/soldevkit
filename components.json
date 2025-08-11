@@ -11,9 +11,9 @@
     "prefix": ""
   },
   "aliases": {
-    "components": "@/components/ui",
+    "components": "@/components/soldevkit-ui",
     "utils": "@/lib/utils",
-    "ui": "@/components/ui",
+    "ui": "@/components/soldevkit-ui",
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
