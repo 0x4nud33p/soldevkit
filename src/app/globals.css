@@ -227,6 +227,24 @@
 }
 
 @layer base {
+  /* Target the sidebar by its position in the layout */
+  .fd-layout > aside,
+  main + aside,
+  aside:first-child {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .dark .fd-layout > aside,
+  .dark main + aside,
+  .dark aside:first-child {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  }
   * {
     @apply border-border outline-ring/50;
   }
@@ -234,6 +252,19 @@
   body {
     @apply bg-background text-foreground;
     overscroll-behavior: none;
+    /* Add your gradient background */
+    background-image:
+      radial-gradient(
+        circle at 25% 25%,
+        rgba(59, 130, 246, 0.1) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 75% 75%,
+        rgba(168, 85, 247, 0.1) 0%,
+        transparent 50%
+      );
+    background-attachment: fixed;
   }
 
   a[href^="/docs/installation"] > svg[data-icon="true"] {
