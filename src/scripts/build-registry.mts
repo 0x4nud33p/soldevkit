@@ -63,7 +63,7 @@ export const Index: Record<string, any> ={`;
     source: "${parseContent(await fs.readFile(sourcePath, 'utf-8'))}",`
         : ''
     }
-    command: "npx shadcn@latest add ${item.name}",
+    command: "https://soldevkit.com/r/${item.name}.json",
   },`;
   }
 
