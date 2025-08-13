@@ -11,7 +11,7 @@ import {
   TabsTrigger,
   TabsContents,
   type TabsProps,
-} from "@/components/ui/tabs";
+} from "@/components/docs/tabs";
 import { CopyButton } from "@/registry/default/ui/button";
 
 type CodeTabsProps = {

@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import {
   MotionHighlight,
   MotionHighlightItem,
-} from "@/components/ui/motion-highlight";
+} from "@/components/docs/motion-highlight";
 
 type TabsProps = React.ComponentProps<typeof TabsPrimitive.Root>;
 

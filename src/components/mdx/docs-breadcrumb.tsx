@@ -6,7 +6,7 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+} from "@/components/docs/breadcrumb";
 import { cn } from "@/lib/utils";
 
 export const DocsBreadcrumb = ({ slug }: { slug?: string[] }) => {

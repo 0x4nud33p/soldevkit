@@ -1,7 +1,7 @@
 "use client";
 
-import { OpenInV0Button } from "@/components/ui/v0-button";
-import { Button } from "@/components/ui/view-button";
+import { OpenInV0Button } from "@/components/docs/v0-button";
+import { Button } from "@/components/docs/view-button";
 import { cn } from "@/lib/utils";
 import { Fullscreen, RotateCcw, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";

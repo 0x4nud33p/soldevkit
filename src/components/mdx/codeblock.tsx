@@ -13,7 +13,7 @@ import {
   ScrollArea,
   ScrollBar,
   ScrollViewport,
-} from "@/components/ui/scroll-area";
+} from "@/components/docs/scroll-area";
 import type { ScrollArea as ScrollAreaPrimitive } from "radix-ui";
 import { CopyButton } from "@/registry/default/ui/button";
 

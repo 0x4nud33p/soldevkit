@@ -11,10 +11,10 @@ import defaultMdxComponents from "fumadocs-ui/mdx";
 import { ComponentPreview } from "@/components/mdx/component-preview";
 import { ComponentSource } from "@/components/mdx/component-source";
 import { ComponentInstallation } from "@/components/mdx/component-installation";
-import { ExternalLink } from "@/components/ui/external-links";
+import { ExternalLink } from "@/components/docs/external-links";
 import { Steps, Step } from "fumadocs-ui/components/steps";
 import { Tabs, Tab } from "fumadocs-ui/components/tabs";
-import { Footer } from "@/components/ui/footer";
+import { Footer } from "@/components/docs/footer";
 import {
   CodeBlock,
   type CodeBlockProps,
@@ -24,7 +24,7 @@ import { DocsAuthor } from "@/components/mdx/docs-author";
 import { DocsBreadcrumb } from "@/components/mdx/docs-breadcrumb";
 
 // Add these imports
-import { LLMCopyButton, ViewOptions } from "@/components/ui/view-button";
+import { LLMCopyButton, ViewOptions } from "@/components/docs/view-button";
 
 export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;

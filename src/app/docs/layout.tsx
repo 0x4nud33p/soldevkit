@@ -9,7 +9,7 @@ import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import type { ReactNode } from "react";
 import { baseOptions } from "@/app/layout.config";
 import { source } from "@/lib/source";
-import { ThemeSwitcher } from "@/components/ui/theme-switcher";
+import { ThemeSwitcher } from "@/components/docs/theme-switcher";
 import XIcon from "@/components/icons/x-icon";
 
 export default function Layout({ children }: { children: ReactNode }) {

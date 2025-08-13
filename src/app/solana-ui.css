@@ -1,0 +1,9 @@
+/* src/components/solana/solana-ui.css */
+@import "@once-ui-system/core/css/styles.css";
+@import "@once-ui-system/core/css/tokens.css";
+
+/* Scope Once UI to only affect .solana-ui-scope */
+.solana-ui-scope {
+  isolation: isolate;
+  contain: style;
+}

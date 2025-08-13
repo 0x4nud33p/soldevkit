@@ -10,7 +10,7 @@ import {
   TabsList,
   TabsTrigger,
   TabsContents,
-} from "@/components/ui/tabs";
+} from "@/components/docs/tabs";
 import { cn } from "@/lib/utils";
 import { Loader } from "lucide-react";
 import { Suspense, useEffect, useMemo, useState } from "react";
