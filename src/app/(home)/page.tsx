@@ -55,9 +55,10 @@ const HomePage = () => {
     <div>
       <div className="relative w-full min-h-screen selection:bg-white/20 selection:text-white">
         <Hero className="absolute z-10 h-full w-full" />
-        <div className="relative z-10 pointer-events-none">
-          <Header />
-          <main className="px-6 md:px-12 lg:px-16 max-w-8xl mx-auto w-full pointer-events-auto">
+        <div className="relative z-10">
+          <Header className="pointer-events-auto" />
+          <main className="px-6 md:px-12 lg:px-16 max-w-8xl mx-auto w-full pointer-events-none">
+            <div className="pointer-events-auto">
             <HeroSection />
             <Manifesto
               title="Our Vision"
@@ -86,6 +87,7 @@ const HomePage = () => {
                 className="max-w-4xl"
               />
             </motion.section>
+            </div>
           </main>
         </div>
         <div className="relative z-20">

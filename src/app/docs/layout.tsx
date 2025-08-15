@@ -48,6 +48,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             themeSwitch={{
               component: <ThemeSwitcher />,
             }}
+            searchToggle={{ enabled: true }}
             {...baseOptions}
           >
             {children}
