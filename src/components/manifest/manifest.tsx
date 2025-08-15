@@ -1,9 +1,6 @@
-import React, { useEffect, useRef, useCallback } from "react";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
-import SplitType from "split-type";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useMotionValueEvent } from "motion/react";
 import { HiArrowRight } from "react-icons/hi";
-import "./manifest.css";
 
 interface ManifestoProps {
   title?: string;
@@ -15,130 +12,150 @@ const Manifesto: React.FC<ManifestoProps> = ({
   content = "We challenge norms, embrace change, pioneer progress. We are innovators merging art and technology to craft experiences that surprise, delight, and evolve.",
 }) => {
   const manifestoRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const splitTypeRef = useRef<SplitType | null>(null);
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
-  const isInitialized = useRef(false);
+  const [chars, setChars] = useState<string[]>([]);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
-  const initializeAnimation = useCallback(() => {
-    if (!titleRef.current || isInitialized.current) return;
+  // Use Framer Motion's useScroll hook
+  const { scrollYProgress } = useScroll({
+    target: manifestoRef,
+    offset: ["start 70%", "end 30%"], // Match GSAP trigger points
+  });
 
-    // Register GSAP plugins
-    gsap.registerPlugin(ScrollTrigger);
+  // Track scroll progress
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    setScrollProgress(latest);
+  });
 
-    // Wait for next frame to ensure DOM is ready
-    requestAnimationFrame(() => {
-      if (!titleRef.current) return;
-
-      try {
-        // Create SplitType instance
-        splitTypeRef.current = new SplitType(titleRef.current, {
-          types: ["words", "chars"],
-          tagName: "span",
-          wordClass: "word",
-          charClass: "char",
-        });
-
-        // Ensure we have chars to animate
-        if (
-          !splitTypeRef.current.chars ||
-          splitTypeRef.current.chars.length === 0
-        ) {
-          console.warn("No characters found to animate");
-          return;
-        }
-
-        // Set initial state with will-change for performance
-        gsap.set(splitTypeRef.current.chars, {
-          opacity: 0.25,
-          willChange: "opacity",
-        });
-
-        // Create scroll-triggered timeline with optimized settings
-        timelineRef.current = gsap.timeline({
-          scrollTrigger: {
-            trigger: manifestoRef.current,
-            start: "top 70%", // Start earlier for smoother effect
-            end: "bottom 30%", // End later for smoother effect
-            scrub: 1.5, // Slightly slower scrub for smoother animation
-            markers: false,
-            invalidateOnRefresh: true, // Recalculate on resize
-            refreshPriority: 1, // Higher priority
-          },
-        });
-
-        // Animate each character with optimized timing
-        splitTypeRef.current.chars.forEach((char: Element, index: number) => {
-          timelineRef.current!.to(
-            char,
-            {
-              opacity: 1,
-              duration: 0.05, // Shorter duration for smoother effect
-              ease: "none",
-            },
-            index * 0.05, // Reduced stagger for smoother flow
-          );
-        });
-
-        isInitialized.current = true;
-      } catch (error) {
-        console.error("Error initializing manifesto animation:", error);
-      }
-    });
-  }, []);
-
-  const cleanup = useCallback(() => {
-    if (timelineRef.current) {
-      timelineRef.current.kill();
-      timelineRef.current = null;
-    }
-    if (splitTypeRef.current) {
-      splitTypeRef.current.revert();
-      splitTypeRef.current = null;
-    }
-    // Clean up will-change
-    if (titleRef.current) {
-      const chars = titleRef.current.querySelectorAll(".char");
-      chars.forEach((char) => {
-        (char as HTMLElement).style.willChange = "auto";
-      });
-    }
-    isInitialized.current = false;
-  }, []);
-
+  // Split text into characters on mount
   useEffect(() => {
-    // Small delay to ensure component is fully mounted
-    const timer = setTimeout(initializeAnimation, 100);
+    const characters = content.split("");
+    setChars(characters);
+  }, [content]);
 
-    return () => {
-      clearTimeout(timer);
-      cleanup();
-    };
-  }, [initializeAnimation, cleanup]);
+  // Calculate opacity for each character based on scroll progress
+  const getCharOpacity = (index: number) => {
+    const totalChars = chars.length;
+    const startProgress = (index / totalChars) * 0.8; // 80% of scroll range
+    const endProgress = startProgress + 1 / totalChars;
 
-  // Handle resize
-  useEffect(() => {
-    const handleResize = () => {
-      if (timelineRef.current) {
-        ScrollTrigger.refresh();
-      }
-    };
+    if (scrollProgress <= startProgress) return 0.25;
+    if (scrollProgress >= endProgress) return 1;
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    // Linear interpolation between start and end
+    const progress =
+      (scrollProgress - startProgress) / (endProgress - startProgress);
+    return 0.25 + 0.75 * progress;
+  };
 
   return (
-    <section className="manifesto" id="manifesto" ref={manifestoRef}>
-      <div className="container">
-        <div className="manifesto-header">
+    <section
+      className="manifesto"
+      id="manifesto"
+      ref={manifestoRef}
+      style={{
+        position: "relative",
+        height: "max-content",
+        padding: "2rem 0 4rem 0",
+      }}
+    >
+      <div
+        className="container"
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          padding: "2em 1em 1em 1em",
+        }}
+      >
+        <div
+          className="manifesto-header"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "1rem",
+            marginBottom: "4em",
+            opacity: 0.8,
+          }}
+        >
           <HiArrowRight size={13} />
-          <p>{title}</p>
+          <p
+            style={{
+              fontWeight: 600,
+              fontSize: "0.8rem",
+              lineHeight: 1,
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
+              margin: 0,
+              fontFamily: "serif",
+              color: "rgba(255, 255, 255, 0.9)",
+            }}
+          >
+            {title}
+          </p>
         </div>
-        <div className="manifesto-title">
-          <h1 ref={titleRef}>{content}</h1>
+
+        <div className="manifesto-title" style={{ position: "relative" }}>
+          <h1
+            style={{
+              fontSize: "clamp(1.8rem, 6vw, 4rem)",
+              lineHeight: 1.125,
+              fontWeight: 300,
+              margin: 0,
+              fontFamily: "serif",
+              color: "rgba(255, 255, 255, 0.95)",
+              transform: "translateZ(0)",
+              backfaceVisibility: "hidden",
+              perspective: "1000px",
+            }}
+          >
+            {chars.map((char, index) => (
+              <motion.span
+                key={index}
+                animate={{
+                  opacity: getCharOpacity(index),
+                }}
+                transition={{
+                  duration: 0,
+                  ease: "linear",
+                }}
+                style={{
+                  display: "inline-block",
+                  transform: "translateZ(0)",
+                  backfaceVisibility: "hidden",
+                }}
+              >
+                {char === " " ? "\u00A0" : char}
+              </motion.span>
+            ))}
+          </h1>
         </div>
       </div>
+
+      <style jsx>{`
+        @media (max-width: 900px) {
+          .manifesto {
+            padding: 2rem 0 !important;
+          }
+          .container {
+            padding: 1em !important;
+          }
+          .manifesto-header {
+            margin-bottom: 2em !important;
+          }
+        }
+
+        @media (max-width: 600px) {
+          h1 {
+            line-height: 1.2 !important;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            transition: none !important;
+            animation: none !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };

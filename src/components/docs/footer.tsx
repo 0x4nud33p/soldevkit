@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+
 export const Footer = () => {
   return (
     <div className="h-14">
