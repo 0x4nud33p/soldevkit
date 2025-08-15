@@ -12,6 +12,7 @@ export function CTADemo() {
         text: "Get Started",
         href: "/docs",
         variant: "default",
+        target: "_blank",
       }}
     />
   );

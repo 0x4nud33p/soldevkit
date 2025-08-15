@@ -8,6 +8,8 @@
     "manual-installation",
     "license",
     "---Components---",
-    "components/button"
+    "components/wallet",
+    "components/nft",
+    "components/ipfs"
   ]
 }

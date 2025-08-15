@@ -15,6 +15,7 @@ interface CTAProps {
     text: string;
     href: string;
     variant?: "default" | "glow";
+    target?: string;
   };
   withGlow?: boolean;
   className?: string;
@@ -35,7 +36,7 @@ export function CTASection({
         {badge && (
           <Badge
             variant="outline"
-            className="opacity-0 animate-fade-in-up delay-100 border-white/20 bg-white/5 text-white/80 font-serif italic text-sm px-4 py-2"
+            className="opacity-0 animate-fade-in-up delay-100 border-white/20 bg-white/5 text-white/80 font-serif  text-sm px-4 py-2"
           >
             <span className="bg-clip-text bg-gradient-stop bg-gradient-to-br from-white/90 via-30% via-white/90 to-white/50 text-transparent">
               {badge.text}
@@ -44,7 +45,7 @@ export function CTASection({
         )}
 
         {/* Title */}
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif italic bg-clip-text bg-gradient-stop bg-gradient-to-br from-white via-30% via-white to-white/30 text-transparent leading-tight opacity-0 animate-fade-in-up delay-200">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif  bg-clip-text bg-gradient-stop bg-gradient-to-br from-white via-30% via-white to-white/30 text-transparent leading-tight opacity-0 animate-fade-in-up delay-200">
           {title}
         </h2>
 
@@ -56,10 +57,8 @@ export function CTASection({
         )}
 
         {/* Action Button */}
-        <Link href={action.href}>
-          <AnimatedButton label={action.text}>
-            {action.text}
-          </AnimatedButton>
+        <Link href={action.href} target={action.target}>
+          <AnimatedButton label={action.text}>{action.text}</AnimatedButton>
         </Link>
 
         {/* Glow Effect */}
