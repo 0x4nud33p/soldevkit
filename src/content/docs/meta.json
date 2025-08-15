@@ -8,7 +8,6 @@
     "manual-installation",
     "license",
     "---Components---",
-    "components/button",
-    "components/wallet-connect-button"
+    "components/button"
   ]
 }

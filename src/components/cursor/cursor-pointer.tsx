@@ -14,7 +14,7 @@ const Cursor = () => {
       scale: 1,
     });
 
-    const moveCursor = (e) => {
+    const moveCursor = (e: MouseEvent) => {
       gsap.to(cursor, {
         x: e.clientX,
         y: e.clientY,

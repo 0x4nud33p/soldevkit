@@ -3,7 +3,8 @@ import { cn } from "@/lib/utils";
 export const Button: React.FC<{
   icon?: React.ReactNode;
   children?: React.ReactNode;
-}> = ({ icon, children, ...props }) => (
+  className?: string;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>> = ({ icon, children, className, ...props }) => (
   <button
     className={cn(
       `relative cursor-pointer z-0 flex items-center justify-center gap-2 overflow-hidden rounded-md 
@@ -12,7 +13,7 @@ export const Button: React.FC<{
     before:absolute before:inset-0 before:-z-10 before:translate-x-[150%] before:translate-y-[150%] before:scale-[2.5]
     before:rounded-[100%] before:bg-zinc-800 dark:before:bg-zinc-200 before:transition-transform before:duration-1000 before:content-[""]
     hover:scale-105 hover:text-zinc-100 dark:hover:text-zinc-900 hover:before:translate-x-[0%] hover:before:translate-y-[0%] active:scale-95`,
-      (props as any).className,
+      className,
     )}
     {...props}
   >
