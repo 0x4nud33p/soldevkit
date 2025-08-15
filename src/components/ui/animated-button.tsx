@@ -47,8 +47,6 @@ const shimmerVariants: Variants = {
   },
 };
 
-
-
 // Define component variants using cva
 const animatedButtonVariants = cva(
   [

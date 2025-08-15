@@ -49,6 +49,8 @@
 
   --accent: oklch(0.97 0 0);
 
+  
+
   --accent-foreground: oklch(0.205 0 0);
 
   --destructive: oklch(0.577 0.245 27.325);
@@ -237,24 +239,177 @@
 }
 
 @layer base {
-  /* Target the sidebar by its position in the layout */
+  /* Force override sidebar backgrounds with more specific selectors */
   .fd-layout > aside,
   main + aside,
-  aside:first-child {
+  aside:first-child,
+  [data-sidebar],
+  nav[data-orientation="vertical"],
+  aside[data-orientation="vertical"],
+  aside[data-sidebar="sidebar"],
+  .fd-sidebar {
     background: rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-radius: 12px !important;
+    margin: 8px !important;
+    box-shadow: none !important;
   }
 
   .dark .fd-layout > aside,
   .dark main + aside,
-  .dark aside:first-child {
-    background: rgba(0, 0, 0, 0.2) !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  .dark aside:first-child,
+  .dark [data-sidebar],
+  .dark nav[data-orientation="vertical"],
+  .dark aside[data-orientation="vertical"],
+  .dark aside[data-sidebar="sidebar"],
+  .dark .fd-sidebar {
+    /* background: rgba(0, 0, 0, 0.8) !important; */
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 12px !important;
+    margin: 8px !important;
+    box-shadow: none !important;
   }
+
+  /* Override any nested backgrounds that might be causing the black */
+  .fd-layout > aside > *,
+  [data-sidebar] > *,
+  aside[data-sidebar="sidebar"] > *,
+  .fd-sidebar > * {
+    background: transparent !important;
+    border-right: none !important;
+  }
+
+  /* Remove any borders from sidebar content */
+  .fd-layout > aside *,
+  [data-sidebar] *,
+  aside[data-sidebar="sidebar"] *,
+  .fd-sidebar * {
+    border-right: none !important;
+  }
+
+  /* Make layout containers transparent to show gradient background */
+  .fd-layout,
+  .fd-layout > main,
+  main[data-content],
+  .fd-layout > div,
+  .fd-layout main,
+  [data-content],
+  .fd-docs-layout,
+  .fd-docs-layout > *,
+  .relative.z-10,
+  .relative.z-10 > *,
+  .relative.z-10 > div {
+    background: transparent !important;
+  }
+
+  .dark .fd-layout,
+  .dark .fd-layout > main,
+  .dark main[data-content],
+  .dark .fd-layout > div,
+  .dark .fd-layout main,
+  .dark [data-content],
+  .dark .fd-docs-layout,
+  .dark .fd-docs-layout > *,
+  .dark .relative.z-10,
+  .dark .relative.z-10 > *,
+  .dark .relative.z-10 > div {
+    background: transparent !important;
+  }
+
+  /* Force override specific fumadocs classes */
+  .fd-sidebar-nav,
+  .fd-sidebar-header,
+  .fd-sidebar-footer,
+  .fd-sidebar-content {
+    background: transparent !important;
+  }
+
+  /* Override any fumadocs default backgrounds */
+  [class*="fd-"],
+  [data-fumadocs],
+  [data-fumadocs] > *,
+  .fumadocs-ui,
+  .fumadocs-ui > * {
+    background: transparent !important;
+  }
+
+  .dark [class*="fd-"],
+  .dark [data-fumadocs],
+  .dark [data-fumadocs] > *,
+  .dark .fumadocs-ui,
+  .dark .fumadocs-ui > * {
+    background: transparent !important;
+  }
+
+  /* Ensure sidebar content is visible */
+  .fd-layout > aside .text-foreground,
+  .fd-layout > aside [data-theme] {
+    color: var(--sidebar-foreground) !important;
+  }
+
+  .dark .fd-layout > aside .text-foreground,
+  .dark .fd-layout > aside [data-theme] {
+    color: var(--sidebar-foreground) !important;
+  }
+
+  /* Fix sidebar links and buttons */
+  .fd-layout > aside a,
+  .fd-layout > aside button {
+    background: transparent !important;
+    transition: background-color 0.2s ease;
+  }
+
+  .fd-layout > aside a:hover,
+  .fd-layout > aside button:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .dark .fd-layout > aside a:hover,
+  .dark .fd-layout > aside button:hover {
+    background: rgba(255, 255, 255, 0.03) !important;
+  }
+
+  /* Remove border above theme switch toggle in sidebar footer */
+  .fd-layout > aside .border-t,
+  main + aside .border-t,
+  aside:first-child .border-t,
+  [data-sidebar] .border-t,
+  nav[data-orientation="vertical"] .border-t,
+  aside[data-orientation="vertical"] .border-t {
+    border-top: none !important;
+  }
+
+  .dark .fd-layout > aside .border-t,
+  .dark main + aside .border-t,
+  .dark aside:first-child .border-t,
+  .dark [data-sidebar] .border-t,
+  .dark nav[data-orientation="vertical"] .border-t,
+  .dark aside[data-orientation="vertical"] .border-t {
+    border-top: none !important;
+  }
+  /* Add this to preserve image visibility */
+  .hero-image-container,
+  .hero-image-container *,
+  [data-hero-image],
+  [data-hero-image] * {
+    background: initial !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Ensure images are visible */
+  .hero-image-container img,
+  [data-hero-image] img {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+
+  /* Keep your existing styles */
   * {
     @apply border-border outline-ring/50;
   }
@@ -355,11 +510,13 @@ body {
 @theme {
   --color-brand: hsl(var(--brand));
   --color-brand-foreground: hsl(var(--brand-foreground));
-  
+
   --max-width-container: 80rem;
-  
-  --box-shadow-glow: 0 -16px 128px 0 hsla(var(--brand-foreground) / 0.5) inset, 0 -16px 32px 0 hsla(var(--brand) / 0.5) inset;
-  
+
+  --box-shadow-glow:
+    0 -16px 128px 0 hsla(var(--brand-foreground) / 0.5) inset,
+    0 -16px 32px 0 hsla(var(--brand) / 0.5) inset;
+
   --animate-fade-in-up: fade-in-up 0.5s ease-out forwards;
   --animate-fade-in: fade-in 0.5s ease-out forwards;
   --animate-scale-in: scale-in 0.5s ease-out forwards;

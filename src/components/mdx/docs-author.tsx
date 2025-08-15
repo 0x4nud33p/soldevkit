@@ -10,7 +10,7 @@ const nameClassName =
 
 export const DocsAuthor = ({ name, url }: DocsAuthorProps) => {
   return (
-    <span className={"text-sm text-fd-muted-foreground italic"}>
+    <span className={"text-sm text-fd-muted-foreground "}>
       Made by{" "}
       {url ? (
         <a
