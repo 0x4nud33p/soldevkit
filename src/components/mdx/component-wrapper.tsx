@@ -99,28 +99,12 @@ export const ComponentWrapper = ({
           <div
             key={key}
             className="flex min-h-[400px] w-full items-center justify-center px-10 py-16 relative overflow-hidden"
-            style={{
-              backgroundImage: `radial-gradient(circle, rgba(156, 163, 175, 0.15) 1px, transparent 1px)`,
-              backgroundSize: "20px 20px",
-            }}
           >
             {/* Gradient overlay for better visual effect */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: `
-                  radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-                  radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.1) 0%, transparent 50%)
-                `,
-              }}
-            />
-            {/* Dark mode overlay */}
+            <div className="absolute inset-0 pointer-events-none" />
+            {/* Dark mode overlay - removed dotted background */}
             <div
               className="absolute inset-0 pointer-events-none dark:opacity-100 opacity-0 transition-opacity"
-              style={{
-                backgroundImage: `radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px)`,
-                backgroundSize: "20px 20px",
-              }}
             />
             <div className="relative z-10">{children}</div>
           </div>

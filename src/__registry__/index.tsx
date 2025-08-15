@@ -18,17 +18,6 @@ export const Index: Record<string, any> ={
     }],
     command: "https://soldevkit.com/r/copy-button.json",
   },
-  "wallet-connect-button": {
-    name: "wallet-connect-button",
-    description: "A Solana wallet connection button built on Once UI Button.",
-    type: "registry:ui",
-    files: [{
-      path: "src/registry/default/ui/wallet/wallet-connect-button.tsx",
-      content: "\"use client\";\n\nimport * as React from \"react\";\nimport { Button } from \"@once-ui-system/core\";\nimport { useWallet } from \"@solana/wallet-adapter-react\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { cn } from \"@/lib/utils\";\n\n// Extend Once UI Button variants for Solana-specific styling\nconst walletButtonVariants = cva(\n  \"inline-flex items-center justify-center rounded-md transition-colors\",\n  {\n    variants: {\n      variant: {\n        default:\n          \"bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600\",\n        outline:\n          \"border-2 border-purple-500 text-purple-500 hover:bg-purple-50\",\n        ghost: \"text-purple-600 hover:bg-purple-50\",\n      },\n      size: {\n        default: \"h-10 px-4 py-2\",\n        sm: \"h-8 px-3 text-sm\",\n        lg: \"h-12 px-6 text-lg\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  },\n);\n\nexport interface WalletConnectButtonProps\n  extends React.ButtonHTMLAttributes<HTMLButtonElement>,\n    VariantProps<typeof walletButtonVariants> {\n  onConnect?: () => void;\n  onDisconnect?: () => void;\n  showBalance?: boolean;\n}\n\nexport const WalletConnectButton = React.forwardRef<\n  HTMLButtonElement,\n  WalletConnectButtonProps\n>(\n  (\n    {\n      className,\n      variant,\n      size,\n      onConnect,\n      onDisconnect,\n      showBalance,\n      ...props\n    },\n    ref,\n  ) => {\n    const { connected, connecting, publicKey, disconnect } = useWallet();\n\n    const handleClick = async () => {\n      if (connected) {\n        await disconnect();\n        onDisconnect?.();\n      } else {\n        // Trigger wallet selection modal\n        onConnect?.();\n      }\n    };\n\n    return (\n      <Button\n        ref={ref}\n        className={cn(walletButtonVariants({ variant, size }), className)}\n        onClick={handleClick}\n        disabled={connecting}\n        {...props}\n      >\n        {connecting ? (\n          \"Connecting...\"\n        ) : connected ? (\n          <>\n            {showBalance && publicKey && (\n              <span className=\"mr-2\">\n                {publicKey.toString().slice(0, 4)}...\n                {publicKey.toString().slice(-4)}\n              </span>\n            )}\n            Disconnect\n          </>\n        ) : (\n          \"Connect Wallet\"\n        )}\n      </Button>\n    );\n  },\n);\n\nWalletConnectButton.displayName = \"WalletConnectButton\";\n",
-      type: "registry:ui",
-    }],
-    command: "https://soldevkit.com/r/wallet-connect-button.json",
-  },
   "button-demo": {
     name: "button-demo",
     description: "Demo showing a button with copy to clipboard effect.",
@@ -41,18 +30,5 @@ export const Index: Record<string, any> ={
     component: React.lazy(() => import("@/registry/default/examples/button-demo.tsx")),
     source: "import { CopyButton } from \"../ui/button\";\n\nexport default function CopyButtonDemo() {\n  return (\n    <div className=\"flex items-center justify-center p-4\">\n      <CopyButton content=\"Content to copy\" size=\"md\" />\n    </div>\n  );\n}\n",
     command: "https://soldevkit.com/r/button-demo.json",
-  },
-  "wallet-connect-button-demo": {
-    name: "wallet-connect-button-demo",
-    description: "Demo showcasing Solana wallet connection with different variants.",
-    type: "registry:example",
-    files: [{
-      path: "src/registry/default/examples/wallet/wallet-connect-button-demo.tsx",
-      content: "import { WalletConnectButton } from \"@/registry/default/ui/wallet/wallet-connect-button\";\nimport {\n  ConnectionProvider,\n  WalletProvider,\n} from \"@solana/wallet-adapter-react\";\nimport {\n  PhantomWalletAdapter,\n  SolflareWalletAdapter,\n} from \"@solana/wallet-adapter-wallets\";\nimport { clusterApiUrl } from \"@solana/web3.js\";\nimport { useMemo } from \"react\";\n\nexport default function WalletConnectButtonDemo() {\n  const endpoint = useMemo(() => clusterApiUrl(\"devnet\"), []);\n  const wallets = useMemo(\n    () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],\n    [],\n  );\n\n  return (\n    <ConnectionProvider endpoint={endpoint}>\n      <WalletProvider wallets={wallets} autoConnect>\n        <div className=\"flex flex-col items-center justify-center p-8 space-y-4\">\n          <WalletConnectButton variant=\"default\" size=\"lg\" showBalance />\n          <WalletConnectButton variant=\"outline\" size=\"default\" />\n          <WalletConnectButton variant=\"ghost\" size=\"sm\" />\n        </div>\n      </WalletProvider>\n    </ConnectionProvider>\n  );\n}\n",
-      type: "registry:example",
-    }],
-    component: React.lazy(() => import("@/registry/default/examples/wallet/wallet-connect-button-demo.tsx")),
-    source: "import { WalletConnectButton } from \"@/registry/default/ui/wallet/wallet-connect-button\";\nimport {\n  ConnectionProvider,\n  WalletProvider,\n} from \"@solana/wallet-adapter-react\";\nimport {\n  PhantomWalletAdapter,\n  SolflareWalletAdapter,\n} from \"@solana/wallet-adapter-wallets\";\nimport { clusterApiUrl } from \"@solana/web3.js\";\nimport { useMemo } from \"react\";\n\nexport default function WalletConnectButtonDemo() {\n  const endpoint = useMemo(() => clusterApiUrl(\"devnet\"), []);\n  const wallets = useMemo(\n    () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],\n    [],\n  );\n\n  return (\n    <ConnectionProvider endpoint={endpoint}>\n      <WalletProvider wallets={wallets} autoConnect>\n        <div className=\"flex flex-col items-center justify-center p-8 space-y-4\">\n          <WalletConnectButton variant=\"default\" size=\"lg\" showBalance />\n          <WalletConnectButton variant=\"outline\" size=\"default\" />\n          <WalletConnectButton variant=\"ghost\" size=\"sm\" />\n        </div>\n      </WalletProvider>\n    </ConnectionProvider>\n  );\n}\n",
-    command: "https://soldevkit.com/r/wallet-connect-button-demo.json",
   },
 }

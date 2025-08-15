@@ -5,8 +5,21 @@ import Script from "next/script";
 // Add type declarations
 declare global {
   interface Window {
-    THREE: any;
-    initWebGL?: () => void; // Make this optional with ?
+    THREE: {
+      WebGLRenderer: new (options?: any) => any;
+      OrthographicCamera: new (...args: any[]) => any;
+      WebGLRenderTarget: new (...args: any[]) => any;
+      ShaderMaterial: new (options?: any) => any;
+      Vector2: new (...args: any[]) => any;
+      Vector3: new (...args: any[]) => any;
+      Vector4: new (...args: any[]) => any;
+      PlaneGeometry: new (...args: any[]) => any;
+      Mesh: new (...args: any[]) => any;
+      LinearFilter: any;
+      RGBAFormat: any;
+      FloatType: any;
+    };
+    initWebGL?: () => void;
   }
 }
 
@@ -324,8 +337,8 @@ const WebGLBackground = () => {
           prevMouseY = 0;
         let lastMoveTime = 0;
 
-        const handleMouseMove = (e) => {
-          const rect = gradientCanvas.getBoundingClientRect();
+        const handleMouseMove = (e: MouseEvent) => {
+          const rect = renderer.domElement.getBoundingClientRect();
           prevMouseX = mouseX;
           prevMouseY = mouseY;
           mouseX = e.clientX - rect.left;
