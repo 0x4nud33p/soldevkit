@@ -8,8 +8,8 @@ import {
   TabsTrigger,
   TabsContent,
   TabsContents,
-} from "@/components/ui/tabs";
-import { CodeTabs } from "@/components/ui/code-tabs";
+} from "@/components/docs/tabs";
+import { CodeTabs } from "@/components/docs/code-tabs";
 import { ComponentManualInstallation } from "./component-manual-installation";
 
 interface ComponentInstallationProps

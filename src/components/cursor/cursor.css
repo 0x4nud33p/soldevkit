@@ -1,0 +1,26 @@
+.cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  background-color: #ffffff;
+  will-change: transform;
+  pointer-events: none;
+  z-index: 9999;
+  transform-origin: center;
+  margin-left: -10px;
+  margin-top: -10px;
+  top: 0;
+  left: 0;
+}
+
+.cursor-icon {
+  transform-origin: center;
+  will-change: transform;
+}
+
+@media (max-width: 900px) {
+  .cursor {
+    display: none !important;
+  }
+}

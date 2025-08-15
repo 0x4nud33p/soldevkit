@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/view-button";
+import { Button } from "@/components/docs/view-button";
 import { motion } from "motion/react";
 
 export function OpenInV0Button({ url }: { url: string }) {

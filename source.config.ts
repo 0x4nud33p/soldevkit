@@ -5,6 +5,7 @@ import {
 } from "fumadocs-mdx/config";
 import { remarkInstall } from "fumadocs-docgen";
 import { z } from "zod";
+import rehypePrettyCode from "rehype-pretty-code";
 
 export const { docs, meta } = defineDocs({
   dir: "src/content/docs",
@@ -28,5 +29,17 @@ export default defineConfig({
   lastModifiedTime: "git",
   mdxOptions: {
     remarkPlugins: [remarkInstall],
+    rehypePlugins: [
+      [
+        rehypePrettyCode,
+        {
+          theme: {
+            light: "github-light",
+            dark: "github-dark",
+          },
+          keepBackground: false,
+        },
+      ],
+    ],
   },
 });

@@ -14,8 +14,8 @@ export async function GET(
     if (slug && slug.length > 0) {
       // Join the slug parts and remove .json extension if present
       const slugPath = slug.join("/");
-      filePath = slugPath.endsWith(".json") 
-        ? slugPath.slice(0, -5) + ".mdx"  // Remove .json and add .mdx
+      filePath = slugPath.endsWith(".json")
+        ? slugPath.slice(0, -5) + ".mdx" // Remove .json and add .mdx
         : slugPath + ".mdx";
     } else {
       filePath = "index.mdx";

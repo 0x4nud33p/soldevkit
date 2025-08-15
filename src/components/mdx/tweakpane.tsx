@@ -2,23 +2,23 @@
 
 import * as React from "react";
 
-import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
+import { Label } from "@/components/docs/label";
+import { Slider } from "@/components/docs/slider";
+import { Input } from "@/components/docs/input";
 import { cn } from "@/lib/utils";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+} from "@/components/docs/collapsible";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
+} from "@/components/docs/select";
+import { Switch } from "@/components/docs/switch";
 import { ChevronsUpDown } from "lucide-react";
 
 type BaseBindNumber = { value: number };
