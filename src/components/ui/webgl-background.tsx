@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import Script from "next/script";
 
 // Add type declarations
+/* eslint-disable @typescript-eslint/no-explicit-any */
 declare global {
   interface Window {
     THREE: {
@@ -17,11 +18,15 @@ declare global {
       Mesh: new (...args: any[]) => any;
       LinearFilter: any;
       RGBAFormat: any;
+      UnsignedByteType: any;
       FloatType: any;
+      NearestFilter: any;
+      ClampToEdgeWrapping: any;
     };
     initWebGL?: () => void;
   }
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 interface Config {
   brushSize: number;

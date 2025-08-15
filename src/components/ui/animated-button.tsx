@@ -47,18 +47,7 @@ const shimmerVariants: Variants = {
   },
 };
 
-const pulseVariants: Variants = {
-  pulse: {
-    boxShadow: [
-      "0 0 0 0 hsl(var(--primary) / 0.4)",
-      "0 0 0 20px hsl(var(--primary) / 0)",
-    ],
-    transition: {
-      duration: 1.5,
-      repeat: Infinity,
-    },
-  },
-};
+
 
 // Define component variants using cva
 const animatedButtonVariants = cva(
