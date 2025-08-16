@@ -53,7 +53,8 @@ export default async function Page(props: {
         <DocsAuthor name={page.data.author.name} url={page.data.author?.url} />
       )}
 
-      <div className="flex flex-row gap-2 items-center border-b pt-2 pb-6">
+      <div className="rounded-full w-full h-[2px] bg-gradient-to-r dark:from-transparent dark:via-zinc-600 dark:to-transparent mt-2 mb-4"></div>
+      <div className="flex flex-row gap-2 items-center pb-6">
         {/* Add the new components here */}
         <LLMCopyButton markdownUrl={markdownUrl} />
         <ViewOptions markdownUrl={markdownUrl} githubUrl={githubUrl} />

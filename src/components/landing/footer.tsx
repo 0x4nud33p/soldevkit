@@ -24,13 +24,15 @@ export const Footer = ({
   isLoading,
 }: FooterProps) => {
   return (
-    <motion.footer
-      className="px-6 md:px-12 lg:px-16 py-16 border-t border-white/10"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.8 }}
-    >
+    <>
+      <div className="rounded-full w-full h-[2px] bg-gradient-to-r dark:from-transparent dark:via-zinc-600 dark:to-transparent"></div>
+      <motion.footer
+        className="px-6 md:px-12 lg:px-16 py-16"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8 }}
+      >
       <div className="max-w-8xl mx-auto">
         {/* Main Footer Grid */}
         <div className="grid lg:grid-cols-2 gap-16 mb-12">
@@ -185,7 +187,9 @@ export const Footer = ({
             {/* Team Member Index */}
           </motion.div>
         </div>
-        <div className="absolute left-0 bottom-52 w-screen border-t border-white/10"></div>
+        <div className="absolute left-0 bottom-52 w-screen">
+          <div className="rounded-full w-full h-[2px] bg-gradient-to-r dark:from-transparent dark:via-zinc-600 dark:to-transparent"></div>
+        </div>
 
         {/* Footer Links */}
         <motion.div
@@ -221,6 +225,7 @@ export const Footer = ({
           </p>
         </motion.div>
       </div>
-    </motion.footer>
+      </motion.footer>
+    </>
   );
 };

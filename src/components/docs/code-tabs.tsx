@@ -92,11 +92,12 @@ function CodeTabs({
         onValueChange?.(val);
       }}
     >
-      <TabsList
-        data-slot="install-tabs-list"
-        className="w-full relative justify-between rounded-none h-10 bg-muted border-b border-border/75 dark:border-border/50 text-current py-0 px-4"
-        activeClassName="rounded-none shadow-none bg-transparent after:content-[''] after:absolute after:inset-x-0 after:h-0.5 after:bottom-0 dark:after:bg-white after:bg-black after:rounded-t-full"
-      >
+      <>
+        <TabsList
+          data-slot="install-tabs-list"
+          className="w-full relative justify-between rounded-none h-10 bg-muted text-current py-0 px-4"
+          activeClassName="rounded-none shadow-none bg-transparent after:content-[''] after:absolute after:inset-x-0 after:h-0.5 after:bottom-0 dark:after:bg-white after:bg-black after:rounded-t-full"
+        >
         <div className="flex gap-x-3 h-full">
           {highlightedCodes &&
             Object.keys(highlightedCodes).map((code) => (
@@ -119,7 +120,9 @@ function CodeTabs({
             onCopy={onCopy}
           />
         )}
-      </TabsList>
+        </TabsList>
+        <div className="rounded-full w-full h-[2px] bg-gradient-to-r dark:from-transparent dark:via-zinc-600 dark:to-transparent"></div>
+      </>
       <TabsContents data-slot="install-tabs-contents">
         {highlightedCodes &&
           Object.entries(highlightedCodes).map(([code, val]) => (

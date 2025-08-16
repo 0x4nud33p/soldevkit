@@ -388,9 +388,12 @@ const Tweakpane = ({
   }, [props]);
 
   return (
-    <div className="overflow-y-auto bg-muted dark:bg-muted/50 md:rounded-r-[13px] rounded-b-[13px] md:rounded-bl-none md:border-l border-t border-border/75 dark:border-border/10 md:border-t-0 p-1.5 size-full flex flex-col">
-      {renderBinds(localBinds, handleBindsChange, initial)}
-    </div>
+    <>
+      <div className="rounded-full w-full h-[2px] bg-gradient-to-r dark:from-transparent dark:via-zinc-600 dark:to-transparent md:hidden" />
+      <div className="overflow-y-auto bg-muted dark:bg-muted/50 md:rounded-r-[13px] rounded-b-[13px] md:rounded-bl-none md:border-l dark:border-border/10 p-1.5 size-full flex flex-col">
+        {renderBinds(localBinds, handleBindsChange, initial)}
+      </div>
+    </>
   );
 };
 

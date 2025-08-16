@@ -10,6 +10,7 @@ import { Hero } from "@/components/ui/hero2";
 import { useEmailSubscription } from "@/components/hooks/use-email-subscription";
 import Manifesto from "@/components/manifest/manifest";
 import { motion } from "motion/react";
+import { StarsBackground } from "@/components/landing/starts-background";
 
 const HomePage = () => {
   const [email, setEmail] = useState("");
@@ -60,31 +61,36 @@ const HomePage = () => {
           <main className="px-6 md:px-12 lg:px-16 max-w-8xl mx-auto w-full pointer-events-none">
             <div className="pointer-events-auto">
               <HeroSection />
+              <div className="rounded-full w-full h-[2px] bg-gradient-to-r dark:from-transparent dark:via-zinc-600 dark:to-transparent"></div>
               <Manifesto content="Soldevkit isn't just a UI library it's a complete design system. With a single CLI command, you get a powerful set of components to build stunning Solana dApps effortlessly." />
-
+              <div className="rounded-full w-full h-[2px] bg-gradient-to-r dark:from-transparent dark:via-zinc-600 dark:to-transparent"></div>
               <FeaturesSection />
-              <motion.section
-                className="py-16 md:py-24 content-center items-center flex flex-col -mt-16"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8 }}
-              >
-                <CTASection
-                  badge={{
-                    text: "Get started",
-                  }}
-                  title="Start building with Soldevkit UI"
-                  description="Build modern React applications with ease using Soldevkit UI, a collection of components and utilities."
-                  action={{
-                    text: "Get Started",
-                    href: "/docs/introduction",
-                    variant: "glow",
-                    target: "_blank",
-                  }}
-                  className="max-w-4xl"
-                />
-              </motion.section>
+              <div className="rounded-full w-full h-[2px] bg-gradient-to-r dark:from-transparent dark:via-zinc-600 dark:to-transparent"></div>
+
+              <StarsBackground className="w-full relative z-10">
+                <motion.section
+                  className="py-16 md:py-24 content-center items-center flex flex-col -mt-16"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.8 }}
+                >
+                  <CTASection
+                    badge={{
+                      text: "Get started",
+                    }}
+                    title="Start building with Soldevkit UI"
+                    description="Build modern React applications with ease using Soldevkit UI, a collection of components and utilities."
+                    action={{
+                      text: "Get Started",
+                      href: "/docs/introduction",
+                      variant: "glow",
+                      target: "_blank",
+                    }}
+                    className="max-w-4xl"
+                  />
+                </motion.section>
+              </StarsBackground>
             </div>
           </main>
         </div>

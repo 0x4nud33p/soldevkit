@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { SearchDialog } from "./search-dialog";
 import GitHubIcon from "@/components/icons/github-icon";
 import XIcon from "@/components/icons/x-icon";
+import { ThemeSwitcher } from "@/components/docs/theme-switcher";
 
 interface HeaderProps {
   className?: string;
@@ -45,7 +46,7 @@ export const Header = ({ className }: HeaderProps) => {
         transition={{ duration: 0.8, delay: 0.6 }}
       >
         <SearchDialog />
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <Link
             href="https://github.com/satyawaniaman/soldevkit-UI"
             className="text-muted-foreground hover:text-foreground transition-colors"
@@ -62,6 +63,7 @@ export const Header = ({ className }: HeaderProps) => {
           >
             <XIcon className="w-5 h-5" />
           </Link>
+          <ThemeSwitcher className="w-10 h-5" />
         </div>
       </motion.nav>
     </motion.header>

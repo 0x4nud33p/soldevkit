@@ -31,7 +31,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               rel="noopener noreferrer"
               className="font-medium text-white hover:text-white/90 transition-colors duration-200 underline decoration-white/60 hover:decoration-white underline-offset-2"
             >
-              💎 Donate SOL via Blink - Support SoldevKit UI!
+              💎 Donate SOL via Blink - Support SoldevKit UI
             </a>
           </Banner>
           <DocsLayout

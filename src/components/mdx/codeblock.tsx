@@ -82,30 +82,33 @@ export const CodeBlock = forwardRef<HTMLElement, CodeBlockProps>(
         )}
       >
         {title ? (
-          <div className="flex flex-row items-center gap-2 bg-muted border-b border-border/75 dark:border-border/50 px-4 h-10">
-            {icon ? (
-              <div
-                className="text-muted-foreground [&_svg]:size-3.5"
-                dangerouslySetInnerHTML={
-                  typeof icon === "string" ? { __html: icon } : undefined
-                }
-              >
-                {typeof icon !== "string" ? icon : null}
-              </div>
-            ) : null}
-            <figcaption className="flex-1 truncate text-muted-foreground">
-              {title}
-            </figcaption>
-            {allowCopy ? (
-              <CopyButton
-                size="sm"
-                variant="ghost"
-                className="-me-2 bg-transparent hover:bg-black/5 dark:hover:bg-white/10"
-                onClick={onCopy}
-                isCopied={isCopied}
-              />
-            ) : null}
-          </div>
+          <>
+            <div className="flex flex-row items-center gap-2 bg-muted px-4 h-10">
+              {icon ? (
+                <div
+                  className="text-muted-foreground [&_svg]:size-3.5"
+                  dangerouslySetInnerHTML={
+                    typeof icon === "string" ? { __html: icon } : undefined
+                  }
+                >
+                  {typeof icon !== "string" ? icon : null}
+                </div>
+              ) : null}
+              <figcaption className="flex-1 truncate text-muted-foreground">
+                {title}
+              </figcaption>
+              {allowCopy ? (
+                <CopyButton
+                  size="sm"
+                  variant="ghost"
+                  className="-me-2 bg-transparent hover:bg-black/5 dark:hover:bg-white/10"
+                  onClick={onCopy}
+                  isCopied={isCopied}
+                />
+              ) : null}
+            </div>
+            <div className="rounded-full w-full h-[2px] bg-gradient-to-r dark:from-transparent dark:via-zinc-600 dark:to-transparent"></div>
+          </>
         ) : (
           allowCopy && (
             <CopyButton
