@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Fullscreen, RotateCcw, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 import { motion } from "motion/react";
-import Iframe from "@/lib/iframe";
+import Iframe from "@/components/ui/iframe";
 import { useIsMobile } from "@/components/hooks/use-mobile";
 
 interface ComponentWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -103,9 +103,7 @@ export const ComponentWrapper = ({
             {/* Gradient overlay for better visual effect */}
             <div className="absolute inset-0 pointer-events-none" />
             {/* Dark mode overlay - removed dotted background */}
-            <div
-              className="absolute inset-0 pointer-events-none dark:opacity-100 opacity-0 transition-opacity"
-            />
+            <div className="absolute inset-0 pointer-events-none dark:opacity-100 opacity-0 transition-opacity" />
             <div className="relative z-10">{children}</div>
           </div>
         )}

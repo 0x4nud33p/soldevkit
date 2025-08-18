@@ -15,7 +15,7 @@ import {
   ScrollViewport,
 } from "@/components/docs/scroll-area";
 import type { ScrollArea as ScrollAreaPrimitive } from "radix-ui";
-import { CopyButton } from "@/registry/default/ui/button";
+import { CopyButton } from "@/components/mdx/copy-button";
 
 export type CodeBlockProps = HTMLAttributes<HTMLElement> & {
   icon?: ReactNode;

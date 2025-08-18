@@ -14,7 +14,7 @@ import { source } from "@/lib/source";
 import { ThemeSwitcher } from "@/components/docs/theme-switcher";
 import XIcon from "@/components/icons/x-icon";
 import { ThemeAwareHero } from "@/components/docs/theme-aware-hero";
-
+import { WalletProviderWrapper } from "@/components/provider/wallet-provider";
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
@@ -51,7 +51,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             searchToggle={{ enabled: true }}
             {...baseOptions}
           >
-            {children}
+            <WalletProviderWrapper>{children}</WalletProviderWrapper>
           </DocsLayout>
         </div>
       </div>

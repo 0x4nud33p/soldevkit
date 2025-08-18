@@ -5,20 +5,141 @@
   "items": [
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "copy-button",
-      "type": "registry:ui",
-      "title": "Copy Button",
-      "description": "A button with a copy to clipboard animation.",
+      "name": "utils",
+      "type": "registry:lib",
+      "title": "Utils",
+      "description": "Utility functions for class name merging with clsx and tailwind-merge.",
       "dependencies": [
-        "motion",
-        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "lib/utils.ts"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Displays a button or a component that looks like a button.",
+      "dependencies": [
+        "@radix-ui/react-slot",
         "class-variance-authority"
       ],
       "files": [
         {
-          "path": "src/registry/default/ui/button.tsx",
+          "path": "src/registry/soldevkit-ui/button.tsx",
           "type": "registry:ui",
-          "target": "components/solanadevkit-ui/button/copy-button.tsx"
+          "target": "components/ui/button.tsx"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.",
+      "dependencies": [
+        "@radix-ui/react-dialog"
+      ],
+      "files": [
+        {
+          "path": "src/registry/soldevkit-ui/dialog.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/dialog.tsx"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "collapsible",
+      "type": "registry:ui",
+      "title": "Collapsible",
+      "description": "An interactive component which expands/collapses a panel.",
+      "dependencies": [
+        "@radix-ui/react-collapsible"
+      ],
+      "files": [
+        {
+          "path": "src/registry/soldevkit-ui/collapsible.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/collapsible.tsx"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "Dropdown Menu",
+      "description": "Displays a menu to the user — such as a set of actions or functions — triggered by a button.",
+      "dependencies": [
+        "@radix-ui/react-dropdown-menu",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "src/registry/soldevkit-ui/dropdown-menu.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/dropdown-menu.tsx"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "Displays a badge or a component that looks like a badge.",
+      "dependencies": [
+        "@radix-ui/react-slot",
+        "class-variance-authority"
+      ],
+      "files": [
+        {
+          "path": "src/registry/soldevkit-ui/badge.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/badge.tsx"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "wallet-connect-button",
+      "type": "registry:ui",
+      "title": "Wallet Connect Button",
+      "description": "A comprehensive Solana wallet connection button with modal dialog, dropdown menu, and wallet management features.",
+      "dependencies": [
+        "@solana/wallet-adapter-react",
+        "@solana/wallet-adapter-base",
+        "@solana/wallet-adapter-react-ui",
+        "@solana/wallet-adapter-wallets",
+        "@solana/web3.js",
+        "@radix-ui/react-dialog",
+        "@radix-ui/react-collapsible",
+        "@radix-ui/react-dropdown-menu",
+        "@radix-ui/react-slot",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "dialog",
+        "collapsible",
+        "dropdown-menu",
+        "badge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/ui/wallet/wallet-connect-button.tsx",
+          "type": "registry:ui",
+          "target": "components/soldevkit-ui/wallet/wallet-connect-button.tsx"
         }
       ]
     }

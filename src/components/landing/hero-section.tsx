@@ -1,6 +1,6 @@
 "use client";
 
-import TextShimmer from "@/components/magicui/text-shimmer";
+import TextShimmer from "@/components/ui/text-shimmer";
 import { GlowCard } from "@/components/ui/spotlight-card";
 
 import { HiArrowRight } from "react-icons/hi";
@@ -20,7 +20,7 @@ export function HeroSection() {
       id="hero"
       className="relative mx-auto mt-32 mb-16 max-w-[80rem] px-6 text-center md:px-8"
     >
-      <motion.div 
+      <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.6 }}

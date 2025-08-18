@@ -10,7 +10,7 @@ export const source = loader({
 // import { loader } from "fumadocs-core/source";
 // import { createElement } from "react";
 // import { icons } from "lucide-react";
-// import { attachFile } from "./attach-file";
+// import { attachFile } from "@/components/hooks/attach-file";
 
 // export const source = loader({
 //   baseUrl: "/docs",

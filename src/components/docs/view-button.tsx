@@ -124,7 +124,7 @@ export function ViewOptions({
   markdownUrl: string;
   githubUrl: string;
 }) {
-  const reviewText = `Please review this documentation: ${typeof window !== "undefined" ? window.location.origin : ""}/api/mdx${markdownUrl}`;
+  const reviewText = `Please review this documentation: ${typeof window !== "undefined" ? window.location.origin : ""}/api/mdx${markdownUrl} I want to ask questions about it.`;
 
   return (
     <Popover>
@@ -140,27 +140,60 @@ export function ViewOptions({
         Open
         <ChevronDown className="text-fd-muted-foreground size-3.5" />
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-2">
-        <div className="flex flex-col gap-2">
-          {/* GitHub */}
-          <Button variant="ghost" size="sm" className="justify-start" asChild>
-            <a href={githubUrl} target="_blank" rel="noopener noreferrer">
-              <ExternalLinkIcon className="mr-2 h-4 w-4" />
-              Edit on GitHub
-            </a>
-          </Button>
-
-          {/* ChatGPT (supports ?q=) */}
-          <Button variant="ghost" size="sm" className="justify-start" asChild>
-            <a
-              href={`https://chatgpt.com/?q=${encodeURIComponent(reviewText)}`}
-              target="_blank"
-              rel="noopener noreferrer"
+      <PopoverContent className="w-auto p-0 border border-neutral-200 dark:border-neutral-800 shadow-lg relative z-50">
+        <div
+          className="p-2 rounded-md bg-neutral-100 dark:bg-neutral-900"
+          style={{
+            opacity: "1",
+          }}
+        >
+          <div className="flex flex-col gap-2">
+            {/* GitHub */}
+            <Button
+              variant="neutral"
+              size="sm"
+              className="justify-start"
+              asChild
             >
-              <MessageCircleIcon className="mr-2 h-4 w-4" />
-              Open in ChatGPT
-            </a>
-          </Button>
+              <a href={githubUrl} target="_blank" rel="noopener noreferrer">
+                <ExternalLinkIcon className="mr-2 h-4 w-4" />
+                Edit on GitHub
+              </a>
+            </Button>
+
+            {/* ChatGPT (supports ?q=) */}
+            <Button
+              variant="neutral"
+              size="sm"
+              className="justify-start"
+              asChild
+            >
+              <a
+                href={`https://chatgpt.com/?q=${encodeURIComponent(reviewText)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MessageCircleIcon className="mr-2 h-4 w-4" />
+                Open in ChatGPT
+              </a>
+            </Button>
+            {/* Claude */}
+            <Button
+              variant="neutral"
+              size="sm"
+              className="justify-start"
+              asChild
+            >
+              <a
+                href={`https://claude.ai/new?q=${encodeURIComponent(reviewText)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MessageCircleIcon className="mr-2 h-4 w-4" />
+                Open in Claude
+              </a>
+            </Button>
+          </div>
         </div>
       </PopoverContent>
     </Popover>

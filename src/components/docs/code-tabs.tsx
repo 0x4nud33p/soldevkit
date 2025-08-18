@@ -12,7 +12,7 @@ import {
   TabsContents,
   type TabsProps,
 } from "@/components/docs/tabs";
-import { CopyButton } from "@/registry/default/ui/button";
+import { CopyButton } from "@/components/mdx/copy-button";
 
 type CodeTabsProps = {
   codes: Record<string, string>;
@@ -98,28 +98,28 @@ function CodeTabs({
           className="w-full relative justify-between rounded-none h-10 bg-muted text-current py-0 px-4"
           activeClassName="rounded-none shadow-none bg-transparent after:content-[''] after:absolute after:inset-x-0 after:h-0.5 after:bottom-0 dark:after:bg-white after:bg-black after:rounded-t-full"
         >
-        <div className="flex gap-x-3 h-full">
-          {highlightedCodes &&
-            Object.keys(highlightedCodes).map((code) => (
-              <TabsTrigger
-                key={code}
-                value={code}
-                className="text-muted-foreground data-[state=active]:text-current px-0"
-              >
-                {code}
-              </TabsTrigger>
-            ))}
-        </div>
+          <div className="flex gap-x-3 h-full">
+            {highlightedCodes &&
+              Object.keys(highlightedCodes).map((code) => (
+                <TabsTrigger
+                  key={code}
+                  value={code}
+                  className="text-muted-foreground data-[state=active]:text-current px-0"
+                >
+                  {code}
+                </TabsTrigger>
+              ))}
+          </div>
 
-        {copyButton && highlightedCodes && (
-          <CopyButton
-            content={codes[selectedCode]}
-            size="sm"
-            variant="ghost"
-            className="-me-2 bg-transparent hover:bg-black/5 dark:hover:bg-white/10"
-            onCopy={onCopy}
-          />
-        )}
+          {copyButton && highlightedCodes && (
+            <CopyButton
+              content={codes[selectedCode]}
+              size="sm"
+              variant="ghost"
+              className="-me-2 bg-transparent hover:bg-black/5 dark:hover:bg-white/10"
+              onCopy={onCopy}
+            />
+          )}
         </TabsList>
         <div className="rounded-full w-full h-[2px] bg-gradient-to-r dark:from-transparent dark:via-zinc-600 dark:to-transparent"></div>
       </>

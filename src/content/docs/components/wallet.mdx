@@ -1,57 +1,124 @@
 ---
-title: Wallet
-description: A button with a copy to clipboard animation.
+title: Wallet Connect Button
+description: A comprehensive Solana wallet connection button with modal dialog, dropdown menu, and wallet management features.
 author:
   name: Aman Satyawani
   url: https://github.com/satyawaniaman
 ---
 
-<ComponentPreview name="button-demo" />
+<ComponentPreview name="wallet-connect-button-demo" />
 
 ## Installation
 
-<ComponentInstallation name="copy-button" />
+<ComponentInstallation name="wallet-connect-button" />
 
 ## Usage
 
 ```tsx
-<CopyButton content="Hello world!" />
+import { WalletConnectButton } from '@/components/soldevkit-ui/wallet/wallet-connect-button';
+
+export default function Example() {
+  return (
+    <WalletConnectButton
+      variant="outline"
+      size="lg"
+      labels={{
+        "has-wallet": "Connect Wallet",
+        connecting: "Connecting...",
+        disconnect: "Disconnect",
+        "change-wallet": "Change Wallet",
+        "copy-address": "Copy Address",
+        copied: "Copied",
+      }}
+    />
+  );
+}
 ```
+
+## Features
+
+- **Smart State Management**: Automatically handles wallet connection states
+- **Modal Dialog**: Clean wallet selection interface with installed/not installed badges
+- **Dropdown Menu**: Connected wallet management with copy address and disconnect options
+- **Collapsible Wallets**: Expandable section for additional wallet options
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Customizable Labels**: Override default text labels for internationalization
+- **Button Variants**: Supports all standard button variants and sizes
 
 ## Props
 
 <TypeTable
   type={{
-    content: {
-      description: "The content to copy to the clipboard.",
-      type: "string",
+    variant: {
+      description: "Button variant style.",
+      type: "'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'",
       required: false,
-    },
-    delay: {
-      description: "The delay in milliseconds before the button resets.",
-      type: "number",
-      required: false,
-      default: "3000",
+      default: "'default'",
     },
     size: {
-      description: "The size of the button.",
-      type: "'default' | 'sm' | 'md' | 'lg'",
+      description: "Button size.",
+      type: "'default' | 'sm' | 'lg' | 'icon'",
       required: false,
-      default: "default",
+      default: "'default'",
     },
-    variant: {
-      description: "The variant of the button.",
-      type: "'default' | 'muted' | 'outline' | 'secondary' | 'ghost'",
+    labels: {
+      description: "Custom labels for different states and actions.",
+      type: "Partial<typeof LABELS>",
       required: false,
-      default: "default",
+      default: "Default labels",
     },
-    onCopy: {
-      description: "The function to call when copy is successful.",
-      type: "(content: string) => void",
+    children: {
+      description: "Custom content to display inside the button.",
+      type: "React.ReactNode",
       required: false,
+      default: "undefined",
+    },
+    className: {
+      description: "Additional CSS classes.",
+      type: "string",
+      required: false,
+      default: "undefined",
     },
   }}
 />
+
+## Label Customization
+
+You can customize all text labels used by the component:
+
+```tsx
+const customLabels = {
+  "change-wallet": "Switch Wallet",
+  connecting: "Connecting...",
+  "copy-address": "Copy Address",
+  copied: "Copied!",
+  disconnect: "Disconnect",
+  "has-wallet": "Connect Wallet",
+  "no-wallet": "Select Wallet",
+};
+
+<WalletConnectButton labels={customLabels} />
+```
+
+## Wallet States
+
+The component automatically handles different wallet states:
+
+- **Not Connected**: Shows "Connect Wallet" button that opens the wallet selection modal
+- **Connecting**: Shows loading spinner with "Connecting..." text
+- **Connected**: Shows wallet icon and truncated address, with dropdown menu for actions
+
+## Dependencies
+
+This component requires the following Solana wallet adapter packages:
+
+- `@solana/wallet-adapter-react`
+- `@solana/wallet-adapter-base`
+- `@solana/wallet-adapter-react-ui`
+- `@solana/wallet-adapter-wallets`
+- `@solana/web3.js`
+
+Make sure your app is wrapped with the appropriate wallet providers.
 
 ## Credits
 
