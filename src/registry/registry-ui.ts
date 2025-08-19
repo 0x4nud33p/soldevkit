@@ -24,6 +24,27 @@ export const ui: ExtendedRegistryItem[] = [
   },
   {
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "provider",
+    type: "registry:ui",
+    title: "Wallet Provider",
+    description:
+      "A provider for Solana wallet connection with modal dialog, dropdown menu, and wallet management features.",
+    dependencies: [
+      "@solana/wallet-adapter-react",
+      "@solana/wallet-adapter-react-ui",
+      "@solana/wallet-adapter-wallets",
+      "@solana/web3.js",
+    ],
+    files: [
+      {
+        path: "provider/wallet-provider.tsx",
+        type: "registry:ui",
+        target: "components/soldevkit-ui/provider/wallet-provider.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
     name: "button",
     type: "registry:ui",
     title: "Button",
@@ -74,7 +95,8 @@ export const ui: ExtendedRegistryItem[] = [
     name: "dropdown-menu",
     type: "registry:ui",
     title: "Dropdown Menu",
-    description: "Displays a menu to the user — such as a set of actions or functions — triggered by a button.",
+    description:
+      "Displays a menu to the user — such as a set of actions or functions — triggered by a button.",
     dependencies: ["@radix-ui/react-dropdown-menu", "lucide-react"],
     files: [
       {
@@ -104,7 +126,8 @@ export const ui: ExtendedRegistryItem[] = [
     name: "wallet-connect-button",
     type: "registry:ui",
     title: "Wallet Connect Button",
-    description: "A comprehensive Solana wallet connection button with modal dialog, dropdown menu, and wallet management features.",
+    description:
+      "A comprehensive Solana wallet connection button with modal dialog, dropdown menu, and wallet management features.",
     dependencies: [
       "@solana/wallet-adapter-react",
       "@solana/wallet-adapter-base",
@@ -118,7 +141,14 @@ export const ui: ExtendedRegistryItem[] = [
       "class-variance-authority",
       "lucide-react",
     ],
-    registryDependencies: ["button", "dialog", "collapsible", "dropdown-menu", "badge"],
+    registryDependencies: [
+      "button",
+      "dialog",
+      "collapsible",
+      "dropdown-menu",
+      "badge",
+      "provider",
+    ],
     providers: ["solana-wallet"],
     files: [
       {

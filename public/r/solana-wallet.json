@@ -1,0 +1,13 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "solana-wallet",
+  "type": "registry:lib",
+  "title": "Solana Wallet Provider",
+  "description": "Solana wallet connection provider with ConnectionProvider, WalletProvider, and WalletModalProvider.",
+  "dependencies": [
+    "@solana/wallet-adapter-react",
+    "@solana/wallet-adapter-react-ui",
+    "@solana/wallet-adapter-wallets"
+  ],
+  "files": []
+}

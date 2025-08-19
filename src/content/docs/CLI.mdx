@@ -11,18 +11,19 @@ Add components to your project using the shadcn CLI:
 npx shadcn@latest add https://soldevkit.com/r/(component-name).json
 ```
 
-### Examples
+### Providers
+
+Install wallet providers for Solana integration:
 
 ```bash
-# Add the copy button component
-npx shadcn@latest add https://soldevkit.com/r/copy-button.json
+# Wallet Provider (recommended)
+npx shadcn@latest add https://soldevkit.com/r/provider.json
 
-# Add the wallet connect button component
-npx shadcn@latest add https://soldevkit.com/r/wallet-connect-button.json
+# Alternative Solana Provider
+npx shadcn@latest add https://soldevkit.com/r/solana-provider.json
 
 # Using pnpm
-pnpm dlx shadcn@latest add https://soldevkit.com/r/copy-button.json
-pnpm dlx shadcn@latest add https://soldevkit.com/r/wallet-connect-button.json
+pnpm dlx shadcn@latest add https://soldevkit.com/r/provider.json
 ```
 
 That's it! The CLI will automatically:

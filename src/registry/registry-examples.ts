@@ -7,9 +7,7 @@ export const examples: Registry["items"] = [
     title: "Wallet Connect Button Demo",
     description:
       "Demo showcasing Solana wallet connection with different variants.",
-    registryDependencies: [
-      "https://soldevkit.com/r/wallet-connect-button",
-    ],
+    registryDependencies: ["https://soldevkit.com/r/wallet-connect-button"],
     files: [
       {
         path: "default/examples/wallet/wallet-connect-button-demo.tsx",

@@ -13,10 +13,21 @@ export const Index: Record<string, any> ={
     type: "registry:lib",
     files: [{
       path: "src/registry/lib/utils.ts",
-      content: "import { clsx, type ClassValue } from 'clsx';\nimport { twMerge } from 'tailwind-merge';\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}",
+      content: "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}\n",
       type: "registry:lib",
     }],
     command: "https://soldevkit.com/r/utils.json",
+  },
+  "provider": {
+    name: "provider",
+    description: "A provider for Solana wallet connection with modal dialog, dropdown menu, and wallet management features.",
+    type: "registry:ui",
+    files: [{
+      path: "src/registry/provider/wallet-provider.tsx",
+      content: "\"use client\";\n\nimport React, { useMemo } from \"react\";\nimport {\n  ConnectionProvider,\n  WalletProvider,\n} from \"@solana/wallet-adapter-react\";\nimport { WalletModalProvider } from \"@solana/wallet-adapter-react-ui\";\nimport {\n  PhantomWalletAdapter,\n  SolflareWalletAdapter,\n} from \"@solana/wallet-adapter-wallets\";\nimport { clusterApiUrl } from \"@solana/web3.js\";\n\n// Import wallet adapter CSS\nimport \"@solana/wallet-adapter-react-ui/styles.css\";\n\ninterface WalletProviderWrapperProps {\n  children: React.ReactNode;\n}\n\nexport function WalletProviderWrapper({\n  children,\n}: WalletProviderWrapperProps) {\n  // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'\n  const network = \"devnet\";\n\n  // You can also provide a custom RPC endpoint\n  const endpoint = useMemo(() => clusterApiUrl(network), [network]);\n\n  const wallets = useMemo(\n    () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],\n    [],\n  );\n\n  return (\n    <ConnectionProvider endpoint={endpoint}>\n      <WalletProvider wallets={wallets} autoConnect>\n        <WalletModalProvider>{children}</WalletModalProvider>\n      </WalletProvider>\n    </ConnectionProvider>\n  );\n}\n",
+      type: "registry:ui",
+    }],
+    command: "https://soldevkit.com/r/provider.json",
   },
   "button": {
     name: "button",

@@ -1,8 +1,3 @@
-// registry/index.ts
-import { type Registry } from "shadcn/registry";
-import { ui } from "./registry-ui";
-import { examples } from "./registry-examples";
-
 // Define provider type
 export type Provider = {
   name: string;
@@ -30,16 +25,3 @@ import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";`,
     `,
   },
 ];
-
-// Extend shadcn registry type
-export type ExtendedRegistry = Registry & {
-  providers: Provider[];
-};
-
-// Final registry export
-export const registry: ExtendedRegistry = {
-  name: "soldevkit-ui",
-  homepage: "https://soldevkit.com",
-  items: [...ui, ...examples],
-  providers,
-};

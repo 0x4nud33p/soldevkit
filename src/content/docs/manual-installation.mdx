@@ -7,7 +7,8 @@ description: Install and configure SoldevKit UI manually.
 
 - Node.js 16.8 or later
 - React 18 or later
-- Tailwind CSS 3.0 or later
+- Next.js 14 or later
+- Tailwind CSS v4 or later
 
 ## Installation
 
@@ -23,8 +24,11 @@ description: Install and configure SoldevKit UI manually.
     # UI dependencies
     npm install clsx tailwind-merge class-variance-authority
 
-    # Utility dependencies
-    npm install @radix-ui/react-slot lucide-react
+    # Radix UI dependencies
+    npm install @radix-ui/react-slot @radix-ui/react-dialog @radix-ui/react-collapsible @radix-ui/react-dropdown-menu
+
+    # Icon dependencies
+    npm install lucide-react
     ```
 
   </Tab>
@@ -39,8 +43,11 @@ description: Install and configure SoldevKit UI manually.
     # UI dependencies
     pnpm add clsx tailwind-merge class-variance-authority
 
-    # Utility dependencies
-    pnpm add @radix-ui/react-slot lucide-react
+    # Radix UI dependencies
+    pnpm add @radix-ui/react-slot @radix-ui/react-dialog @radix-ui/react-collapsible @radix-ui/react-dropdown-menu
+
+    # Icon dependencies
+    pnpm add lucide-react
     ```
 
   </Tab>
@@ -55,8 +62,11 @@ description: Install and configure SoldevKit UI manually.
     # UI dependencies
     yarn add clsx tailwind-merge class-variance-authority
 
-    # Utility dependencies
-    yarn add @radix-ui/react-slot lucide-react
+    # Radix UI dependencies
+    yarn add @radix-ui/react-slot @radix-ui/react-dialog @radix-ui/react-collapsible @radix-ui/react-dropdown-menu
+
+    # Icon dependencies
+    yarn add lucide-react
     ```
 
   </Tab>
@@ -145,15 +155,20 @@ export function cn(...inputs: ClassValue[]) {
 Once configured, import and use components:
 
 ```tsx
-import { CopyButton } from "@/components/soldevkit-ui/button";
-import { WalletConnectButton } from "@/components/soldevkit-ui/wallet-connect-button";
+import { Button } from "@/components/soldevkit-ui/button";
+import { WalletConnectButton } from "@/components/soldevkit-ui/wallet/wallet-connect-button";
+import { Badge } from "@/components/soldevkit-ui/badge";
+import { WalletProviderWrapper } from "@/components/soldevkit-ui/provider/wallet-provider";
 
 export default function App() {
   return (
-    <div>
-      <CopyButton content="Hello World" />
-      <WalletConnectButton />
-    </div>
+    <WalletProviderWrapper>
+      <div className="space-y-4">
+        <Button variant="outline">Click me</Button>
+        <WalletConnectButton variant="default" size="lg" />
+        <Badge variant="secondary">New</Badge>
+      </div>
+    </WalletProviderWrapper>
   );
 }
 ```
@@ -176,5 +191,7 @@ Optionally, add a path mapping in your `tsconfig.json` for cleaner imports:
 Then you can import like:
 
 ```tsx
-import { CopyButton } from "@/soldevkit-ui/button";
+import { Button } from "@/soldevkit-ui/button";
+import { WalletConnectButton } from "@/soldevkit-ui/wallet/wallet-connect-button";
+import { Badge } from "@/soldevkit-ui/badge";
 ```

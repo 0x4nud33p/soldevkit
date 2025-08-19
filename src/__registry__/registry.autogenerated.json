@@ -23,6 +23,26 @@
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "provider",
+      "type": "registry:ui",
+      "title": "Wallet Provider",
+      "description": "A provider for Solana wallet connection with modal dialog, dropdown menu, and wallet management features.",
+      "dependencies": [
+        "@solana/wallet-adapter-react",
+        "@solana/wallet-adapter-react-ui",
+        "@solana/wallet-adapter-wallets",
+        "@solana/web3.js"
+      ],
+      "files": [
+        {
+          "path": "src/registry/provider/wallet-provider.tsx",
+          "type": "registry:ui",
+          "target": "components/soldevkit-ui/provider/wallet-provider.tsx"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "button",
       "type": "registry:ui",
       "title": "Button",

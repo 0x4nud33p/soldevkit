@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "solana-provider",
+  "type": "registry:lib",
+  "title": "Solana Provider",
+  "description": "Connection Provider with wallet connection providers with different variants.",
+  "dependencies": [
+    "@solana/wallet-adapter-react",
+    "@solana/wallet-adapter-wallets",
+    "@solana/wallet-adapter-react-ui",
+    "@solana/web3.js"
+  ],
+  "files": [
+    {
+      "path": "src/registry/providers/solana-provider.tsx",
+      "content": "\"use client\";\n\nimport React, { useMemo } from \"react\";\nimport {\n  ConnectionProvider,\n  WalletProvider,\n} from \"@solana/wallet-adapter-react\";\nimport { WalletModalProvider } from \"@solana/wallet-adapter-react-ui\";\nimport {\n  PhantomWalletAdapter,\n  SolflareWalletAdapter,\n} from \"@solana/wallet-adapter-wallets\";\nimport { clusterApiUrl } from \"@solana/web3.js\";\n\n// Import wallet adapter CSS\nimport \"@solana/wallet-adapter-react-ui/styles.css\";\n\ninterface SolanaProviderWrapperProps {\n  children: React.ReactNode;\n}\n\nexport function SolanaProviderWrapper({\n  children,\n}: SolanaProviderWrapperProps) {\n  // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'\n  const network = \"devnet\";\n\n  // You can also provide a custom RPC endpoint\n  const endpoint = useMemo(() => clusterApiUrl(network), [network]);\n\n  const wallets = useMemo(\n    () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],\n    [],\n  );\n\n  return (\n    <ConnectionProvider endpoint={endpoint}>\n      <WalletProvider wallets={wallets} autoConnect>\n        <WalletModalProvider>{children}</WalletModalProvider>\n      </WalletProvider>\n    </ConnectionProvider>\n  );\n}\n",
+      "type": "registry:lib",
+      "target": "providers/solana-provider.tsx"
+    }
+  ]
+}

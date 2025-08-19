@@ -1,5 +1,7 @@
 {
-  "providers": ["solana-wallet"],
+  "providers": [
+    "solana-wallet"
+  ],
   "components": [
     "token-selector",
     "wallet-connect-button",
