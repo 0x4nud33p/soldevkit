@@ -20,7 +20,7 @@ export const Header = ({ className }: HeaderProps) => {
 
   return (
     <motion.header
-      className={`max-w-7xl mx-auto flex items-center justify-between p-6 w-full pointer-events-auto ${className || ""}`}
+      className={`max-w-7xl mx-auto flex items-center justify-between p-4 sm:p-6 w-full pointer-events-auto ${className || ""}`}
       {...fadeIn}
       transition={{ ...fadeIn.transition, delay: 0.2 }}
     >
@@ -32,7 +32,7 @@ export const Header = ({ className }: HeaderProps) => {
       >
         <Link
           href="/"
-          className="text-2xl font-serif  bg-clip-text bg-gradient-stop bg-gradient-to-br from-white via-30% via-white to-white/30 text-transparent leading-none tracking-wide"
+          className="text-xl sm:text-2xl font-serif bg-clip-text bg-gradient-to-br from-black via-30% via-black to-black/30 dark:from-white dark:via-white dark:to-white/30 text-transparent leading-none tracking-wide"
         >
           Soldevkit UI
         </Link>
@@ -40,13 +40,15 @@ export const Header = ({ className }: HeaderProps) => {
 
       {/* Navigation */}
       <motion.nav
-        className="flex items-center gap-4"
+        className="flex items-center gap-2 sm:gap-4"
         initial={{ opacity: 0, x: 30 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, delay: 0.6 }}
       >
-        <SearchDialog />
-        <div className="flex items-center gap-4">
+        <div className="hidden lg:block">
+          <SearchDialog />
+        </div>
+        <div className="flex items-center gap-2 sm:gap-4">
           <Link
             href="https://github.com/satyawaniaman/soldevkit-UI"
             className="text-muted-foreground hover:text-foreground transition-colors"

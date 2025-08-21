@@ -1,0 +1,203 @@
+---
+title: Avatar
+description: A component for displaying unique visual identifiers for Solana wallet addresses using minidenticons.
+---
+
+## Preview
+
+    <ComponentPreview name="avatar-demo" />
+
+## Installation
+
+### CLI
+
+<Tabs items={["npm", "pnpm"]}>
+  <Tab>```sh npx shadcn@latest add https://soldevkit.com/r/avatar.json ```</Tab>
+  <Tab>```sh pnpm dlx shadcn@latest add https://soldevkit.com/r/avatar.json ```</Tab>
+</Tabs>
+
+### Manual
+
+<ComponentInstallation name="avatar" />
+
+## Usage
+
+```tsx
+import { PublicKey } from "@solana/web3.js";
+import { Avatar } from "@/components/soldevkit-ui/avatar";
+
+const walletAddress = new PublicKey("9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM");
+
+export default function Example() {
+  return <Avatar address={walletAddress} size={48} className="border-2 border-primary" />;
+}
+```
+
+## Features
+
+- **Unique Visual Identity**: Generates consistent, unique visual identifiers for wallet addresses
+- **Minidenticons**: Uses the minidenticons library for deterministic avatar generation
+- **Customizable Size**: Supports any pixel size for different use cases
+- **Responsive Design**: Scales appropriately across different screen sizes
+- **Accessibility**: Includes proper alt text and ARIA attributes
+- **Performance Optimized**: Memoized SVG generation for better performance
+- **Solana Native**: Built specifically for Solana PublicKey objects
+
+## API Reference
+
+### Props
+
+<TypeTable
+  type={{
+    address: {
+      description: "The Solana wallet address to generate avatar for",
+      type: "PublicKey",
+      required: true,
+    },
+    size: {
+      description: "Size of the avatar in pixels",
+      type: "number",
+      default: "48",
+    },
+    className: {
+      description: "Additional CSS classes for styling",
+      type: "string",
+    },
+    alt: {
+      description: "Alternative text for accessibility (defaults to address string)",
+      type: "string",
+    },
+  }}
+/>
+
+## Examples
+
+### Basic Usage
+
+```tsx
+import { PublicKey } from "@solana/web3.js";
+import { Avatar } from "@/components/soldevkit-ui/avatar";
+
+const address = new PublicKey("9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM");
+
+<Avatar address={address} />;
+```
+
+### Different Sizes
+
+```tsx
+<div className="flex items-center space-x-4">
+  <Avatar address={address} size={24} />
+  <Avatar address={address} size={32} />
+  <Avatar address={address} size={48} />
+  <Avatar address={address} size={64} />
+</div>
+```
+
+### Custom Styling
+
+```tsx
+<Avatar address={address} size={64} className="border-2 border-primary ring-2 ring-primary/20" />
+```
+
+### Avatar Group
+
+```tsx
+<div className="flex -space-x-2">
+  {addresses.map((address, index) => (
+    <Avatar key={index} address={address} size={40} className="border-2 border-background" />
+  ))}
+</div>
+```
+
+### Interactive Avatar
+
+```tsx
+<Avatar
+  address={address}
+  size={56}
+  className="cursor-pointer transition-transform hover:scale-110"
+  onClick={() => console.log("Avatar clicked")}
+/>
+```
+
+### With User Info
+
+```tsx
+<div className="flex items-center space-x-3">
+  <Avatar address={address} size={40} />
+  <div>
+    <p className="text-sm font-medium">
+      {address.toBase58().slice(0, 8)}...{address.toBase58().slice(-8)}
+    </p>
+    <p className="text-xs text-muted-foreground">Wallet Address</p>
+  </div>
+</div>
+```
+
+## Styling
+
+The Avatar component uses Tailwind CSS classes and can be customized using the `className` prop:
+
+```tsx
+// Border variations
+<Avatar className="border-2 border-primary" />
+<Avatar className="border-2 border-destructive" />
+<Avatar className="border-2 border-green-500" />
+
+// Shadow effects
+<Avatar className="shadow-lg" />
+<Avatar className="shadow-xl shadow-primary/25" />
+
+// Ring effects
+<Avatar className="ring-2 ring-primary ring-offset-2" />
+
+// Hover effects
+<Avatar className="transition-transform hover:scale-110" />
+<Avatar className="hover:shadow-lg hover:border-primary" />
+```
+
+## Accessibility
+
+The Avatar component includes several accessibility features:
+
+- **Alt Text**: Automatically uses the wallet address as alt text, or accepts custom alt text
+- **Semantic HTML**: Uses proper img elements with appropriate attributes
+- **Keyboard Navigation**: Can be made focusable and interactive with proper event handlers
+
+```tsx
+<Avatar
+  address={address}
+  alt="User wallet avatar"
+  className="focus:outline-none focus:ring-2 focus:ring-primary"
+  tabIndex={0}
+/>
+```
+
+## Technical Details
+
+### Minidenticons
+
+The component uses the [minidenticons](https://github.com/laurentpayot/minidenticons) library to generate deterministic SVG avatars. Each unique wallet address will always produce the same visual identifier.
+
+### Performance
+
+The SVG generation is memoized using `React.useMemo` to prevent unnecessary recalculations when the component re-renders with the same address.
+
+### Data URI
+
+The generated SVG is embedded as a data URI, eliminating the need for external image files and ensuring the avatar is always available.
+
+## Dependencies
+
+This component requires the following dependencies:
+
+- `@solana/web3.js` - For PublicKey type support
+- `minidenticons` - For generating deterministic avatars
+- `react` - For React hooks and components
+
+## Credits
+
+- Built with [minidenticons](https://github.com/laurentpayot/minidenticons) for avatar generation
+- Designed for [Solana](https://solana.com) wallet addresses
+- Follows [shadcn/ui](https://ui.shadcn.com) design patterns

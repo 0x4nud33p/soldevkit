@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-wallet-token-balance",
+  "type": "registry:hook",
+  "title": "useWalletTokenBalance",
+  "description": "A React hook for fetching wallet token balances (SOL) with connection status and error handling.",
+  "dependencies": [
+    "@solana/web3.js",
+    "@solana/wallet-adapter-base",
+    "react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "src/registry/default/hooks/wallet/use-wallet-token-balance.tsx",
+      "content": "import { useState } from \"react\";\nimport { PublicKey, Connection } from \"@solana/web3.js\";\nimport { WalletNotConnectedError } from \"@solana/wallet-adapter-base\";\nimport { getLamportsToSol } from \"@/registry/default/utils/solana\";\n\nexport type ErrorState = string | null;\nexport type StatusState = \"idle\" | \"loading\" | \"error\" | \"success\";\ntype UserBalanceResultState = number;\n\n// safer invariant\nexport function invariant(\n  condition: unknown,\n  message?: string | (() => string),\n): asserts condition {\n  if (!condition) {\n    const msg = typeof message === \"function\" ? message() : message;\n    throw new Error(msg || \"Invariant failed\");\n  }\n}\n\nexport function useWalletTokenBalance(\n  publicKey: PublicKey | null,\n  connection: Connection,\n) {\n  const [error, setError] = useState<ErrorState>(null);\n  const [status, setStatus] = useState<StatusState>(\"idle\");\n  const [result, setResult] = useState<UserBalanceResultState>(0);\n\n  async function getWalletTokenBalance(\n    tokenSymbol: \"SOL\",\n    digitsToDisplay?: number,\n  ): Promise<number | null> {\n    try {\n      // explicit error for wallet not connected\n      if (!publicKey) throw new WalletNotConnectedError();\n\n      // explicit check for token type\n      invariant(tokenSymbol === \"SOL\", \"Only SOL is supported\");\n\n      setStatus(\"loading\");\n\n      const lamports = await connection.getBalance(publicKey);\n      const { sol } = getLamportsToSol(lamports, digitsToDisplay);\n\n      setResult(sol);\n      setStatus(\"success\");\n\n      return sol;\n    } catch (err) {\n      setError((err as Error).message);\n      setStatus(\"error\");\n      return null;\n    }\n  }\n\n  return { result, status, error, getWalletTokenBalance };\n}\n",
+      "type": "registry:hook",
+      "target": "hooks/use-wallet-token-balance.tsx"
+    }
+  ]
+}

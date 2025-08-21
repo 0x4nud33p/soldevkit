@@ -58,18 +58,18 @@ const HomePage = () => {
         <Hero className="absolute z-10 h-full w-full" />
         <div className="relative z-10">
           <Header className="pointer-events-auto" />
-          <main className="px-6 md:px-12 lg:px-16 max-w-8xl mx-auto w-full pointer-events-none">
+          <main className="px-4 sm:px-6 md:px-12 lg:px-16 max-w-8xl mx-auto w-full pointer-events-none">
             <div className="pointer-events-auto">
               <HeroSection />
-              <div className="rounded-full w-full h-[2px] bg-gradient-to-r dark:from-transparent dark:via-zinc-600 dark:to-transparent"></div>
+              <div className="rounded-full w-full h-[2px] bg-gradient-to-r from-transparent via-zinc-300 to-transparent dark:from-transparent dark:via-zinc-600 dark:to-transparent"></div>
               <Manifesto content="Soldevkit isn't just a UI library it's a complete design system. With a single CLI command, you get a powerful set of components to build stunning Solana dApps effortlessly." />
-              <div className="rounded-full w-full h-[2px] bg-gradient-to-r dark:from-transparent dark:via-zinc-600 dark:to-transparent"></div>
+              <div className="rounded-full w-full h-[2px] bg-gradient-to-r from-transparent via-zinc-300 to-transparent dark:from-transparent dark:via-zinc-600 dark:to-transparent"></div>
               <FeaturesSection />
-              <div className="rounded-full w-full h-[2px] bg-gradient-to-r dark:from-transparent dark:via-zinc-600 dark:to-transparent"></div>
+              <div className="rounded-full w-full h-[2px] bg-gradient-to-r from-transparent via-zinc-300 to-transparent dark:from-transparent dark:via-zinc-600 dark:to-transparent"></div>
 
               <StarsBackground className="w-full relative z-10">
                 <motion.section
-                  className="py-16 md:py-24 content-center items-center flex flex-col -mt-16"
+                  className="py-8 sm:py-12 md:py-16 lg:py-24 content-center items-center flex flex-col -mt-8 sm:-mt-12 md:-mt-16"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true, margin: "-100px" }}

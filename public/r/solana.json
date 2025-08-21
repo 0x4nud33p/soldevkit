@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "solana",
+  "type": "registry:lib",
+  "title": "Solana Utilities",
+  "description": "Utility functions for Solana development including lamports/SOL conversion and number formatting.",
+  "dependencies": [
+    "@solana/web3.js"
+  ],
+  "files": [
+    {
+      "path": "src/registry/default/utils/solana.ts",
+      "content": "import { LAMPORTS_PER_SOL } from \"@solana/web3.js\";\n\n/**\n * Convert lamports to SOL\n */\nexport function getLamportsToSol(\n  lamports: number,\n  digitsToDisplay?: number,\n): { sol: number } {\n  const sol = lamports / LAMPORTS_PER_SOL;\n  return { sol: digitsToDisplay ? toFixed(sol, digitsToDisplay) : sol };\n}\n\n/**\n * Convert SOL to lamports\n */\nexport function getSolToLamports(sol: number): { lamports: number } {\n  return { lamports: sol * LAMPORTS_PER_SOL };\n}\n\n/**\n * Round number to fixed digits\n */\nexport function toFixed(num: number, digits: number): number {\n  const factor = Math.pow(10, digits);\n  return Math.round(num * factor) / factor;\n}\n",
+      "type": "registry:lib",
+      "target": "lib/solana.ts"
+    }
+  ]
+}

@@ -18,13 +18,13 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative mx-auto mt-32 mb-16 max-w-[80rem] px-6 text-center md:px-8"
+      className="relative mx-auto  sm:mt-24 md:mt-32 xl:mt-8 max-2xl:mt-32 mb-8 sm:mb-12 md:mb-16 max-w-[80rem] px-4 sm:px-6 text-center md:px-8"
     >
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.6 }}
-        className=" backdrop-filter-[12px] inline-flex h-7 items-center justify-between rounded-full border border-white/5 bg-white/10 px-3 text-xs  dark:text-black transition-all ease-in hover:cursor-pointer hover:bg-white/20 group gap-1"
+        className=" backdrop-filter-[12px] inline-flex h-7 items-center justify-between rounded-full border border-white/5 bg-white/10 px-3 text-xs text-black dark:text-black transition-all ease-in hover:cursor-pointer hover:bg-white/20 group gap-1"
       >
         <TextShimmer className="inline-flex items-center justify-center">
           <span>✨ Introducing Solana Components</span>{" "}
@@ -35,7 +35,7 @@ export function HeroSection() {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.4, duration: 0.6 }}
-        className="bg-gradient-to-br dark:from-white from-black from-30% dark:to-white/40 to-black/40 bg-clip-text py-6 text-5xl font-medium leading-none tracking-tighter text-transparent text-balance sm:text-6xl md:text-7xl lg:text-8xl"
+        className="bg-gradient-to-br dark:from-white from-black from-30% dark:to-white/40 to-black/40 bg-clip-text py-4 sm:py-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-medium leading-none tracking-tighter text-transparent text-balance"
       >
         Soldevkit UI
         <br className="hidden md:block" /> the new way to build
@@ -46,7 +46,7 @@ export function HeroSection() {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.6, duration: 0.6 }}
-        className="mb-12 text-lg tracking-tight text-gray-400 md:text-xl text-balance"
+        className="mb-8 sm:mb-10 md:mb-12 text-base sm:text-lg tracking-tight text-gray-600 dark:text-gray-400 md:text-xl text-balance px-2 sm:px-0"
       >
         Beautifully designed, animated components built with
         <br className="hidden md:block" /> Tailwind CSS, React, and Framer
@@ -68,7 +68,7 @@ export function HeroSection() {
       </Link>
       <motion.div
         ref={ref}
-        className="hero-image-container relative mx-auto mt-16 max-w-7xl"
+        className="hero-image-container relative mx-auto mt-8 sm:mt-12 md:mt-16 max-w-7xl"
         data-hero-image
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}

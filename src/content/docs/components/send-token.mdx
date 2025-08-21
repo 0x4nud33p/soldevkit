@@ -1,0 +1,274 @@
+---
+title: Send Token
+description: A form component for sending SPL tokens on Solana with validation and transaction handling.
+author:
+  name: Aman Satyawani
+  url: https://github.com/satyawaniaman
+---
+
+<ComponentPreview name="send-token-demo" />
+
+## Installation
+
+<ComponentInstallation name="send-token" />
+
+## Usage
+
+### Basic Usage
+
+```tsx
+import { SendTokenForm } from "@/components/soldevkit-ui/token/send-token";
+import { PublicKey } from "@solana/web3.js";
+
+const tokens = [
+  {
+    id: "sol",
+    symbol: "SOL",
+    name: "Solana",
+    decimals: 9,
+    balance: 1.5,
+    mintAddress: "So11111111111111111111111111111111111111112",
+    icon: "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
+  },
+];
+
+export default function Example() {
+  const handleSendToken = async (values) => {
+    // Handle token sending logic
+    console.log("Sending token:", values);
+  };
+
+  const validateDestination = async (address: string) => {
+    // Validate Solana address
+    try {
+      new PublicKey(address);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  return (
+    <SendTokenForm
+      onSendToken={handleSendToken}
+      tokens={tokens}
+      validateDestination={validateDestination}
+      showTokenBalance
+    />
+  );
+}
+```
+
+### With Custom Validation
+
+```tsx
+import { SendTokenForm } from "@/components/soldevkit-ui/token/send-token";
+
+export default function ExampleWithValidation() {
+  return (
+    <SendTokenForm
+      onSendToken={handleSendToken}
+      tokens={tokens}
+      validateDestination={async (address) => {
+        // Custom validation logic
+        if (address.length < 32) {
+          return "Address too short";
+        }
+        return true;
+      }}
+    />
+  );
+}
+```
+
+### Loading State
+
+```tsx
+import { SendTokenForm } from "@/components/soldevkit-ui/token/send-token";
+
+export default function ExampleWithLoading() {
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  return <SendTokenForm onSendToken={handleSendToken} tokens={tokens} isLoading={isProcessing} />;
+}
+```
+
+## Features
+
+- **Form Validation**: Built-in validation for destination address and amount
+- **Token Selection**: Dropdown with balance display and token icons
+- **Loading States**: Proper loading indicators during transaction processing
+- **Error Handling**: Toast notifications for success and error states
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Customizable Validation**: Support for custom destination address validation
+- **Multi-Token Support**: Handles both SOL and SPL token transfers
+
+## Props
+
+<TypeTable
+  type={{
+    onSendToken: {
+      description: "Callback function called when form is submitted.",
+      type: "(values: FormValues) => Promise<void>",
+      required: false,
+      default: "undefined",
+    },
+    tokens: {
+      description: "Array of available tokens for selection.",
+      type: "TokenInfo[]",
+      required: true,
+      default: "undefined",
+    },
+    isLoading: {
+      description: "Loading state for the form.",
+      type: "boolean",
+      required: false,
+      default: "false",
+    },
+    showTokenBalance: {
+      description: "Whether to show token balance in selection dropdown.",
+      type: "boolean",
+      required: false,
+      default: "true",
+    },
+    validateDestination: {
+      description: "Custom validation function for destination address.",
+      type: "(address: string) => Promise<boolean | string>",
+      required: false,
+      default: "undefined",
+    },
+    className: {
+      description: "Additional CSS classes.",
+      type: "string",
+      required: false,
+      default: "undefined",
+    },
+  }}
+/>
+
+## Type Definitions
+
+### FormValues
+
+<TypeTable
+  type={{
+    destination: {
+      description: "The destination Solana address.",
+      type: "string",
+      required: true,
+      default: "undefined",
+    },
+    amount: {
+      description: "The amount of tokens to send.",
+      type: "number | undefined",
+      required: true,
+      default: "undefined",
+    },
+    token: {
+      description: "The selected token ID.",
+      type: "string",
+      required: true,
+      default: "undefined",
+    },
+  }}
+/>
+
+### TokenInfo
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for the token.",
+      type: "string",
+      required: true,
+      default: "undefined",
+    },
+    symbol: {
+      description: "Token symbol (e.g., 'SOL', 'USDC').",
+      type: "string",
+      required: true,
+      default: "undefined",
+    },
+    name: {
+      description: "Full name of the token.",
+      type: "string",
+      required: true,
+      default: "undefined",
+    },
+    decimals: {
+      description: "Number of decimal places for the token.",
+      type: "number",
+      required: true,
+      default: "undefined",
+    },
+    balance: {
+      description: "Current balance of the token.",
+      type: "number",
+      required: true,
+      default: "undefined",
+    },
+    mintAddress: {
+      description: "The mint address of the SPL token.",
+      type: "string",
+      required: false,
+      default: "undefined",
+    },
+    icon: {
+      description: "URL or path to the token icon.",
+      type: "string",
+      required: false,
+      default: "undefined",
+    },
+  }}
+/>
+
+## Validation
+
+The component includes built-in validation for:
+
+- **Destination Address**: Validates Solana public key format
+- **Amount**: Ensures positive numbers and respects token decimal precision
+- **Token Selection**: Requires a token to be selected
+
+### Custom Validation
+
+You can provide custom destination validation:
+
+```tsx
+const validateDestination = async (address: string) => {
+  // Return true for valid, false or error message for invalid
+  if (address.startsWith("invalid")) {
+    return "Invalid address format";
+  }
+  return true;
+};
+
+<SendTokenForm
+  validateDestination={validateDestination}
+  // ... other props
+/>;
+```
+
+## Dependencies
+
+This component requires the following packages:
+
+- `@solana/web3.js`
+- `@solana/wallet-adapter-react`
+- `@solana/spl-token`
+- `@solana/spl-token-registry`
+- `react-hook-form`
+- `sonner`
+- `lucide-react`
+
+Make sure your app is wrapped with the appropriate Solana wallet providers.
+
+## Notes
+
+- The component uses `react-hook-form` for form management and validation
+- Toast notifications are handled via `sonner` for user feedback
+- Requires a connected Solana wallet for transaction signing
+- Supports both SOL and SPL token transfers with automatic decimal handling
+- Token icons are displayed from the provided `icon` URL or a default Solana icon
+- Custom destination validation (`validateDestination`) is currently not applied to the built-in resolver. Built-in validation still runs.

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-is-valid-txn",
+  "type": "registry:hook",
+  "title": "useIsValidTransaction",
+  "description": "A React hook for validating Solana transaction signatures and checking confirmation status.",
+  "dependencies": [
+    "@solana/web3.js",
+    "react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "src/registry/default/hooks/transaction/use-is-valid-txn.tsx",
+      "content": "import { useState, useEffect, useCallback } from \"react\";\nimport { TransactionSignature, Connection } from \"@solana/web3.js\";\n\nexport type ErrorState = string | null;\nexport type StatusState = \"idle\" | \"loading\" | \"error\" | \"success\";\ntype ValidResultState = { isValidTransaction: boolean } | null;\n\n/**\n * Check if a Solana transaction is valid (confirmed)\n */\nexport function useIsValidTransaction(\n  connection: Connection,\n  transactionSignature: TransactionSignature,\n  autoTrigger: boolean = true,\n) {\n  const [error, setError] = useState<ErrorState>(null);\n  const [status, setStatus] = useState<StatusState>(\"idle\");\n  const [result, setResult] = useState<ValidResultState>(null);\n\n  const fetchIsValidTransaction = useCallback(async () => {\n    try {\n      setStatus(\"loading\");\n\n      const tx = await connection.getParsedTransaction(transactionSignature, {\n        commitment: \"confirmed\",\n      });\n\n      setResult({ isValidTransaction: !!tx });\n      setStatus(\"success\");\n    } catch (err) {\n      setError((err as Error).message);\n      setStatus(\"error\");\n    }\n  }, [connection, transactionSignature]);\n\n  useEffect(() => {\n    if (autoTrigger) {\n      fetchIsValidTransaction();\n    }\n  }, [fetchIsValidTransaction, autoTrigger]);\n\n  return { result, status, error, fetchIsValidTransaction };\n}\n",
+      "type": "registry:hook",
+      "target": "hooks/use-is-valid-txn.tsx"
+    }
+  ]
+}

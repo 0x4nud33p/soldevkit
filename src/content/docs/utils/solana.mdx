@@ -1,0 +1,200 @@
+---
+title: Solana Utilities
+description: Utility functions for Solana development including lamports/SOL conversion and number formatting.
+---
+
+import { ComponentInstallation } from "@/components/mdx/component-installation";
+import { Callout } from "fumadocs-ui/components/callout";
+import { CodeTabs } from "@/components/docs/code-tabs";
+
+# Solana Utilities
+
+A collection of utility functions for Solana development including lamports/SOL conversion and number formatting.
+
+## Installation
+
+<ComponentInstallation name="solana" />
+
+### Manual Installation
+
+<CodeTabs
+  codes={{
+    npm: "npx shadcn@latest add https://soldevkit.com/r/solana.json",
+    pnpm: "pnpm dlx shadcn@latest add https://soldevkit.com/r/solana.json",
+    yarn: "npx shadcn@latest add https://soldevkit.com/r/solana.json",
+  }}
+/>
+
+<Callout title="Dependencies" type="info">
+  This utility requires `@solana/web3.js` to be installed in your project.
+</Callout>
+
+```tsx title="lib/solana.ts"
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+
+/**
+ * Convert lamports to SOL
+ */
+export function getLamportsToSol(
+  lamports: number,
+  digitsToDisplay?: number,
+): { sol: number } {
+  const sol = lamports / LAMPORTS_PER_SOL;
+  return { sol: digitsToDisplay ? toFixed(sol, digitsToDisplay) : sol };
+}
+
+/**
+ * Convert SOL to lamports
+ */
+export function getSolToLamports(sol: number): { lamports: number } {
+  return { lamports: sol * LAMPORTS_PER_SOL };
+}
+
+/**
+ * Round number to fixed digits
+ */
+export function toFixed(num: number, digits: number): number {
+  const factor = Math.pow(10, digits);
+  return Math.round(num * factor) / factor;
+}
+```
+
+## Usage
+
+### Converting Lamports to SOL
+
+```tsx
+import { getLamportsToSol } from "@/lib/solana";
+
+// Convert lamports to SOL
+const { sol } = getLamportsToSol(1000000000); // 1 SOL
+console.log(sol); // 1
+
+// Convert with specific decimal places
+const { sol: formattedSol } = getLamportsToSol(1500000000, 2); // 1.5 SOL with 2 decimals
+console.log(formattedSol); // 1.5
+```
+
+### Converting SOL to Lamports
+
+```tsx
+import { getSolToLamports } from "@/lib/solana";
+
+// Convert SOL to lamports
+const { lamports } = getSolToLamports(1.5); // 1.5 SOL
+console.log(lamports); // 1500000000
+```
+
+### Number Formatting
+
+```tsx
+import { toFixed } from "@/lib/solana";
+
+// Round to specific decimal places
+const rounded = toFixed(3.14159, 2);
+console.log(rounded); // 3.14
+```
+
+## API Reference
+
+### `getLamportsToSol`
+
+Converts lamports to SOL with optional decimal formatting.
+
+**Parameters:**
+- `lamports` (number): The amount in lamports to convert
+- `digitsToDisplay` (number, optional): Number of decimal places to display
+
+**Returns:**
+- `{ sol: number }`: Object containing the SOL amount
+
+### `getSolToLamports`
+
+Converts SOL to lamports.
+
+**Parameters:**
+- `sol` (number): The amount in SOL to convert
+
+**Returns:**
+- `{ lamports: number }`: Object containing the lamports amount
+
+### `toFixed`
+
+Rounds a number to a specified number of decimal places.
+
+**Parameters:**
+- `num` (number): The number to round
+- `digits` (number): Number of decimal places
+
+**Returns:**
+- `number`: The rounded number
+
+## Examples
+
+### Wallet Balance Display
+
+```tsx
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useEffect, useState } from "react";
+import { getLamportsToSol } from "@/lib/solana";
+
+function WalletBalance() {
+  const { connection } = useConnection();
+  const { publicKey } = useWallet();
+  const [balance, setBalance] = useState<number>(0);
+
+  useEffect(() => {
+    if (!publicKey) return;
+
+    const getBalance = async () => {
+      const lamports = await connection.getBalance(publicKey);
+      const { sol } = getLamportsToSol(lamports, 4);
+      setBalance(sol);
+    };
+
+    getBalance();
+  }, [connection, publicKey]);
+
+  return (
+    <div>
+      <p>Balance: {balance} SOL</p>
+    </div>
+  );
+}
+```
+
+### Transaction Amount Input
+
+```tsx
+import { useState } from "react";
+import { getSolToLamports } from "@/lib/solana";
+
+function TransactionForm() {
+  const [solAmount, setSolAmount] = useState<string>("");
+
+  const handleSubmit = () => {
+    const sol = parseFloat(solAmount);
+    const { lamports } = getSolToLamports(sol);
+    
+    // Use lamports for transaction
+    console.log(`Sending ${lamports} lamports`);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="number"
+        step="0.001"
+        placeholder="Amount in SOL"
+        value={solAmount}
+        onChange={(e) => setSolAmount(e.target.value)}
+      />
+      <button type="submit">Send Transaction</button>
+    </form>
+  );
+}
+```
+
+<Callout title="Important" type="warning">
+  Always validate user input when working with SOL amounts to prevent precision errors and ensure security.
+</Callout>

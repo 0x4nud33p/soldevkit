@@ -1,0 +1,319 @@
+---
+title: useTransferTokens
+description: A React hook for transferring SOL or SPL tokens with wallet adapter integration and transaction confirmation.
+author:
+  name: Aman Satyawani
+  url: https://github.com/satyawaniaman
+---
+
+## Installation
+
+```bash
+npx shadcn@latest add https://soldevkit.com/r/use-transfer-token.json
+```
+
+### Manual Installation
+
+If you prefer to set up the hook manually:
+
+#### 1. Install required dependencies
+
+```bash
+npm install @solana/web3.js @solana/spl-token @solana/wallet-adapter-base react
+```
+
+#### 2. Copy the hook file
+
+Copy the `use-transfer-token.tsx` hook from the registry and place it in your `hooks/` directory.
+
+## Usage
+
+### SOL Transfer
+
+```tsx
+import { useState } from 'react';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useTransferTokens } from '@/hooks/use-transfer-token';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+
+export function SolTransfer() {
+  const { connection } = useConnection();
+  const { publicKey, sendTransaction } = useWallet();
+  const { result, status, error, transferTokens } = useTransferTokens(
+    publicKey,
+    connection,
+    sendTransaction
+  );
+  
+  const [recipient, setRecipient] = useState('');
+  const [amount, setAmount] = useState('');
+
+  const handleTransfer = async () => {
+    if (!recipient || !amount) return;
+    
+    await transferTokens(
+      recipient,
+      'SOL',
+      parseFloat(amount)
+    );
+  };
+
+  return (
+    <div className="space-y-4">
+      <Input
+        type="text"
+        placeholder="Recipient wallet address"
+        value={recipient}
+        onChange={(e) => setRecipient(e.target.value)}
+      />
+      <Input
+        type="number"
+        placeholder="Amount (SOL)"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+        min="0"
+        step="0.001"
+      />
+      <Button 
+        onClick={handleTransfer}
+        disabled={!publicKey || status === 'loading' || !recipient || !amount}
+      >
+        {status === 'loading' ? 'Transferring...' : 'Transfer SOL'}
+      </Button>
+      
+      {status === 'success' && result && (
+        <div className="p-4 bg-green-100 rounded">
+          <p className="text-green-800">Transfer successful!</p>
+          <p className="text-sm text-green-600 break-all">
+            Transaction: {result.transactionSignature}
+          </p>
+        </div>
+      )}
+      
+      {status === 'error' && error && (
+        <div className="p-4 bg-red-100 rounded">
+          <p className="text-red-800">Error: {error}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### SPL Token Transfer
+
+```tsx
+import { useState } from 'react';
+import { PublicKey } from '@solana/web3.js';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useTransferTokens } from '@/hooks/use-transfer-token';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+
+// Example: USDC mint address on mainnet
+const USDC_MINT = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
+
+export function TokenTransfer() {
+  const { connection } = useConnection();
+  const { publicKey, sendTransaction } = useWallet();
+  const { result, status, error, transferTokens } = useTransferTokens(
+    publicKey,
+    connection,
+    sendTransaction
+  );
+  
+  const [recipient, setRecipient] = useState('');
+  const [amount, setAmount] = useState('');
+
+  const handleTransfer = async () => {
+    if (!recipient || !amount) return;
+    
+    await transferTokens(
+      recipient,
+      { mint: USDC_MINT },
+      parseFloat(amount) * 1_000_000 // USDC has 6 decimals
+    );
+  };
+
+  return (
+    <div className="space-y-4">
+      <Input
+        type="text"
+        placeholder="Recipient wallet address"
+        value={recipient}
+        onChange={(e) => setRecipient(e.target.value)}
+      />
+      <Input
+        type="number"
+        placeholder="Amount (USDC)"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+        min="0"
+        step="0.01"
+      />
+      <Button 
+        onClick={handleTransfer}
+        disabled={!publicKey || status === 'loading' || !recipient || !amount}
+      >
+        {status === 'loading' ? 'Transferring...' : 'Transfer USDC'}
+      </Button>
+      
+      {status === 'success' && result && (
+        <div className="p-4 bg-green-100 rounded">
+          <p className="text-green-800">USDC transfer successful!</p>
+          <p className="text-sm text-green-600 break-all">
+            Transaction: {result.transactionSignature}
+          </p>
+        </div>
+      )}
+      
+      {status === 'error' && error && (
+        <div className="p-4 bg-red-100 rounded">
+          <p className="text-red-800">Error: {error}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Advanced Usage with Custom Hook
+
+```tsx
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { PublicKey } from '@solana/web3.js';
+import { useTransferTokens } from '@/hooks/use-transfer-token';
+import { useTxnToast } from '@/hooks/use-txn-toast';
+
+export function useTokenTransferWithToast() {
+  const { connection } = useConnection();
+  const { publicKey, sendTransaction } = useWallet();
+  const { transferTokens, status, error } = useTransferTokens(
+    publicKey,
+    connection,
+    sendTransaction
+  );
+  const { txnToast } = useTxnToast();
+
+  const transferWithToast = async (
+    recipient: string,
+    token: 'SOL' | { mint: PublicKey },
+    amount: number,
+    tokenName?: string
+  ) => {
+    try {
+      const toastId = txnToast(
+        undefined,
+        `Transferring ${tokenName || (token === 'SOL' ? 'SOL' : 'tokens')}...`,
+        { variant: 'pending' }
+      );
+
+      const result = await transferTokens(recipient, token, amount);
+      
+      if (result?.transactionSignature) {
+        txnToast.confirm(
+          result.transactionSignature,
+          `${tokenName || (token === 'SOL' ? 'SOL' : 'Token')} transfer completed!`
+        );
+      }
+      
+      return result;
+    } catch (err) {
+      txnToast.error(`Transfer failed: ${err.message}`);
+      throw err;
+    }
+  };
+
+  return {
+    transferWithToast,
+    status,
+    error
+  };
+}
+```
+
+## API Reference
+
+### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `publicKey` | `PublicKey \| null` | The wallet's public key |
+| `connection` | `Connection` | Solana RPC connection |
+| `sendTransaction` | `WalletAdapterProps["sendTransaction"]` | Wallet adapter's sendTransaction function |
+
+### Return Value
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `result` | `{ transactionSignature?: TransactionSignature } \| null` | Transfer result with transaction signature |
+| `status` | `"idle" \| "loading" \| "error" \| "success"` | Current operation status |
+| `error` | `string \| null` | Error message if operation failed |
+| `transferTokens` | `(recipientAddress: string, token: "SOL" \| { mint: PublicKey }, amount: number) => Promise<TransferResultState>` | Function to execute transfer |
+
+### transferTokens Function
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `recipientAddress` | `string` | Recipient wallet address |
+| `token` | `"SOL" \| { mint: PublicKey }` | Token type - "SOL" for native SOL or object with mint address for SPL tokens |
+| `amount` | `number` | Amount to transfer (in SOL for native, or smallest token units for SPL) |
+
+## Important Notes
+
+### SOL Transfers
+- Amount is specified in SOL units (e.g., 1.5 for 1.5 SOL)
+- Automatically converts to lamports (1 SOL = 1,000,000,000 lamports)
+
+### SPL Token Transfers
+- Amount must be specified in the token's smallest units
+- For tokens with decimals, multiply by 10^decimals (e.g., USDC has 6 decimals, so 1 USDC = 1,000,000 units)
+- Requires Associated Token Accounts (ATAs) to exist for both sender and recipient
+
+### Error Handling
+
+Common errors you might encounter:
+
+- `"Wallet not connected"`: User hasn't connected their wallet
+- `"Insufficient funds"`: Not enough balance for transfer + fees
+- `"Invalid recipient address"`: Malformed recipient address
+- `"Token account not found"`: Missing Associated Token Account
+- `"Network error"`: RPC connection issues
+
+```tsx
+const handleTransferWithErrorHandling = async () => {
+  try {
+    const result = await transferTokens(recipient, 'SOL', amount);
+    if (result) {
+      console.log('Transfer successful:', result.transactionSignature);
+    }
+  } catch (err) {
+    console.error('Transfer failed:', err);
+    // Handle specific error cases
+    if (err.message.includes('Insufficient funds')) {
+      // Show insufficient funds message
+    } else if (err.message.includes('Invalid recipient')) {
+      // Show invalid address message
+    }
+  }
+};
+```
+
+## Token Decimals Reference
+
+Common SPL tokens and their decimal places:
+
+| Token | Mint Address | Decimals | Example Amount Calculation |
+|-------|--------------|----------|----------------------------|
+| USDC | `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v` | 6 | 1 USDC = 1,000,000 units |
+| USDT | `Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB` | 6 | 1 USDT = 1,000,000 units |
+| BONK | `DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263` | 5 | 1 BONK = 100,000 units |
+
+## Security Considerations
+
+1. **Validate Addresses**: Always validate recipient addresses before transfers
+2. **Amount Limits**: Consider implementing transfer limits for security
+3. **Confirmation**: Wait for transaction confirmation before showing success
+4. **Error Handling**: Provide clear error messages to users
+5. **Network Fees**: Account for transaction fees in balance calculations

@@ -39,7 +39,7 @@ const LABELS = {
 
 // Types
 type WalletButtonProps = React.ComponentProps<"button"> & {
-  labels?: Partial<typeof LABELS>;
+  labels?: Partial<Record<keyof typeof LABELS, string>>;
   variant?:
     | "default"
     | "destructive"
@@ -48,6 +48,7 @@ type WalletButtonProps = React.ComponentProps<"button"> & {
     | "ghost"
     | "link";
   size?: "default" | "sm" | "lg" | "icon";
+  icon?: React.ReactNode;
 };
 
 // Enhanced Wallet Modal Component
@@ -193,6 +194,7 @@ export const WalletModal: React.FC<{
 export function WalletConnectButton({
   children,
   labels = LABELS,
+  icon,
   ...props
 }: WalletButtonProps) {
   const [walletModalOpen, setWalletModalOpen] = useState(false);
@@ -203,13 +205,26 @@ export function WalletConnectButton({
   const { publicKey, wallet, disconnect, connecting, connected } = useWallet();
 
   const content = useMemo(() => {
-    if (!mounted) return labels["no-wallet"];
+    if (!mounted) {
+      return (
+        <div className="flex items-center gap-2">
+          {icon && <span className="flex-shrink-0">{icon}</span>}
+          <span>{labels["no-wallet"]}</span>
+        </div>
+      );
+    }
 
     if (children) {
-      return children;
+      return (
+        <div className="flex items-center gap-2">
+          {icon && <span className="flex-shrink-0">{icon}</span>}
+          {children}
+        </div>
+      );
     } else if (connecting) {
       return (
         <div className="flex items-center gap-2">
+          {icon && <span className="flex-shrink-0">{icon}</span>}
           <Loader2 className="h-4 w-4 animate-spin" />
           <span>{labels["connecting"]}</span>
         </div>
@@ -220,6 +235,7 @@ export function WalletConnectButton({
     if (connected && publicKey) {
       return (
         <div className="flex items-center gap-2">
+          {icon && <span className="flex-shrink-0">{icon}</span>}
           {wallet?.adapter.icon && (
             <img
               src={wallet.adapter.icon}
@@ -237,8 +253,22 @@ export function WalletConnectButton({
       );
     }
 
-    return labels["has-wallet"];
-  }, [mounted, children, connecting, connected, publicKey, wallet, labels]);
+    return (
+      <div className="flex items-center gap-2">
+        {icon && <span className="flex-shrink-0">{icon}</span>}
+        <span>{labels["has-wallet"]}</span>
+      </div>
+    );
+  }, [
+    mounted,
+    children,
+    connecting,
+    connected,
+    publicKey,
+    wallet,
+    labels,
+    icon,
+  ]);
 
   const handleCopyAddress = useCallback(async () => {
     if (publicKey) {

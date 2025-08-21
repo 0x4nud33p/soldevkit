@@ -2,6 +2,8 @@
 import { type Registry } from "shadcn/registry";
 import { ui } from "./registry-ui";
 import { examples } from "./registry-examples";
+import { hooks } from "./registry-hooks";
+import { utils } from "./registry-utils";
 import { providers, type Provider } from "./registry-providers";
 
 // Extend the registry item type to include providers
@@ -17,6 +19,6 @@ type ExtendedRegistry = Registry & {
 export const registry: ExtendedRegistry = {
   name: "soldevkit-ui",
   homepage: "https://soldevkit.com",
-  items: [...ui, ...examples] as ExtendedRegistryItem[],
+  items: [...ui, ...examples, ...hooks, ...utils] as ExtendedRegistryItem[],
   providers,
 };

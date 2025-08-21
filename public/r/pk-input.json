@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pk-input",
+  "type": "registry:ui",
+  "title": "Public Key Input",
+  "description": "A specialized input component for Solana public key validation with real-time validation feedback.",
+  "dependencies": [
+    "@solana/web3.js"
+  ],
+  "registryDependencies": [
+    "input"
+  ],
+  "files": [
+    {
+      "path": "src/registry/default/ui/pk/pk-input.tsx",
+      "content": "\"use client\";\nimport React from \"react\";\n\nimport { validatePublicKey, cn } from \"@/lib/utils\";\nimport { Input } from \"@/components/soldevkit-ui/input\";\n\nexport const PKInput = ({\n  ...props\n}: React.ComponentPropsWithoutRef<\"input\">) => {\n  const [value, setValue] = React.useState(\"\");\n  const [isInvalid, setIsInvalid] = React.useState(false);\n  const [hasBlurred, setHasBlurred] = React.useState(false);\n\n  const inputRef = React.useRef<HTMLInputElement>(null);\n\n  const validateField = React.useCallback(() => {\n    const isValid = validatePublicKey(value);\n    if (inputRef.current) {\n      if (!isValid) {\n        inputRef.current.setCustomValidity(\"Invalid public key\");\n      } else {\n        inputRef.current.setCustomValidity(\"\");\n      }\n      setIsInvalid(!inputRef.current.validity.valid);\n    }\n  }, [value]);\n  const handleBlur = React.useCallback(() => {\n    setHasBlurred(true);\n    validateField();\n  }, [validateField]);\n\n  React.useEffect(() => {\n    if (hasBlurred) {\n      validateField();\n    }\n  }, [value, validateField, hasBlurred]);\n  return (\n    <Input\n      ref={inputRef}\n      type=\"text\"\n      {...props}\n      className={cn(\n        \"outline-none\",\n        props.className,\n        isInvalid && \"border-destructive focus-visible:ring-destructive\",\n      )}\n      value={value}\n      onChange={(e) => setValue(e.target.value)}\n      onBlur={handleBlur}\n      aria-invalid={isInvalid}\n    />\n  );\n};\n",
+      "type": "registry:ui",
+      "target": "components/soldevkit-ui/pk/pk-input.tsx"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "avatar",
+  "type": "registry:ui",
+  "title": "Avatar",
+  "description": "A component for displaying Solana address avatars using Minidenticons with customizable sizes and styling.",
+  "dependencies": [
+    "@solana/web3.js",
+    "minidenticon"
+  ],
+  "files": [
+    {
+      "path": "src/registry/default/ui/avatar/avatar.tsx",
+      "content": "import React from \"react\";\nimport { PublicKey } from \"@solana/web3.js\";\nimport { minidenticon } from \"minidenticons\";\nimport { cn } from \"@/lib/utils\";\n\ntype AvatarProps = {\n  address?: PublicKey | string; // allow optional\n  size?: number;\n  className?: string;\n  alt?: string;\n};\n\nconst Avatar = ({ address, size = 48, className, alt }: AvatarProps) => {\n  const pubkeyStr = React.useMemo(() => {\n    if (!address) return \"\";\n    return typeof address === \"string\" ? address : address.toBase58();\n  }, [address]);\n\n  const identicon = React.useMemo(() => {\n    if (!pubkeyStr) return \"\";\n    return (\n      \"data:image/svg+xml;utf8,\" +\n      encodeURIComponent(minidenticon(pubkeyStr, 90, 50))\n    );\n  }, [pubkeyStr]);\n\n  if (!pubkeyStr) {\n    return (\n      <div\n        className={cn(\n          \"relative flex items-center justify-center rounded-full bg-muted p-1 text-muted-foreground\",\n          className,\n        )}\n        style={{ width: size, height: size }}\n      >\n        <span className=\"text-xs\">?</span>\n      </div>\n    );\n  }\n\n  return (\n    <div\n      className={cn(\n        \"relative flex items-center justify-center rounded-full bg-muted p-1 text-muted-foreground\",\n        className,\n      )}\n      style={{ width: size, height: size }}\n    >\n      <img src={identicon} alt={alt || pubkeyStr} width={size} height={size} />\n    </div>\n  );\n};\n\nexport { Avatar };\n",
+      "type": "registry:ui",
+      "target": "components/soldevkit-ui/avatar/avatar.tsx"
+    }
+  ]
+}

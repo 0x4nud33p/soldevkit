@@ -8,6 +8,22 @@
     "manual-installation",
     "license",
     "---Components---",
-    "components/wallet"
+    "components/avatar",
+    "components/wallet",
+    "components/pk-input",
+    "components/send-token",
+    "components/txn-settings",
+    "components/transaction",
+    "components/txn-list",
+    "components/swap-token",
+    "---Hooks---",
+    "hooks/use-request-sol-airdrop",
+    "hooks/use-transfer-token",
+    "hooks/use-is-valid-txn",
+    "hooks/use-txn-details",
+    "hooks/use-txn-toast",
+    "hooks/use-wallet-token-balance",
+    "---Utils---",
+    "utils/solana"
   ]
 }

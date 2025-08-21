@@ -1,0 +1,216 @@
+---
+title: Transaction Settings
+description: A comprehensive transaction settings dialog with priority fee, slippage, and other configuration options for Solana transactions.
+---
+
+import { ComponentPreview } from "@/components/mdx/component-preview";
+import { ComponentInstallation } from "@/components/mdx/component-installation";
+
+<ComponentPreview name="txn-settings-demo" />
+
+## Installation
+
+<ComponentInstallation name="txn-settings" />
+
+## Usage
+
+```tsx
+import { TxnSettings, TxnSettingsProvider } from "@/components/soldevkit-ui/transaction/txn-settings";
+
+export default function Example() {
+  return (
+    <TxnSettingsProvider>
+      <TxnSettings />
+    </TxnSettingsProvider>
+  );
+}
+```
+
+## Examples
+
+### Basic Usage
+
+```tsx
+import { TxnSettings, TxnSettingsProvider } from "@/components/soldevkit-ui/transaction/txn-settings";
+
+export default function BasicExample() {
+  return (
+    <TxnSettingsProvider>
+      <TxnSettings />
+    </TxnSettingsProvider>
+  );
+}
+```
+
+### Custom Trigger
+
+```tsx
+import { TxnSettings, TxnSettingsProvider } from "@/components/soldevkit-ui/transaction/txn-settings";
+import { Button } from "@/components/soldevkit-ui/button";
+import { Zap } from "lucide-react";
+
+export default function CustomTriggerExample() {
+  return (
+    <TxnSettingsProvider>
+      <TxnSettings
+        trigger={
+          <Button variant="outline" size="icon">
+            <Zap size={16} />
+          </Button>
+        }
+      />
+    </TxnSettingsProvider>
+  );
+}
+```
+
+### With Text Button
+
+```tsx
+import { TxnSettings, TxnSettingsProvider } from "@/components/soldevkit-ui/transaction/txn-settings";
+import { Button } from "@/components/soldevkit-ui/button";
+import { Settings } from "lucide-react";
+
+export default function TextButtonExample() {
+  return (
+    <TxnSettingsProvider>
+      <TxnSettings
+        trigger={
+          <Button variant="secondary">
+            <Settings size={16} className="mr-2" />
+            Transaction Settings
+          </Button>
+        }
+      />
+    </TxnSettingsProvider>
+  );
+}
+```
+
+## Features
+
+- **Priority Fee Configuration**: Choose between Normal, Medium, and Turbo priority levels
+- **Priority Fee Cap**: Set dynamic or manual priority fee caps
+- **Slippage Management**: Configure dynamic or fixed slippage tolerance
+- **Custom Slippage Values**: Set specific slippage percentages (0.5%, 1%, 1.5%, or custom)
+- **Context Provider**: Manage settings state across your application
+- **Customizable Trigger**: Use any component as the settings trigger
+- **Form Validation**: Built-in validation for numeric inputs
+- **Responsive Design**: Works seamlessly on desktop and mobile
+
+## API Reference
+
+### TxnSettingsProvider
+
+The provider component that manages transaction settings state.
+
+<TypeTable
+  type={{
+    children: {
+      description: "Child components that need access to settings",
+      type: "React.ReactNode",
+      required: true,
+    },
+  }}
+/>
+
+### TxnSettings
+
+The main transaction settings dialog component.
+
+<TypeTable
+  type={{
+    trigger: {
+      description: "Custom trigger element for opening the dialog",
+      type: "React.ReactNode",
+      default: "Settings icon button",
+    },
+  }}
+/>
+
+### useTxnSettings Hook
+
+A hook to access and modify transaction settings from any component within the provider.
+
+```tsx
+const { settings, updateSettings, isOpen, setIsOpen } = useTxnSettings();
+```
+
+**Returns:**
+
+- `settings`: Current transaction settings object
+- `updateSettings`: Function to update settings
+- `isOpen`: Dialog open state
+- `setIsOpen`: Function to control dialog visibility
+
+### TxnSettingsType
+
+The transaction settings configuration object.
+
+```tsx
+type TxnSettingsType = {
+  priority: string; // "normal" | "medium" | "turbo"
+  priorityFeeCap: "dynamic" | number;
+  slippageMode: "dynamic" | "fixed";
+  slippageValue: number; // Percentage value
+};
+```
+
+## Settings Configuration
+
+### Priority Levels
+
+- **Normal**: Standard transaction priority
+- **Medium**: Increased priority for faster confirmation
+- **Turbo**: Highest priority for immediate processing
+
+### Priority Fee Cap
+
+- **Dynamic**: Automatically adjusts based on network conditions
+- **Manual**: Set a specific maximum fee amount
+
+### Slippage Modes
+
+- **Dynamic**: Automatically calculates optimal slippage
+- **Fixed**: Use predefined or custom slippage values
+  - Low: 0.5%
+  - Normal: 1.0%
+  - High: 1.5%
+  - Custom: User-defined percentage
+
+## Usage with Context
+
+```tsx
+import { useTxnSettings } from "@/components/soldevkit-ui/transaction/txn-settings";
+
+function MyComponent() {
+  const { settings, updateSettings } = useTxnSettings();
+
+  const handlePriorityChange = () => {
+    updateSettings({ priority: "turbo" });
+  };
+
+  return (
+    <div>
+      <p>Current priority: {settings.priority}</p>
+      <button onClick={handlePriorityChange}>Set Turbo</button>
+    </div>
+  );
+}
+```
+
+## Accessibility
+
+- Full keyboard navigation support
+- ARIA labels and descriptions
+- Screen reader compatible
+- Focus management within dialog
+- Escape key to close dialog
+
+## Dependencies
+
+- `@radix-ui/react-dialog` - Dialog primitive
+- `lucide-react` - Icons
+- `button` - Button component
+- `input` - Input component
+- `toggle-group` - Toggle group component

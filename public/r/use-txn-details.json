@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-txn-details",
+  "type": "registry:hook",
+  "title": "useTransactionDetails",
+  "description": "A React hook for fetching detailed Solana transaction information including parsed data and metadata.",
+  "dependencies": [
+    "@solana/web3.js",
+    "react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "src/registry/default/hooks/transaction/use-txn-details.tsx",
+      "content": "import { useState, useEffect, useCallback } from \"react\";\nimport {\n  TransactionSignature,\n  ParsedTransactionWithMeta,\n  Connection,\n} from \"@solana/web3.js\";\n\nexport type ErrorState = string | null;\nexport type StatusState = \"idle\" | \"loading\" | \"error\" | \"success\";\ntype DetailsResultState = {\n  transactionDetails: ParsedTransactionWithMeta;\n} | null;\n\n/**\n * Fetch Solana transaction details\n */\nexport function useTransactionDetails(\n  connection: Connection,\n  transactionSignature: TransactionSignature,\n  autoTrigger: boolean = true,\n) {\n  const [error, setError] = useState<ErrorState>(null);\n  const [status, setStatus] = useState<StatusState>(\"idle\");\n  const [result, setResult] = useState<DetailsResultState>(null);\n\n  const fetchTransactionDetails = useCallback(async () => {\n    try {\n      setStatus(\"loading\");\n\n      const tx = await connection.getParsedTransaction(transactionSignature, {\n        commitment: \"confirmed\",\n      });\n\n      if (!tx) throw new Error(\"Transaction not found\");\n\n      setResult({ transactionDetails: tx });\n      setStatus(\"success\");\n    } catch (err) {\n      setError((err as Error).message);\n      setStatus(\"error\");\n    }\n  }, [connection, transactionSignature]);\n\n  useEffect(() => {\n    if (autoTrigger) {\n      fetchTransactionDetails();\n    }\n  }, [fetchTransactionDetails, autoTrigger]);\n\n  return { result, status, error, fetchTransactionDetails };\n}\n",
+      "type": "registry:hook",
+      "target": "hooks/use-txn-details.tsx"
+    }
+  ]
+}

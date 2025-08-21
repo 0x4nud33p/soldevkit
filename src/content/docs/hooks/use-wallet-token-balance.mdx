@@ -1,0 +1,619 @@
+---
+title: useWalletTokenBalance
+description: A React hook for fetching SOL balance for a given wallet address with real-time updates.
+author:
+  name: Aman Satyawani
+  url: https://github.com/satyawaniaman
+---
+
+## Installation
+
+```bash
+npx shadcn@latest add https://soldevkit.com/r/use-wallet-token-balance.json
+```
+
+### Manual Installation
+
+If you prefer to set up the hook manually:
+
+#### 1. Install required dependencies
+
+```bash
+npm install @solana/web3.js react
+```
+
+#### 2. Copy the hook file
+
+Copy the `use-wallet-token-balance.tsx` hook from the registry and place it in your `hooks/` directory.
+
+## Usage
+
+### Basic Usage
+
+```tsx
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useWalletTokenBalance } from '@/hooks/use-wallet-token-balance';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { RefreshCw } from 'lucide-react';
+
+export function WalletBalance() {
+  const { connection } = useConnection();
+  const { publicKey } = useWallet();
+  const { balance, status, error, refetch } = useWalletTokenBalance(
+    publicKey,
+    connection,
+    'SOL'
+  );
+
+  if (!publicKey) {
+    return (
+      <Card>
+        <CardContent className="p-6 text-center">
+          <p className="text-gray-500">Please connect your wallet to view balance</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">SOL Balance</CardTitle>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={refetch}
+          disabled={status === 'loading'}
+        >
+          <RefreshCw className={`h-4 w-4 ${status === 'loading' ? 'animate-spin' : ''}`} />
+        </Button>
+      </CardHeader>
+      <CardContent>
+        {status === 'loading' && (
+          <div className="text-2xl font-bold text-gray-400">Loading...</div>
+        )}
+        
+        {status === 'success' && balance !== null && (
+          <div className="text-2xl font-bold">{balance.toFixed(4)} SOL</div>
+        )}
+        
+        {status === 'error' && error && (
+          <div className="text-red-600">
+            <p className="text-sm">Error: {error}</p>
+            <Button variant="outline" size="sm" onClick={refetch} className="mt-2">
+              Retry
+            </Button>
+          </div>
+        )}
+        
+        <p className="text-xs text-gray-500 mt-2">
+          {publicKey.toBase58().slice(0, 8)}...{publicKey.toBase58().slice(-8)}
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+### Balance Display with Formatting
+
+```tsx
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useWalletTokenBalance } from '@/hooks/use-wallet-token-balance';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Wallet, TrendingUp, TrendingDown } from 'lucide-react';
+
+interface BalanceDisplayProps {
+  publicKey?: PublicKey | null;
+  showTrend?: boolean;
+}
+
+export function BalanceDisplay({ publicKey, showTrend = false }: BalanceDisplayProps) {
+  const { connection } = useConnection();
+  const { balance, status, error, refetch } = useWalletTokenBalance(
+    publicKey,
+    connection,
+    'SOL'
+  );
+
+  const formatBalance = (balance: number) => {
+    if (balance >= 1000) {
+      return `${(balance / 1000).toFixed(2)}K SOL`;
+    } else if (balance >= 1) {
+      return `${balance.toFixed(4)} SOL`;
+    } else {
+      return `${(balance * 1000).toFixed(2)}m SOL`;
+    }
+  };
+
+  const getBalanceColor = (balance: number) => {
+    if (balance >= 10) return 'text-green-600';
+    if (balance >= 1) return 'text-blue-600';
+    if (balance >= 0.1) return 'text-yellow-600';
+    return 'text-red-600';
+  };
+
+  const getBalanceStatus = (balance: number) => {
+    if (balance >= 10) return { label: 'High', variant: 'default' as const };
+    if (balance >= 1) return { label: 'Good', variant: 'secondary' as const };
+    if (balance >= 0.1) return { label: 'Low', variant: 'outline' as const };
+    return { label: 'Very Low', variant: 'destructive' as const };
+  };
+
+  if (!publicKey) {
+    return (
+      <Card className="w-full">
+        <CardContent className="flex items-center justify-center p-6">
+          <div className="text-center">
+            <Wallet className="h-8 w-8 mx-auto mb-2 text-gray-400" />
+            <p className="text-sm text-gray-500">No wallet connected</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="w-full">
+      <CardContent className="p-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-purple-100 rounded-full">
+              <Wallet className="h-5 w-5 text-purple-600" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-600">SOL Balance</p>
+              {status === 'loading' && (
+                <div className="h-8 w-24 bg-gray-200 animate-pulse rounded"></div>
+              )}
+              {status === 'success' && balance !== null && (
+                <div className="flex items-center space-x-2">
+                  <p className={`text-2xl font-bold ${getBalanceColor(balance)}`}>
+                    {formatBalance(balance)}
+                  </p>
+                  <Badge variant={getBalanceStatus(balance).variant}>
+                    {getBalanceStatus(balance).label}
+                  </Badge>
+                </div>
+              )}
+              {status === 'error' && (
+                <p className="text-red-600 text-sm">{error}</p>
+              )}
+            </div>
+          </div>
+          
+          {showTrend && status === 'success' && balance !== null && (
+            <div className="text-right">
+              {balance >= 1 ? (
+                <TrendingUp className="h-5 w-5 text-green-500" />
+              ) : (
+                <TrendingDown className="h-5 w-5 text-red-500" />
+              )}
+            </div>
+          )}
+        </div>
+        
+        <div className="mt-4 pt-4 border-t">
+          <p className="text-xs text-gray-500">
+            Address: {publicKey.toBase58().slice(0, 12)}...{publicKey.toBase58().slice(-12)}
+          </p>
+          <button
+            onClick={refetch}
+            className="text-xs text-blue-600 hover:text-blue-800 mt-1"
+            disabled={status === 'loading'}
+          >
+            {status === 'loading' ? 'Refreshing...' : 'Refresh Balance'}
+          </button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+### Multi-Wallet Balance Tracker
+
+```tsx
+import { useConnection } from '@solana/wallet-adapter-react';
+import { useWalletTokenBalance } from '@/hooks/use-wallet-token-balance';
+import { PublicKey } from '@solana/web3.js';
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Trash2, Plus } from 'lucide-react';
+
+interface WalletEntry {
+  id: string;
+  address: string;
+  label?: string;
+}
+
+function WalletBalanceItem({ wallet, onRemove }: { 
+  wallet: WalletEntry; 
+  onRemove: (id: string) => void; 
+}) {
+  const { connection } = useConnection();
+  const publicKey = React.useMemo(() => {
+    try {
+      return new PublicKey(wallet.address);
+    } catch {
+      return null;
+    }
+  }, [wallet.address]);
+  
+  const { balance, status, error } = useWalletTokenBalance(
+    publicKey,
+    connection,
+    'SOL'
+  );
+
+  return (
+    <div className="flex items-center justify-between p-4 border rounded-lg">
+      <div className="flex-1">
+        <div className="flex items-center space-x-2 mb-1">
+          {wallet.label && (
+            <Badge variant="outline">{wallet.label}</Badge>
+          )}
+          <span className="font-mono text-sm text-gray-600">
+            {wallet.address.slice(0, 8)}...{wallet.address.slice(-8)}
+          </span>
+        </div>
+        
+        {status === 'loading' && (
+          <div className="text-sm text-gray-500">Loading balance...</div>
+        )}
+        
+        {status === 'success' && balance !== null && (
+          <div className="text-lg font-semibold text-green-600">
+            {balance.toFixed(4)} SOL
+          </div>
+        )}
+        
+        {status === 'error' && (
+          <div className="text-sm text-red-600">{error}</div>
+        )}
+      </div>
+      
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => onRemove(wallet.id)}
+        className="text-red-600 hover:text-red-800"
+      >
+        <Trash2 className="h-4 w-4" />
+      </Button>
+    </div>
+  );
+}
+
+export function MultiWalletTracker() {
+  const [wallets, setWallets] = useState<WalletEntry[]>([]);
+  const [newAddress, setNewAddress] = useState('');
+  const [newLabel, setNewLabel] = useState('');
+
+  const addWallet = () => {
+    if (!newAddress.trim()) return;
+    
+    try {
+      // Validate address
+      new PublicKey(newAddress.trim());
+      
+      const wallet: WalletEntry = {
+        id: Date.now().toString(),
+        address: newAddress.trim(),
+        label: newLabel.trim() || undefined,
+      };
+      
+      setWallets(prev => [...prev, wallet]);
+      setNewAddress('');
+      setNewLabel('');
+    } catch {
+      alert('Invalid Solana address');
+    }
+  };
+
+  const removeWallet = (id: string) => {
+    setWallets(prev => prev.filter(w => w.id !== id));
+  };
+
+  const totalBalance = wallets.reduce((sum, wallet) => {
+    // This would need to be calculated from individual balance states
+    // For simplicity, we're not implementing this here
+    return sum;
+  }, 0);
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Add Wallet</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Input
+            type="text"
+            placeholder="Wallet address"
+            value={newAddress}
+            onChange={(e) => setNewAddress(e.target.value)}
+          />
+          <Input
+            type="text"
+            placeholder="Label (optional)"
+            value={newLabel}
+            onChange={(e) => setNewLabel(e.target.value)}
+          />
+          <Button onClick={addWallet} className="w-full">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Wallet
+          </Button>
+        </CardContent>
+      </Card>
+
+      {wallets.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Wallet Balances ({wallets.length})</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {wallets.map(wallet => (
+              <WalletBalanceItem
+                key={wallet.id}
+                wallet={wallet}
+                onRemove={removeWallet}
+              />
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
+      {wallets.length === 0 && (
+        <Card>
+          <CardContent className="p-8 text-center">
+            <p className="text-gray-500">No wallets added yet</p>
+            <p className="text-sm text-gray-400 mt-1">
+              Add wallet addresses above to track their SOL balances
+            </p>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
+```
+
+### Balance Alert System
+
+```tsx
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useWalletTokenBalance } from '@/hooks/use-wallet-token-balance';
+import { useState, useEffect } from 'react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { AlertTriangle, CheckCircle, Settings } from 'lucide-react';
+
+export function useBalanceAlert(threshold: number) {
+  const { connection } = useConnection();
+  const { publicKey } = useWallet();
+  const { balance, status } = useWalletTokenBalance(publicKey, connection, 'SOL');
+  const [hasAlerted, setHasAlerted] = useState(false);
+
+  useEffect(() => {
+    if (status === 'success' && balance !== null) {
+      if (balance < threshold && !hasAlerted) {
+        setHasAlerted(true);
+        // You could trigger notifications here
+        console.warn(`Balance alert: ${balance} SOL is below threshold of ${threshold} SOL`);
+      } else if (balance >= threshold && hasAlerted) {
+        setHasAlerted(false);
+      }
+    }
+  }, [balance, threshold, hasAlerted, status]);
+
+  return {
+    balance,
+    status,
+    isLowBalance: balance !== null && balance < threshold,
+    hasAlerted,
+  };
+}
+
+export function BalanceAlertSystem() {
+  const [threshold, setThreshold] = useState(1.0);
+  const [showSettings, setShowSettings] = useState(false);
+  const { balance, status, isLowBalance, hasAlerted } = useBalanceAlert(threshold);
+
+  return (
+    <div className="space-y-4">
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-base">Balance Monitor</CardTitle>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowSettings(!showSettings)}
+          >
+            <Settings className="h-4 w-4" />
+          </Button>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {showSettings && (
+            <div className="p-4 bg-gray-50 rounded-lg">
+              <label className="block text-sm font-medium mb-2">
+                Alert Threshold (SOL)
+              </label>
+              <Input
+                type="number"
+                value={threshold}
+                onChange={(e) => setThreshold(parseFloat(e.target.value) || 0)}
+                min="0"
+                step="0.1"
+                className="w-full"
+              />
+            </div>
+          )}
+
+          {status === 'success' && balance !== null && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">Current Balance:</span>
+                <span className={`font-semibold ${
+                  isLowBalance ? 'text-red-600' : 'text-green-600'
+                }`}>
+                  {balance.toFixed(4)} SOL
+                </span>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">Alert Threshold:</span>
+                <span className="font-medium">{threshold.toFixed(2)} SOL</span>
+              </div>
+
+              {isLowBalance && (
+                <Alert className="border-red-200 bg-red-50">
+                  <AlertTriangle className="h-4 w-4 text-red-600" />
+                  <AlertDescription className="text-red-800">
+                    <strong>Low Balance Alert!</strong> Your balance of {balance.toFixed(4)} SOL 
+                    is below the threshold of {threshold.toFixed(2)} SOL.
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {!isLowBalance && (
+                <Alert className="border-green-200 bg-green-50">
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <AlertDescription className="text-green-800">
+                    Balance is above threshold. You're all set!
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+
+          {status === 'loading' && (
+            <div className="text-center py-4">
+              <div className="animate-pulse text-gray-500">Loading balance...</div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+```
+
+## API Reference
+
+### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `publicKey` | `PublicKey \| null` | The wallet's public key to fetch balance for |
+| `connection` | `Connection` | Solana RPC connection |
+| `token` | `"SOL"` | Token type (currently only SOL is supported) |
+
+### Return Value
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `balance` | `number \| null` | Wallet balance in SOL (null if not fetched yet) |
+| `status` | `"idle" \| "loading" \| "error" \| "success"` | Current operation status |
+| `error` | `string \| null` | Error message if operation failed |
+| `refetch` | `() => Promise<void>` | Function to manually refetch the balance |
+
+## Important Notes
+
+### Token Support
+
+- **Current Version**: Only supports SOL balance fetching
+- **Future Versions**: SPL token support may be added in future updates
+- The hook includes an invariant check to ensure only SOL is requested
+
+### Balance Precision
+
+- Balance is returned in SOL units (not lamports)
+- 1 SOL = 1,000,000,000 lamports
+- Use appropriate decimal places for display (typically 4-9 decimal places)
+
+### Performance Considerations
+
+- Each balance check makes an RPC call to the Solana network
+- Consider implementing polling intervals for real-time updates
+- Cache balance data when appropriate to reduce RPC calls
+
+### Error Handling
+
+Common errors you might encounter:
+
+- `"Wallet not connected"`: No public key provided
+- `"Network error"`: RPC connection issues
+- `"Invalid public key"`: Malformed public key
+- `"Only SOL is supported"`: Attempting to fetch non-SOL token balance
+
+```tsx
+const handleBalanceWithErrorHandling = () => {
+  if (status === 'error' && error) {
+    if (error.includes('not connected')) {
+      // Handle wallet not connected
+      console.log('Please connect your wallet');
+    } else if (error.includes('Network error')) {
+      // Handle network issues
+      console.log('Network connection problem');
+    } else if (error.includes('Only SOL is supported')) {
+      // Handle unsupported token
+      console.log('This hook only supports SOL balance');
+    }
+  }
+};
+```
+
+### Real-time Updates
+
+For real-time balance updates, consider implementing polling:
+
+```tsx
+import { useEffect } from 'react';
+
+export function useRealTimeBalance(publicKey: PublicKey | null, interval = 30000) {
+  const { connection } = useConnection();
+  const { balance, status, error, refetch } = useWalletTokenBalance(
+    publicKey,
+    connection,
+    'SOL'
+  );
+
+  useEffect(() => {
+    if (!publicKey) return;
+
+    const intervalId = setInterval(() => {
+      refetch();
+    }, interval);
+
+    return () => clearInterval(intervalId);
+  }, [publicKey, refetch, interval]);
+
+  return { balance, status, error, refetch };
+}
+```
+
+### Best Practices
+
+1. **Handle Null States**: Always check for null publicKey and balance
+2. **Loading States**: Show loading indicators during balance fetching
+3. **Error Handling**: Implement proper error handling and retry mechanisms
+4. **Caching**: Consider caching balance data for better UX
+5. **Polling**: Implement reasonable polling intervals for real-time updates
+6. **Formatting**: Use appropriate decimal places for balance display
+
+## Use Cases
+
+- **Wallet Dashboards**: Display user's SOL balance in wallet interfaces
+- **Payment Systems**: Check balance before allowing transactions
+- **Portfolio Trackers**: Monitor multiple wallet balances
+- **Alert Systems**: Set up low balance notifications
+- **Analytics**: Track balance changes over time
+- **DApp Integration**: Show user balance in decentralized applications

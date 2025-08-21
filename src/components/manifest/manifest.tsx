@@ -63,50 +63,18 @@ const Manifesto: React.FC<ManifestoProps> = ({
         style={{
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: "2em 1em 1em 1em",
+          padding: "1em 1em 1em 1em",
         }}
       >
-        <div
-          className="manifesto-header"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "1rem",
-            marginBottom: "4em",
-            opacity: 0.8,
-          }}
-        >
-          <HiArrowRight size={13} />
-          <p
-            style={{
-              fontWeight: 600,
-              fontSize: "0.8rem",
-              lineHeight: 1,
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-              margin: 0,
-              fontFamily: "serif",
-              color: "rgba(255, 255, 255, 0.9)",
-            }}
-          >
+        <div className="manifesto-header flex items-center gap-4 mb-8 opacity-80">
+          <HiArrowRight size={13} className="text-black dark:text-white" />
+          <p className="font-semibold text-xs leading-none uppercase tracking-wider m-0 font-serif text-black dark:text-white">
             {title}
           </p>
         </div>
 
-        <div className="manifesto-title" style={{ position: "relative" }}>
-          <h1
-            style={{
-              fontSize: "clamp(1.8rem, 6vw, 4rem)",
-              lineHeight: 1.125,
-              fontWeight: 300,
-              margin: 0,
-              fontFamily: "serif",
-              color: "rgba(255, 255, 255, 0.95)",
-              transform: "translateZ(0)",
-              backfaceVisibility: "hidden",
-              perspective: "1000px",
-            }}
-          >
+        <div className="manifesto-title relative">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-tight font-light m-0 font-serif text-black dark:text-white transform-gpu">
             {chars.map((char, index) => (
               <motion.span
                 key={index}

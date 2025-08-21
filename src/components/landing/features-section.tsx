@@ -38,24 +38,24 @@ const features = [
 export const FeaturesSection = ({ className }: FeaturesSectionProps) => {
   return (
     <motion.section
-      className={`relative py-16 md:py-24 ${className || ""}`}
+      className={`relative py-8 sm:py-12 md:py-16 lg:py-24 ${className || ""}`}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8 }}
     >
-      <div className="max-w-6xl mx-auto px-4 md:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
         {/* Features Header - Right Aligned */}
         <motion.div
-          className="flex justify-end mb-16"
+          className="flex justify-center md:justify-end mb-8 sm:mb-12 md:mb-16"
           initial={{ opacity: 0, x: 40 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <div className="text-right max-w-2xl">
+          <div className="text-center md:text-right max-w-2xl">
             <motion.div
-              className="flex items-center justify-end gap-4 mb-6 opacity-80"
+              className="flex items-center justify-center md:justify-end gap-4 mb-4 sm:mb-6 opacity-80"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -67,7 +67,7 @@ export const FeaturesSection = ({ className }: FeaturesSectionProps) => {
               </p>
             </motion.div>
             <motion.h2
-              className="text-3xl md:text-4xl lg:text-5xl font-serif  bg-clip-text bg-gradient-stop bg-gradient-to-br from-white via-30% via-white to-white/30 text-transparent leading-tight"
+              className="text-3xl md:text-4xl lg:text-5xl font-serif bg-clip-text bg-gradient-stop bg-gradient-to-br from-black via-30% via-black to-black/30 dark:from-white dark:via-white dark:to-white/30 text-transparent leading-tight opacity-0 animate-fade-in-up delay-200"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -80,7 +80,7 @@ export const FeaturesSection = ({ className }: FeaturesSectionProps) => {
 
         {/* Features Grid */}
         <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 justify-items-center"
           initial="initial"
           whileInView="animate"
           viewport={{ once: true, margin: "-50px" }}

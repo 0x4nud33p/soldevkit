@@ -14,6 +14,8 @@ author:
 
 ## Usage
 
+### Basic Usage
+
 ```tsx
 import { WalletConnectButton } from "@/components/soldevkit-ui/wallet/wallet-connect-button";
 
@@ -22,13 +24,47 @@ export default function Example() {
     <WalletConnectButton
       variant="outline"
       size="lg"
+    />
+  );
+}
+```
+
+### With Icon
+
+```tsx
+import { WalletConnectButton } from "@/components/soldevkit-ui/wallet/wallet-connect-button";
+import { Wallet } from "lucide-react";
+
+export default function ExampleWithIcon() {
+  return (
+    <WalletConnectButton
+      variant="default"
+      size="lg"
+      icon={<Wallet className="h-4 w-4" />}
+    />
+  );
+}
+```
+
+### With Custom Labels
+
+```tsx
+import { WalletConnectButton } from "@/components/soldevkit-ui/wallet/wallet-connect-button";
+import { Shield } from "lucide-react";
+
+export default function ExampleWithCustomLabels() {
+  return (
+    <WalletConnectButton
+      variant="outline"
+      size="lg"
+      icon={<Shield className="h-4 w-4" />}
       labels={{
-        "has-wallet": "Connect Wallet",
-        connecting: "Connecting...",
-        disconnect: "Disconnect",
-        "change-wallet": "Change Wallet",
-        "copy-address": "Copy Address",
-        copied: "Copied",
+        "has-wallet": "🚀 Launch Wallet",
+        connecting: "🔄 Launching...",
+        disconnect: "👋 Goodbye",
+        "change-wallet": "🔄 Switch Wallet",
+        "copy-address": "📋 Copy Address",
+        copied: "✅ Copied!",
       }}
     />
   );
@@ -41,6 +77,7 @@ export default function Example() {
 - **Modal Dialog**: Clean wallet selection interface with installed/not installed badges
 - **Dropdown Menu**: Connected wallet management with copy address and disconnect options
 - **Collapsible Wallets**: Expandable section for additional wallet options
+- **Icon Support**: Add custom icons to enhance visual appeal and branding
 - **Responsive Design**: Works seamlessly on desktop and mobile devices
 - **Customizable Labels**: Override default text labels for internationalization
 - **Button Variants**: Supports all standard button variants and sizes
@@ -61,9 +98,15 @@ export default function Example() {
       required: false,
       default: "'default'",
     },
+    icon: {
+      description: "Icon to display on the left side of the button text.",
+      type: "React.ReactNode",
+      required: false,
+      default: "undefined",
+    },
     labels: {
       description: "Custom labels for different states and actions.",
-      type: "Partial<typeof LABELS>",
+      type: "Partial<Record<keyof typeof LABELS, string>>",
       required: false,
       default: "Default labels",
     },
@@ -81,6 +124,45 @@ export default function Example() {
     },
   }}
 />
+
+## Icon Usage
+
+The `icon` prop accepts any React node, allowing you to use icons from various libraries or custom SVG elements. The icon is automatically positioned on the left side of the button text with proper spacing.
+
+### With Lucide React Icons
+
+```tsx
+import { Wallet, Shield, Zap, Lock, Globe } from "lucide-react";
+
+// Different icon examples
+<WalletConnectButton icon={<Wallet className="h-4 w-4" />} />
+<WalletConnectButton icon={<Shield className="h-4 w-4" />} />
+<WalletConnectButton icon={<Zap className="h-4 w-4" />} />
+```
+
+### Icon Sizing Guidelines
+
+- **Small buttons**: Use `h-3 w-3` for icons
+- **Default buttons**: Use `h-4 w-4` for icons  
+- **Large buttons**: Use `h-5 w-5` for icons
+
+```tsx
+<WalletConnectButton size="sm" icon={<Wallet className="h-3 w-3" />} />
+<WalletConnectButton size="default" icon={<Wallet className="h-4 w-4" />} />
+<WalletConnectButton size="lg" icon={<Wallet className="h-5 w-5" />} />
+```
+
+### Custom SVG Icons
+
+```tsx
+const CustomIcon = () => (
+  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" />
+  </svg>
+);
+
+<WalletConnectButton icon={<CustomIcon />} />
+```
 
 ## Label Customization
 

@@ -6,12 +6,13 @@
   "description": "Utility functions for class name merging with clsx and tailwind-merge.",
   "dependencies": [
     "clsx",
-    "tailwind-merge"
+    "tailwind-merge",
+    "@solana/web3.js"
   ],
   "files": [
     {
       "path": "src/registry/lib/utils.ts",
-      "content": "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}\n",
+      "content": "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}\nimport { PublicKey } from \"@solana/web3.js\";\n\nexport const validatePublicKey = (address: PublicKey | string) => {\n  try {\n    if (typeof address == \"string\") {\n      new PublicKey(address);\n    } else {\n      address.toBase58();\n    }\n    return true;\n  } catch {\n    return false;\n  }\n};\nexport const shortAddress = (address: PublicKey | string) => {\n  const key = typeof address === \"string\" ? address : address.toBase58();\n  return `${key.slice(0, 4)}...${key.slice(-4)}`;\n};\nexport const JUP_API = \"https://quote-api.jup.ag/v6\";\nexport const JUP_REFERRAL_ADDRESS =\n  \"JUPTRFXx5qe2wMFBtC7c7s6DvS3weDgAZu7Lr4ZKtoQ\";\n\nexport const DEFAULT_OPTIONS = {\n  SLIPPAGE_BPS: 50, // 0.5%\n};\n\nexport const TOKENS = {\n  SOL: new PublicKey(\"So11111111111111111111111111111111111111112\"),\n  USDC: new PublicKey(\"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v\"),\n  USDT: new PublicKey(\"Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB\"),\n};\n",
       "type": "registry:lib",
       "target": "lib/utils.ts"
     }

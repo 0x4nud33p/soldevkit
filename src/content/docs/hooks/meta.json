@@ -1,0 +1,11 @@
+{
+  "title": "Hooks",
+  "pages": [
+    "use-request-sol-airdrop",
+    "use-transfer-token",
+    "use-is-valid-txn",
+    "use-txn-details",
+    "use-txn-toast",
+    "use-wallet-token-balance"
+  ]
+}

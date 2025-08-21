@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-transfer-token",
+  "type": "registry:hook",
+  "title": "useTransferTokens",
+  "description": "A React hook for transferring SOL or SPL tokens with wallet adapter integration and transaction confirmation.",
+  "dependencies": [
+    "@solana/web3.js",
+    "@solana/spl-token",
+    "@solana/wallet-adapter-base",
+    "react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "src/registry/default/hooks/token/use-transfer-token.tsx",
+      "content": "import { useState } from \"react\";\nimport {\n  PublicKey,\n  Connection,\n  Transaction,\n  SystemProgram,\n  TransactionSignature,\n} from \"@solana/web3.js\";\nimport {\n  createTransferInstruction,\n  getAssociatedTokenAddress,\n  TOKEN_PROGRAM_ID,\n} from \"@solana/spl-token\";\nimport type { WalletAdapterProps } from \"@solana/wallet-adapter-base\";\n\nexport type ErrorState = string | null;\nexport type StatusState = \"idle\" | \"loading\" | \"error\" | \"success\";\n\ntype TransferResultState = {\n  transactionSignature?: TransactionSignature;\n} | null;\n\n/**\n * Hook to transfer SOL or SPL tokens using a wallet adapter\n */\nexport function useTransferTokens(\n  publicKey: PublicKey | null,\n  connection: Connection,\n  sendTransaction: WalletAdapterProps[\"sendTransaction\"],\n) {\n  const [error, setError] = useState<ErrorState>(null);\n  const [status, setStatus] = useState<StatusState>(\"idle\");\n  const [result, setResult] = useState<TransferResultState>(null);\n\n  /**\n   * Transfer SOL or SPL tokens\n   * @param recipientAddress - recipient wallet address\n   * @param token - \"SOL\" or { mint: PublicKey } for SPL token\n   * @param amount - amount in SOL or token units\n   */\n  async function transferTokens(\n    recipientAddress: string,\n    token: \"SOL\" | { mint: PublicKey },\n    amount: number,\n  ): Promise<TransferResultState> {\n    try {\n      if (!publicKey) throw new Error(\"Wallet not connected\");\n      setStatus(\"loading\");\n\n      const recipientPubkey = new PublicKey(recipientAddress);\n      const transaction = new Transaction();\n\n      if (token === \"SOL\") {\n        // SOL transfer\n        transaction.add(\n          SystemProgram.transfer({\n            fromPubkey: publicKey,\n            toPubkey: recipientPubkey,\n            lamports: Math.round(amount * 1_000_000_000), // convert SOL to lamports\n          }),\n        );\n      } else {\n        // SPL token transfer\n        const senderATA = await getAssociatedTokenAddress(\n          token.mint,\n          publicKey,\n        );\n        const recipientATA = await getAssociatedTokenAddress(\n          token.mint,\n          recipientPubkey,\n        );\n\n        transaction.add(\n          createTransferInstruction(\n            senderATA,\n            recipientATA,\n            publicKey,\n            amount, // amount in smallest token units\n            [],\n            TOKEN_PROGRAM_ID,\n          ),\n        );\n      }\n\n      // Send transaction via wallet adapter\n      const txSig: TransactionSignature = await sendTransaction(\n        transaction,\n        connection,\n      );\n      await connection.confirmTransaction(txSig, \"confirmed\");\n\n      const res = { transactionSignature: txSig };\n      setResult(res);\n      setStatus(\"success\");\n\n      return res;\n    } catch (err) {\n      setError((err as Error).message);\n      setStatus(\"error\");\n      return null;\n    }\n  }\n\n  return { result, status, error, transferTokens };\n}\n",
+      "type": "registry:hook",
+      "target": "hooks/use-transfer-token.tsx"
+    }
+  ]
+}

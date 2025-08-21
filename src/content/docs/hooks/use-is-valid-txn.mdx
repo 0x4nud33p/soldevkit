@@ -1,0 +1,382 @@
+---
+title: useIsValidTxn
+description: A React hook for checking if a Solana transaction is valid (confirmed) on the blockchain.
+author:
+  name: Aman Satyawani
+  url: https://github.com/satyawaniaman
+---
+
+## Installation
+
+```bash
+npx shadcn@latest add https://soldevkit.com/r/use-is-valid-txn.json
+```
+
+### Manual Installation
+
+If you prefer to set up the hook manually:
+
+#### 1. Install required dependencies
+
+```bash
+npm install @solana/web3.js react
+```
+
+#### 2. Copy the hook file
+
+Copy the `use-is-valid-txn.tsx` hook from the registry and place it in your `hooks/` directory.
+
+## Usage
+
+### Basic Usage
+
+```tsx
+import { useConnection } from '@solana/wallet-adapter-react';
+import { useIsValidTxn } from '@/hooks/use-is-valid-txn';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useState } from 'react';
+
+export function TransactionValidator() {
+  const { connection } = useConnection();
+  const [signature, setSignature] = useState('');
+  const { result, status, error, checkTransaction } = useIsValidTxn(connection);
+
+  const handleCheck = async () => {
+    if (!signature) return;
+    await checkTransaction(signature);
+  };
+
+  return (
+    <div className="space-y-4">
+      <Input
+        type="text"
+        placeholder="Enter transaction signature"
+        value={signature}
+        onChange={(e) => setSignature(e.target.value)}
+      />
+      <Button 
+        onClick={handleCheck}
+        disabled={status === 'loading' || !signature}
+      >
+        {status === 'loading' ? 'Checking...' : 'Check Transaction'}
+      </Button>
+      
+      {status === 'success' && result !== null && (
+        <div className={`p-4 rounded ${
+          result ? 'bg-green-100' : 'bg-red-100'
+        }`}>
+          <p className={result ? 'text-green-800' : 'text-red-800'}>
+            Transaction is {result ? 'valid (confirmed)' : 'invalid or not found'}
+          </p>
+        </div>
+      )}
+      
+      {status === 'error' && error && (
+        <div className="p-4 bg-red-100 rounded">
+          <p className="text-red-800">Error: {error}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Transaction Status Display
+
+```tsx
+import { useConnection } from '@solana/wallet-adapter-react';
+import { useIsValidTxn } from '@/hooks/use-is-valid-txn';
+import { Badge } from '@/components/ui/badge';
+import { CheckCircle, XCircle, Clock } from 'lucide-react';
+
+interface TransactionStatusProps {
+  signature: string;
+}
+
+export function TransactionStatus({ signature }: TransactionStatusProps) {
+  const { connection } = useConnection();
+  const { result, status, error, checkTransaction } = useIsValidTxn(connection);
+
+  // Auto-check on mount
+  React.useEffect(() => {
+    if (signature) {
+      checkTransaction(signature);
+    }
+  }, [signature, checkTransaction]);
+
+  const getStatusIcon = () => {
+    if (status === 'loading') return <Clock className="h-4 w-4" />;
+    if (status === 'error') return <XCircle className="h-4 w-4" />;
+    if (result === true) return <CheckCircle className="h-4 w-4" />;
+    if (result === false) return <XCircle className="h-4 w-4" />;
+    return null;
+  };
+
+  const getStatusText = () => {
+    if (status === 'loading') return 'Checking...';
+    if (status === 'error') return 'Error';
+    if (result === true) return 'Confirmed';
+    if (result === false) return 'Not Found';
+    return 'Unknown';
+  };
+
+  const getStatusVariant = () => {
+    if (status === 'loading') return 'secondary';
+    if (status === 'error' || result === false) return 'destructive';
+    if (result === true) return 'default';
+    return 'secondary';
+  };
+
+  return (
+    <div className="flex items-center space-x-2">
+      <Badge variant={getStatusVariant()} className="flex items-center space-x-1">
+        {getStatusIcon()}
+        <span>{getStatusText()}</span>
+      </Badge>
+      {error && (
+        <span className="text-sm text-red-600">{error}</span>
+      )}
+    </div>
+  );
+}
+```
+
+### Batch Transaction Validation
+
+```tsx
+import { useConnection } from '@solana/wallet-adapter-react';
+import { useIsValidTxn } from '@/hooks/use-is-valid-txn';
+import { useState, useCallback } from 'react';
+
+interface TransactionResult {
+  signature: string;
+  isValid: boolean | null;
+  error?: string;
+}
+
+export function useBatchTransactionValidator() {
+  const { connection } = useConnection();
+  const { checkTransaction } = useIsValidTxn(connection);
+  const [results, setResults] = useState<TransactionResult[]>([]);
+  const [isChecking, setIsChecking] = useState(false);
+
+  const validateTransactions = useCallback(async (signatures: string[]) => {
+    setIsChecking(true);
+    const newResults: TransactionResult[] = [];
+
+    for (const signature of signatures) {
+      try {
+        const result = await checkTransaction(signature);
+        newResults.push({
+          signature,
+          isValid: result,
+        });
+      } catch (error) {
+        newResults.push({
+          signature,
+          isValid: null,
+          error: error.message,
+        });
+      }
+    }
+
+    setResults(newResults);
+    setIsChecking(false);
+  }, [checkTransaction]);
+
+  return {
+    results,
+    isChecking,
+    validateTransactions,
+  };
+}
+
+export function BatchTransactionValidator() {
+  const [signatures, setSignatures] = useState('');
+  const { results, isChecking, validateTransactions } = useBatchTransactionValidator();
+
+  const handleValidate = () => {
+    const signatureList = signatures
+      .split('\n')
+      .map(s => s.trim())
+      .filter(s => s.length > 0);
+    
+    if (signatureList.length > 0) {
+      validateTransactions(signatureList);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium mb-2">
+          Transaction Signatures (one per line)
+        </label>
+        <textarea
+          className="w-full h-32 p-2 border rounded"
+          value={signatures}
+          onChange={(e) => setSignatures(e.target.value)}
+          placeholder="Enter transaction signatures, one per line"
+        />
+      </div>
+      
+      <Button 
+        onClick={handleValidate}
+        disabled={isChecking || !signatures.trim()}
+      >
+        {isChecking ? 'Validating...' : 'Validate Transactions'}
+      </Button>
+      
+      {results.length > 0 && (
+        <div className="space-y-2">
+          <h3 className="font-medium">Results:</h3>
+          {results.map((result, index) => (
+            <div key={index} className="flex items-center justify-between p-2 border rounded">
+              <span className="font-mono text-sm truncate flex-1 mr-2">
+                {result.signature}
+              </span>
+              <Badge 
+                variant={result.isValid ? 'default' : 'destructive'}
+              >
+                {result.error ? 'Error' : result.isValid ? 'Valid' : 'Invalid'}
+              </Badge>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Integration with Transaction Toast
+
+```tsx
+import { useConnection } from '@solana/wallet-adapter-react';
+import { useIsValidTxn } from '@/hooks/use-is-valid-txn';
+import { useTxnToast } from '@/hooks/use-txn-toast';
+import { useEffect } from 'react';
+
+export function useTransactionMonitor(signature: string | null) {
+  const { connection } = useConnection();
+  const { result, status, checkTransaction } = useIsValidTxn(connection);
+  const { txnToast } = useTxnToast();
+
+  useEffect(() => {
+    if (!signature) return;
+
+    const monitorTransaction = async () => {
+      // Show pending toast
+      const toastId = txnToast(
+        signature,
+        'Monitoring transaction...',
+        { variant: 'pending' }
+      );
+
+      try {
+        const isValid = await checkTransaction(signature);
+        
+        if (isValid) {
+          txnToast.confirm(signature, 'Transaction confirmed!');
+        } else {
+          txnToast.error('Transaction not found or failed');
+        }
+      } catch (error) {
+        txnToast.error(`Error checking transaction: ${error.message}`);
+      }
+    };
+
+    monitorTransaction();
+  }, [signature, checkTransaction, txnToast]);
+
+  return { result, status };
+}
+```
+
+## API Reference
+
+### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `connection` | `Connection` | Solana RPC connection |
+
+### Return Value
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `result` | `boolean \| null` | Transaction validity result - `true` if confirmed, `false` if not found/failed, `null` if not checked yet |
+| `status` | `"idle" \| "loading" \| "error" \| "success"` | Current operation status |
+| `error` | `string \| null` | Error message if operation failed |
+| `checkTransaction` | `(signature: string) => Promise<boolean>` | Function to check transaction validity |
+
+### checkTransaction Function
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `signature` | `string` | Transaction signature to validate |
+
+**Returns**: `Promise<boolean>` - `true` if transaction is confirmed, `false` otherwise
+
+## Important Notes
+
+### Transaction Confirmation
+
+- A transaction is considered "valid" if it has been confirmed on the blockchain
+- Unconfirmed or failed transactions will return `false`
+- Network errors or invalid signatures will throw an error
+
+### Performance Considerations
+
+- Each check makes an RPC call to the Solana network
+- Consider implementing caching for frequently checked transactions
+- Use batch validation for multiple transactions to avoid rate limits
+
+### Error Handling
+
+Common errors you might encounter:
+
+- `"Invalid transaction signature"`: Malformed signature string
+- `"Network error"`: RPC connection issues
+- `"Transaction not found"`: Transaction doesn't exist on the blockchain
+
+```tsx
+const handleCheckWithErrorHandling = async (signature: string) => {
+  try {
+    const isValid = await checkTransaction(signature);
+    console.log('Transaction is valid:', isValid);
+  } catch (err) {
+    console.error('Validation failed:', err);
+    if (err.message.includes('Invalid transaction signature')) {
+      // Handle invalid signature format
+    } else if (err.message.includes('Network error')) {
+      // Handle network issues
+    }
+  }
+};
+```
+
+### Best Practices
+
+1. **Validate Input**: Always validate transaction signatures before checking
+2. **Handle Loading States**: Show loading indicators during validation
+3. **Cache Results**: Cache validation results to avoid redundant checks
+4. **Error Boundaries**: Implement proper error handling for network issues
+5. **Rate Limiting**: Be mindful of RPC rate limits when checking multiple transactions
+
+### Transaction Signature Format
+
+Solana transaction signatures are base58-encoded strings, typically 87-88 characters long:
+
+```
+Example: 5VERv8NMvzbJMEkV8xnrLkEaWRtSz9CosKDYjCJjBRnbJLgp8uirBgmQpjKhoR4tjF3ZpRzrFmBV6UjKdiSZkQUW
+```
+
+## Use Cases
+
+- **Transaction Monitoring**: Check if submitted transactions are confirmed
+- **Payment Verification**: Verify payment transactions in e-commerce applications
+- **Audit Tools**: Build tools to validate historical transactions
+- **Status Dashboards**: Display transaction status in admin panels
+- **Retry Logic**: Implement retry mechanisms for failed transactions

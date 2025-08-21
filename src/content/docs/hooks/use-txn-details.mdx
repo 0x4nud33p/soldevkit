@@ -1,0 +1,593 @@
+---
+title: useTxnDetails
+description: A React hook for fetching detailed information about Solana transactions from the blockchain.
+author:
+  name: Aman Satyawani
+  url: https://github.com/satyawaniaman
+---
+
+## Installation
+
+```bash
+npx shadcn@latest add https://soldevkit.com/r/use-txn-details.json
+```
+
+### Manual Installation
+
+If you prefer to set up the hook manually:
+
+#### 1. Install required dependencies
+
+```bash
+npm install @solana/web3.js react
+```
+
+#### 2. Copy the hook file
+
+Copy the `use-txn-details.tsx` hook from the registry and place it in your `hooks/` directory.
+
+## Usage
+
+### Basic Usage
+
+```tsx
+import { useConnection } from '@solana/wallet-adapter-react';
+import { useTxnDetails } from '@/hooks/use-txn-details';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState } from 'react';
+
+export function TransactionDetailsViewer() {
+  const { connection } = useConnection();
+  const [signature, setSignature] = useState('');
+  const { result, status, error, getTransactionDetails } = useTxnDetails(connection);
+
+  const handleFetch = async () => {
+    if (!signature) return;
+    await getTransactionDetails(signature);
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex space-x-2">
+        <Input
+          type="text"
+          placeholder="Enter transaction signature"
+          value={signature}
+          onChange={(e) => setSignature(e.target.value)}
+          className="flex-1"
+        />
+        <Button 
+          onClick={handleFetch}
+          disabled={status === 'loading' || !signature}
+        >
+          {status === 'loading' ? 'Loading...' : 'Get Details'}
+        </Button>
+      </div>
+      
+      {status === 'success' && result && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Transaction Details</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <strong>Signature:</strong>
+              <p className="font-mono text-sm break-all">{signature}</p>
+            </div>
+            
+            <div>
+              <strong>Slot:</strong>
+              <p>{result.slot}</p>
+            </div>
+            
+            <div>
+              <strong>Block Time:</strong>
+              <p>{result.blockTime ? new Date(result.blockTime * 1000).toLocaleString() : 'N/A'}</p>
+            </div>
+            
+            <div>
+              <strong>Fee:</strong>
+              <p>{result.meta?.fee ? `${result.meta.fee / 1_000_000_000} SOL` : 'N/A'}</p>
+            </div>
+            
+            <div>
+              <strong>Status:</strong>
+              <p className={result.meta?.err ? 'text-red-600' : 'text-green-600'}>
+                {result.meta?.err ? 'Failed' : 'Success'}
+              </p>
+            </div>
+            
+            {result.meta?.err && (
+              <div>
+                <strong>Error:</strong>
+                <p className="text-red-600">{JSON.stringify(result.meta.err)}</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+      
+      {status === 'error' && error && (
+        <div className="p-4 bg-red-100 rounded">
+          <p className="text-red-800">Error: {error}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Advanced Transaction Analysis
+
+```tsx
+import { useConnection } from '@solana/wallet-adapter-react';
+import { useTxnDetails } from '@/hooks/use-txn-details';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { ExternalLink } from 'lucide-react';
+
+interface TransactionAnalyzerProps {
+  signature: string;
+}
+
+export function TransactionAnalyzer({ signature }: TransactionAnalyzerProps) {
+  const { connection } = useConnection();
+  const { result, status, error, getTransactionDetails } = useTxnDetails(connection);
+
+  React.useEffect(() => {
+    if (signature) {
+      getTransactionDetails(signature);
+    }
+  }, [signature, getTransactionDetails]);
+
+  if (status === 'loading') {
+    return <div className="p-4">Loading transaction details...</div>;
+  }
+
+  if (status === 'error') {
+    return (
+      <div className="p-4 bg-red-100 rounded">
+        <p className="text-red-800">Error: {error}</p>
+      </div>
+    );
+  }
+
+  if (!result) {
+    return <div className="p-4">No transaction data available</div>;
+  }
+
+  const { transaction, meta } = result;
+  const isSuccess = !meta?.err;
+  const fee = meta?.fee ? meta.fee / 1_000_000_000 : 0;
+  const computeUnitsConsumed = meta?.computeUnitsConsumed || 0;
+
+  return (
+    <div className="space-y-6">
+      {/* Transaction Overview */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            Transaction Overview
+            <Badge variant={isSuccess ? 'default' : 'destructive'}>
+              {isSuccess ? 'Success' : 'Failed'}
+            </Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <strong>Signature:</strong>
+              <p className="font-mono text-sm break-all">{signature}</p>
+            </div>
+            
+            <div>
+              <strong>Slot:</strong>
+              <p>{result.slot.toLocaleString()}</p>
+            </div>
+            
+            <div>
+              <strong>Block Time:</strong>
+              <p>{result.blockTime ? new Date(result.blockTime * 1000).toLocaleString() : 'N/A'}</p>
+            </div>
+            
+            <div>
+              <strong>Fee:</strong>
+              <p>{fee.toFixed(9)} SOL</p>
+            </div>
+            
+            <div>
+              <strong>Compute Units:</strong>
+              <p>{computeUnitsConsumed.toLocaleString()}</p>
+            </div>
+            
+            <div>
+              <strong>Recent Blockhash:</strong>
+              <p className="font-mono text-sm break-all">{transaction.message.recentBlockhash}</p>
+            </div>
+          </div>
+          
+          <div className="flex space-x-2">
+            <a
+              href={`https://explorer.solana.com/tx/${signature}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-1 text-blue-600 hover:text-blue-800"
+            >
+              <span>View on Solana Explorer</span>
+              <ExternalLink className="h-4 w-4" />
+            </a>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Account Keys */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Account Keys ({transaction.message.accountKeys.length})</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            {transaction.message.accountKeys.map((key, index) => (
+              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                <span className="font-mono text-sm">{key.toBase58()}</span>
+                <div className="flex space-x-2">
+                  {index < transaction.message.header.numRequiredSignatures && (
+                    <Badge variant="outline">Signer</Badge>
+                  )}
+                  {index < transaction.message.header.numReadonlySignedAccounts + transaction.message.header.numRequiredSignatures && (
+                    <Badge variant="secondary">Read-only</Badge>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Instructions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Instructions ({transaction.message.instructions.length})</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {transaction.message.instructions.map((instruction, index) => (
+              <div key={index} className="border rounded p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-medium">Instruction {index + 1}</h4>
+                  <Badge variant="outline">
+                    Program: {transaction.message.accountKeys[instruction.programIdIndex].toBase58().slice(0, 8)}...
+                  </Badge>
+                </div>
+                
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <strong>Program ID Index:</strong> {instruction.programIdIndex}
+                  </div>
+                  <div>
+                    <strong>Accounts:</strong> [{instruction.accounts.join(', ')}]
+                  </div>
+                  <div>
+                    <strong>Data:</strong>
+                    <p className="font-mono text-xs break-all bg-gray-100 p-2 rounded mt-1">
+                      {Buffer.from(instruction.data).toString('hex')}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Balance Changes */}
+      {meta?.preBalances && meta?.postBalances && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Balance Changes</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {meta.preBalances.map((preBalance, index) => {
+                const postBalance = meta.postBalances[index];
+                const change = postBalance - preBalance;
+                const account = transaction.message.accountKeys[index];
+                
+                if (change === 0) return null;
+                
+                return (
+                  <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                    <span className="font-mono text-sm">
+                      {account.toBase58().slice(0, 8)}...{account.toBase58().slice(-8)}
+                    </span>
+                    <div className="text-right">
+                      <div className={`font-medium ${
+                        change > 0 ? 'text-green-600' : 'text-red-600'
+                      }`}>
+                        {change > 0 ? '+' : ''}{(change / 1_000_000_000).toFixed(9)} SOL
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {(preBalance / 1_000_000_000).toFixed(9)} → {(postBalance / 1_000_000_000).toFixed(9)}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Error Details */}
+      {meta?.err && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-red-600">Transaction Error</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <pre className="bg-red-50 p-4 rounded text-sm overflow-x-auto">
+              {JSON.stringify(meta.err, null, 2)}
+            </pre>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
+```
+
+### Transaction History Component
+
+```tsx
+import { useConnection } from '@solana/wallet-adapter-react';
+import { useTxnDetails } from '@/hooks/use-txn-details';
+import { useState, useCallback } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+
+interface TransactionHistoryItem {
+  signature: string;
+  details: any;
+  timestamp: number;
+}
+
+export function useTransactionHistory() {
+  const { connection } = useConnection();
+  const { getTransactionDetails } = useTxnDetails(connection);
+  const [history, setHistory] = useState<TransactionHistoryItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const addTransaction = useCallback(async (signature: string) => {
+    setIsLoading(true);
+    try {
+      const details = await getTransactionDetails(signature);
+      if (details) {
+        const item: TransactionHistoryItem = {
+          signature,
+          details,
+          timestamp: Date.now(),
+        };
+        setHistory(prev => [item, ...prev.filter(h => h.signature !== signature)]);
+      }
+    } catch (error) {
+      console.error('Failed to fetch transaction details:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [getTransactionDetails]);
+
+  const clearHistory = useCallback(() => {
+    setHistory([]);
+  }, []);
+
+  return {
+    history,
+    isLoading,
+    addTransaction,
+    clearHistory,
+  };
+}
+
+export function TransactionHistory() {
+  const [signature, setSignature] = useState('');
+  const { history, isLoading, addTransaction, clearHistory } = useTransactionHistory();
+
+  const handleAdd = () => {
+    if (signature.trim()) {
+      addTransaction(signature.trim());
+      setSignature('');
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>Transaction History</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex space-x-2">
+            <Input
+              type="text"
+              placeholder="Enter transaction signature"
+              value={signature}
+              onChange={(e) => setSignature(e.target.value)}
+              className="flex-1"
+            />
+            <Button onClick={handleAdd} disabled={isLoading || !signature.trim()}>
+              {isLoading ? 'Adding...' : 'Add'}
+            </Button>
+            {history.length > 0 && (
+              <Button variant="outline" onClick={clearHistory}>
+                Clear
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="space-y-2">
+        {history.map((item) => {
+          const isSuccess = !item.details.meta?.err;
+          const fee = item.details.meta?.fee ? item.details.meta.fee / 1_000_000_000 : 0;
+          
+          return (
+            <Card key={item.signature}>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="font-mono text-sm break-all mb-1">
+                      {item.signature}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {new Date(item.timestamp).toLocaleString()}
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2 ml-4">
+                    <Badge variant={isSuccess ? 'default' : 'destructive'}>
+                      {isSuccess ? 'Success' : 'Failed'}
+                    </Badge>
+                    <span className="text-sm">{fee.toFixed(6)} SOL</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
+      {history.length === 0 && (
+        <div className="text-center py-8 text-gray-500">
+          No transactions in history. Add a transaction signature above.
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+## API Reference
+
+### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `connection` | `Connection` | Solana RPC connection |
+
+### Return Value
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `result` | `TransactionResponse \| null` | Transaction details from Solana RPC |
+| `status` | `"idle" \| "loading" \| "error" \| "success"` | Current operation status |
+| `error` | `string \| null` | Error message if operation failed |
+| `getTransactionDetails` | `(signature: string) => Promise<TransactionResponse \| null>` | Function to fetch transaction details |
+
+### getTransactionDetails Function
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `signature` | `string` | Transaction signature to fetch details for |
+
+**Returns**: `Promise<TransactionResponse | null>` - Transaction details or null if not found
+
+### TransactionResponse Structure
+
+The returned transaction details include:
+
+```typescript
+interface TransactionResponse {
+  slot: number;
+  transaction: {
+    message: {
+      accountKeys: PublicKey[];
+      header: {
+        numRequiredSignatures: number;
+        numReadonlySignedAccounts: number;
+        numReadonlyUnsignedAccounts: number;
+      };
+      instructions: CompiledInstruction[];
+      recentBlockhash: string;
+    };
+    signatures: string[];
+  };
+  meta: {
+    err: any;
+    fee: number;
+    innerInstructions?: any[];
+    logMessages?: string[];
+    postBalances: number[];
+    postTokenBalances?: any[];
+    preBalances: number[];
+    preTokenBalances?: any[];
+    rewards?: any[];
+    status: { Ok: null } | { Err: any };
+    computeUnitsConsumed?: number;
+  } | null;
+  blockTime?: number;
+}
+```
+
+## Important Notes
+
+### Data Availability
+
+- Transaction details are only available for confirmed transactions
+- Historical data availability depends on the RPC node's retention policy
+- Some RPC endpoints may have limited historical data
+
+### Performance Considerations
+
+- Fetching transaction details requires an RPC call
+- Consider caching results for frequently accessed transactions
+- Be mindful of RPC rate limits when fetching multiple transactions
+
+### Error Handling
+
+Common errors you might encounter:
+
+- `"Transaction not found"`: Transaction doesn't exist or is too old
+- `"Invalid transaction signature"`: Malformed signature string
+- `"Network error"`: RPC connection issues
+
+```tsx
+const handleFetchWithErrorHandling = async (signature: string) => {
+  try {
+    const details = await getTransactionDetails(signature);
+    if (details) {
+      console.log('Transaction details:', details);
+    } else {
+      console.log('Transaction not found');
+    }
+  } catch (err) {
+    console.error('Failed to fetch details:', err);
+    if (err.message.includes('not found')) {
+      // Handle transaction not found
+    } else if (err.message.includes('Invalid signature')) {
+      // Handle invalid signature format
+    }
+  }
+};
+```
+
+### Best Practices
+
+1. **Validate Signatures**: Always validate transaction signatures before fetching
+2. **Handle Loading States**: Show loading indicators during fetch operations
+3. **Cache Results**: Cache transaction details to avoid redundant requests
+4. **Error Boundaries**: Implement proper error handling for network issues
+5. **Rate Limiting**: Be mindful of RPC rate limits
+6. **Data Freshness**: Consider data freshness requirements for your use case
+
+## Use Cases
+
+- **Transaction Explorers**: Build custom transaction viewing interfaces
+- **Audit Tools**: Analyze transaction patterns and account interactions
+- **Payment Verification**: Verify payment details in applications
+- **Analytics Dashboards**: Display transaction metrics and insights
+- **Debugging Tools**: Debug failed transactions and understand errors
+- **Compliance Tools**: Track and analyze transactions for compliance purposes

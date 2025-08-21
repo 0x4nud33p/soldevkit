@@ -1,0 +1,344 @@
+---
+title: useTxnToast
+description: A React hook for managing Solana transaction toasts with automatic state tracking and user feedback.
+author:
+  name: Aman Satyawani
+  url: https://github.com/satyawaniaman
+---
+
+## Installation
+
+```bash
+npx shadcn@latest add https://soldevkit.com/r/use-txn-toast.json
+```
+
+### Manual Installation
+
+If you prefer to set up the hook manually:
+
+#### 1. Install required dependencies
+
+```bash
+npm install @solana/web3.js sonner react
+```
+
+#### 2. Copy the hook file
+
+Copy the `use-txn-toast.tsx` hook from the registry and place it in your `hooks/` directory.
+
+#### 3. Install the TransactionToast component
+
+This hook depends on the `TransactionToast` component:
+
+```bash
+npx soldevkit-ui@latest add transaction-toast
+```
+
+## Usage
+
+### Basic Setup
+
+First, make sure your app is wrapped with the Sonner Toaster:
+
+```tsx
+import { Toaster } from "sonner";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <Toaster position="top-right" />
+      </body>
+    </html>
+  );
+}
+```
+
+### Basic Usage
+
+```tsx
+import { useState } from 'react';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { useTxnToast } from '@/hooks/use-txn-toast';
+import { Button } from '@/components/ui/button';
+
+export function TokenTransfer() {
+  const { connection } = useConnection();
+  const { publicKey, sendTransaction } = useWallet();
+  const { txnToast } = useTxnToast();
+  const [recipient, setRecipient] = useState('');
+  const [amount, setAmount] = useState('');
+
+  const handleTransfer = async () => {
+    if (!publicKey || !recipient || !amount) return;
+
+    try {
+      const transaction = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: publicKey,
+          toPubkey: new PublicKey(recipient),
+          lamports: parseFloat(amount) * LAMPORTS_PER_SOL,
+        })
+      );
+
+      const signature = await sendTransaction(transaction, connection);
+      
+      // Show pending toast
+      const toastId = txnToast(signature, 'Transferring tokens...');
+      
+      // Wait for confirmation
+      await connection.confirmTransaction(signature);
+      
+      // Update to success
+      txnToast.confirm(signature, 'Transfer completed successfully!');
+      
+    } catch (error) {
+      txnToast.error(`Transfer failed: ${error.message}`);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <input
+        type="text"
+        placeholder="Recipient address"
+        value={recipient}
+        onChange={(e) => setRecipient(e.target.value)}
+        className="w-full p-2 border rounded"
+      />
+      <input
+        type="number"
+        placeholder="Amount (SOL)"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+        className="w-full p-2 border rounded"
+      />
+      <Button onClick={handleTransfer}>Transfer SOL</Button>
+    </div>
+  );
+}
+```
+
+### Advanced Usage with Custom Hook
+
+```tsx
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { Transaction } from '@solana/web3.js';
+import { useTxnToast } from '@/hooks/use-txn-toast';
+
+export function useTokenSwap() {
+  const { connection } = useConnection();
+  const { sendTransaction } = useWallet();
+  const { txnToast } = useTxnToast();
+
+  const executeSwap = async (
+    transaction: Transaction, 
+    message: string,
+    options?: {
+      network?: "mainnet-beta" | "devnet" | "testnet";
+      explorerUrl?: string;
+    }
+  ) => {
+    try {
+      const signature = await sendTransaction(transaction, connection);
+      
+      // Show pending toast
+      const toastId = txnToast(signature, message, {
+        network: options?.network,
+        explorerUrl: options?.explorerUrl,
+      });
+      
+      // Wait for confirmation
+      await connection.confirmTransaction(signature);
+      
+      // Update to success
+      txnToast.confirm(signature, 'Swap completed successfully!', {
+        network: options?.network,
+        explorerUrl: options?.explorerUrl,
+      });
+      
+      return signature;
+    } catch (error) {
+      txnToast.error(`Swap failed: ${error.message}`);
+      throw error;
+    }
+  };
+
+  return { executeSwap };
+}
+```
+
+## API Reference
+
+### useTxnToast()
+
+Returns an object with the `txnToast` function and its helper methods.
+
+```tsx
+const { txnToast } = useTxnToast();
+```
+
+### txnToast(signature, message?, options?)
+
+Creates a transaction toast with the specified parameters.
+
+**Parameters:**
+- `signature` (string): The transaction signature
+- `message` (string, optional): Custom message to display
+- `options` (TxnToastOptions, optional): Additional configuration
+
+**Returns:** `string` - Toast ID for dismissal
+
+### txnToast.confirm(signature, message?, options?)
+
+Shows a success toast for a confirmed transaction.
+
+**Parameters:**
+- `signature` (string): The transaction signature
+- `message` (string, optional): Custom success message
+- `options` (TxnToastOptions without variant, optional): Additional configuration
+
+**Returns:** `string` - Toast ID
+
+### txnToast.error(message, options?)
+
+Shows an error toast.
+
+**Parameters:**
+- `message` (string): Error message to display
+- `options` (TxnToastOptions without variant, optional): Additional configuration
+
+**Returns:** `string` - Toast ID
+
+### txnToast.dismiss(toastId?)
+
+Dismisses a specific toast or all toasts.
+
+**Parameters:**
+- `toastId` (string, optional): Specific toast ID to dismiss. If not provided, dismisses all toasts.
+
+### TxnToastOptions
+
+```tsx
+interface TxnToastOptions {
+  /** Custom message to display */
+  message?: string;
+  /** Toast variant */
+  variant?: "pending" | "success" | "error";
+  /** Auto dismiss duration in milliseconds */
+  duration?: number;
+  /** Solana explorer URL base */
+  explorerUrl?: string;
+  /** Network for explorer link */
+  network?: "mainnet-beta" | "devnet" | "testnet";
+  /** Show copy signature button */
+  showCopy?: boolean;
+  /** Show explorer link button */
+  showExplorer?: boolean;
+}
+```
+
+## Examples
+
+### NFT Minting
+
+```tsx
+const { txnToast } = useTxnToast();
+
+const handleMint = async () => {
+  try {
+    const signature = await mintNFT();
+    txnToast(signature, 'Minting your NFT...', {
+      network: 'devnet',
+      duration: 10000, // 10 seconds
+    });
+    
+    await connection.confirmTransaction(signature);
+    txnToast.confirm(signature, 'NFT minted successfully!');
+  } catch (error) {
+    txnToast.error('Minting failed: ' + error.message);
+  }
+};
+```
+
+### Batch Operations
+
+```tsx
+const { txnToast } = useTxnToast();
+
+const handleBatchTransfer = async (recipients: string[]) => {
+  const toastIds: string[] = [];
+  
+  try {
+    for (const recipient of recipients) {
+      const signature = await transferTo(recipient);
+      const toastId = txnToast(signature, `Transferring to ${recipient.slice(0, 8)}...`);
+      toastIds.push(toastId);
+    }
+    
+    // Wait for all confirmations
+    await Promise.all(signatures.map(sig => connection.confirmTransaction(sig)));
+    
+    // Dismiss all pending toasts
+    toastIds.forEach(id => txnToast.dismiss(id));
+    
+    // Show success summary
+    txnToast.confirm('', `Successfully transferred to ${recipients.length} recipients`);
+  } catch (error) {
+    // Dismiss pending toasts
+    toastIds.forEach(id => txnToast.dismiss(id));
+    txnToast.error('Batch transfer failed: ' + error.message);
+  }
+};
+```
+
+### Error-Only Notifications
+
+```tsx
+const { txnToast } = useTxnToast();
+
+const handleSilentOperation = async () => {
+  try {
+    await performOperation();
+    // Success is handled silently
+  } catch (error) {
+    // Only show errors
+    txnToast.error('Operation failed: ' + error.message, {
+      duration: 8000, // Show error longer
+    });
+  }
+};
+```
+
+## Features
+
+- **Automatic State Management**: Handles pending, success, and error states
+- **Transaction Tracking**: Links toasts to specific transaction signatures
+- **Explorer Integration**: Provides links to view transactions on Solana explorers
+- **Copy Functionality**: Users can copy transaction signatures to clipboard
+- **Customizable**: Supports custom messages, durations, and styling options
+- **Network Aware**: Supports mainnet, devnet, and testnet configurations
+- **Queue Management**: Handles multiple simultaneous transactions
+- **TypeScript Support**: Fully typed for better developer experience
+
+## Dependencies
+
+This hook requires:
+
+- `@solana/web3.js` - For Solana transaction types
+- `sonner` - For toast notifications
+- `react` - For React hooks
+- `TransactionToast` component - For rendering the toast UI
+
+Make sure your app is wrapped with the appropriate Solana wallet providers and Sonner's Toaster component.
+
+## Credits
+
+- Built on top of [Sonner](https://sonner.emilkowal.ski/) for toast management
+- Integrates with [Solana Web3.js](https://solana-labs.github.io/solana-web3.js/) for transaction handling

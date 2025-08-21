@@ -1,0 +1,135 @@
+---
+title: Transaction List
+description: A component for displaying a list of Solana transactions with details like signature, block, time, sender, and fee.
+---
+
+## Preview
+
+    <ComponentPreview name="txn-list-demo" />
+
+## Installation
+
+### CLI
+
+<Tabs items={["npm", "pnpm"]}>
+  <Tab>```sh npx shadcn@latest add https://soldevkit.com/r/txn-list.json ```</Tab>
+  <Tab>```sh pnpm dlx shadcn@latest add https://soldevkit.com/r/txn-list.json ```</Tab>
+</Tabs>
+
+### Manual
+
+<ComponentInstallation name="txn-list" />
+
+## Usage
+
+```tsx
+import { TxnList } from "@/components/soldevkit-ui/transaction/txn-list";
+
+const transactions = [
+  {
+    signature: "5VfYmGBjvxKjKjFxwlZQpxJGYmGBjvxKjKjFxwlZQpxJGYmGBjvxKjKjFxwlZQpxJGYmGBjvxKjKjFxwlZQpxJGY",
+    block: 245678901,
+    time: "2 mins ago",
+    sender: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM",
+    fee: 0.000005,
+  },
+  // ... more transactions
+];
+
+export default function Example() {
+  return <TxnList transactions={transactions} loading={false} className="border rounded-lg" />;
+}
+```
+
+## Features
+
+- **Solscan Integration**: Direct links to transaction details on Solscan
+- **Loading States**: Built-in skeleton loading animation
+- **Empty States**: Graceful handling when no transactions are available
+- **Responsive Design**: Mobile-friendly table layout
+- **Real-time Data**: Supports live transaction data with connection hooks
+- **Time Formatting**: Human-readable relative time display
+- **Fee Display**: Properly formatted SOL fee amounts
+- **Address Truncation**: Shortened addresses for better readability
+
+## API Reference
+
+### Props
+
+<TypeTable
+  type={{
+    transactions: {
+      description: "Array of Solana transaction objects",
+      type: "VersionedTransactionResponse[]",
+      default: "[]",
+    },
+    loading: {
+      description: "Shows skeleton loading state when true",
+      type: "boolean",
+      default: "false",
+    },
+    onClick: {
+      description: "Callback when a transaction row is clicked",
+      type: "(txn: VersionedTransactionResponse) => void",
+    },
+    className: {
+      description: "Additional CSS classes for the container",
+      type: "string",
+    },
+  }}
+/>
+
+### Transaction Object
+
+The component expects transaction objects with the following structure:
+
+```tsx
+interface Transaction {
+  signature: string; // Transaction signature hash
+  block: number; // Block number
+  time: string; // Human-readable time (e.g., "2 mins ago")
+  sender: string; // Sender's public key
+  fee: number; // Transaction fee in SOL
+}
+```
+
+## Examples
+
+### Basic Usage
+
+```tsx
+<TxnList transactions={transactions} />
+```
+
+### With Loading State
+
+```tsx
+<TxnList loading={true} />
+```
+
+### With Click Handler
+
+```tsx
+<TxnList transactions={transactions} onClick={(txn) => console.log("Transaction clicked:", txn.signature)} />
+```
+
+### Custom Styling
+
+```tsx
+<TxnList transactions={transactions} className="border rounded-lg bg-muted/50" />
+```
+
+## Dependencies
+
+This component requires the following dependencies:
+
+- `@solana/web3.js` - For Solana blockchain types and utilities
+- `@solana/wallet-adapter-react` - For wallet connection hooks
+- `date-fns` - For time formatting
+- `lucide-react` - For icons
+
+## Credits
+
+- Built with [shadcn/ui](https://ui.shadcn.com) components
+- Integrates with [Solscan](https://solscan.io) for transaction exploration
+- Uses [Solana Web3.js](https://solana-labs.github.io/solana-web3.js/) for blockchain interactions

@@ -13,7 +13,7 @@ export const ui: ExtendedRegistryItem[] = [
     title: "Utils",
     description:
       "Utility functions for class name merging with clsx and tailwind-merge.",
-    dependencies: ["clsx", "tailwind-merge"],
+    dependencies: ["clsx", "tailwind-merge", "@solana/web3.js"],
     files: [
       {
         path: "lib/utils.ts",
@@ -155,6 +155,238 @@ export const ui: ExtendedRegistryItem[] = [
         path: "default/ui/wallet/wallet-connect-button.tsx",
         type: "registry:ui",
         target: "components/soldevkit-ui/wallet/wallet-connect-button.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "input",
+    type: "registry:ui",
+    title: "Input",
+    description:
+      "Displays a form input field or a component that looks like an input field.",
+    dependencies: [],
+    files: [
+      {
+        path: "soldevkit-ui/input.tsx",
+        type: "registry:ui",
+        target: "components/soldevkit-ui/input.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "form",
+    type: "registry:ui",
+    title: "Form",
+    description:
+      "Form components (Form, FormField, FormItem, FormLabel, FormMessage) built on react-hook-form.",
+    dependencies: [
+      "@radix-ui/react-label",
+      "@radix-ui/react-slot",
+      "react-hook-form",
+    ],
+    files: [
+      {
+        path: "soldevkit-ui/form.tsx",
+        type: "registry:ui",
+        target: "components/soldevkit-ui/form.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "select",
+    type: "registry:ui",
+    title: "Select",
+    description: "A set of components for building accessible select menus.",
+    dependencies: ["@radix-ui/react-select"],
+    files: [
+      {
+        path: "soldevkit-ui/select.tsx",
+        type: "registry:ui",
+        target: "components/soldevkit-ui/select.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "card",
+    type: "registry:ui",
+    title: "Card",
+    description: "A card component with header and content elements.",
+    dependencies: [],
+    files: [
+      {
+        path: "soldevkit-ui/card.tsx",
+        type: "registry:ui",
+        target: "components/soldevkit-ui/card.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "pk-input",
+    type: "registry:ui",
+    title: "Public Key Input",
+    description:
+      "A specialized input component for Solana public key validation with real-time validation feedback.",
+    dependencies: ["@solana/web3.js"],
+    registryDependencies: ["input"],
+    files: [
+      {
+        path: "default/ui/pk/pk-input.tsx",
+        type: "registry:ui",
+        target: "components/soldevkit-ui/pk/pk-input.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "toggle",
+    type: "registry:ui",
+    title: "Toggle",
+    description: "A two-state button that can be either on or off.",
+    dependencies: ["@radix-ui/react-toggle", "class-variance-authority"],
+    files: [
+      {
+        path: "soldevkit-ui/toggle.tsx",
+        type: "registry:ui",
+        target: "components/ui/toggle.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "toggle-group",
+    type: "registry:ui",
+    title: "Toggle Group",
+    description: "A set of two-state buttons that can be toggled on or off.",
+    dependencies: ["@radix-ui/react-toggle-group"],
+    registryDependencies: ["toggle"],
+    files: [
+      {
+        path: "soldevkit-ui/toggle-group.tsx",
+        type: "registry:ui",
+        target: "components/ui/toggle-group.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "txn-settings",
+    type: "registry:ui",
+    title: "Transaction Settings",
+    description:
+      "A comprehensive transaction settings dialog with priority fee, slippage, and other configuration options.",
+    dependencies: ["@radix-ui/react-dialog", "lucide-react"],
+    registryDependencies: ["button", "dialog", "input", "toggle-group"],
+    files: [
+      {
+        path: "default/ui/transaction/txn-settings.tsx",
+        type: "registry:ui",
+        target: "components/soldevkit-ui/transaction/txn-settings.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "table",
+    type: "registry:ui",
+    title: "Table",
+    description:
+      "A responsive table component with header, body, footer, and cell components.",
+    dependencies: [],
+    files: [
+      {
+        path: "soldevkit-ui/table.tsx",
+        type: "registry:ui",
+        target: "components/ui/table.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "skeleton",
+    type: "registry:ui",
+    title: "Skeleton",
+    description: "Use to show a placeholder while content is loading.",
+    dependencies: [],
+    files: [
+      {
+        path: "soldevkit-ui/skeleton.tsx",
+        type: "registry:ui",
+        target: "components/ui/skeleton.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "txn-list",
+    type: "registry:ui",
+    title: "Transaction List",
+    description:
+      "A component for displaying a list of Solana transactions with details like signature, block, time, sender, and fee.",
+    dependencies: [
+      "@solana/web3.js",
+      "@solana/wallet-adapter-react",
+      "date-fns",
+      "lucide-react",
+    ],
+    registryDependencies: ["table", "skeleton"],
+    files: [
+      {
+        path: "default/ui/transaction/txn-list.tsx",
+        type: "registry:ui",
+        target: "components/soldevkit-ui/transaction/txn-list.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "avatar",
+    type: "registry:ui",
+    title: "Avatar",
+    description:
+      "A component for displaying Solana address avatars using Minidenticons with customizable sizes and styling.",
+    dependencies: ["@solana/web3.js", "minidenticon"],
+    files: [
+      {
+        path: "default/ui/avatar/avatar.tsx",
+        type: "registry:ui",
+        target: "components/soldevkit-ui/avatar/avatar.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "send-token",
+    type: "registry:ui",
+    title: "Send Token",
+    description:
+      "A form component for sending SPL tokens on Solana with validation and transaction handling.",
+    dependencies: [
+      "@solana/web3.js",
+      "@solana/wallet-adapter-react",
+      "@solana/spl-token",
+      "@solana/spl-token-registry", // ✅ added
+      "react-hook-form",
+      "sonner",
+      "lucide-react",
+    ],
+    registryDependencies: [
+      "button",
+      "input",
+      "wallet-connect-button",
+      "select",
+      "form",
+      "card",
+    ],
+    files: [
+      {
+        path: "default/ui/token/send-token.tsx",
+        type: "registry:ui",
+        target: "components/soldevkit-ui/token/send-token.tsx",
       },
     ],
   },

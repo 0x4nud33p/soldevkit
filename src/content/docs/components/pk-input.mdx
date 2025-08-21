@@ -1,0 +1,226 @@
+---
+title: PKInput
+description: A specialized input component for Solana public keys with built-in validation and error handling.
+author:
+  name: Aman Satyawani
+  url: https://github.com/satyawaniaman
+---
+
+<ComponentPreview name="pk-input-demo" />
+
+# PKInput
+
+A specialized input component designed for Solana public key entry with built-in validation, error handling, and accessibility features.
+
+## Installation
+
+<ComponentInstallation name="pk-input" />
+
+## Usage
+
+### Basic Usage
+
+```tsx
+import { PKInput } from "@/components/soldevkit-ui/pk/pk-input";
+
+export default function Example() {
+  return <PKInput placeholder="Enter your public key" />;
+}
+```
+
+### With Label
+
+```tsx
+import { PKInput } from "@/components/soldevkit-ui/pk/pk-input";
+
+export default function ExampleWithLabel() {
+  return (
+    <div className="space-y-2">
+      <label htmlFor="wallet-pk" className="text-sm font-medium">
+        Wallet Public Key
+      </label>
+      <PKInput id="wallet-pk" placeholder="Enter your wallet's public key" />
+    </div>
+  );
+}
+```
+
+### Different Sizes
+
+```tsx
+import { PKInput } from "@/components/soldevkit-ui/pk/pk-input";
+
+export default function ExampleSizes() {
+  return (
+    <div className="space-y-3">
+      <PKInput placeholder="Small public key input" className="h-8 text-sm" />
+      <PKInput placeholder="Default public key input" />
+      <PKInput placeholder="Large public key input" className="h-12 text-lg" />
+    </div>
+  );
+}
+```
+
+### Disabled State
+
+```tsx
+import { PKInput } from "@/components/soldevkit-ui/pk/pk-input";
+
+export default function ExampleDisabled() {
+  return <PKInput placeholder="Disabled input" disabled value="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU" />;
+}
+```
+
+## Features
+
+- **Real-time Validation**: Validates Solana public keys as you type
+- **Error States**: Visual feedback for invalid public keys
+- **Accessibility**: Full ARIA support and keyboard navigation
+- **Customizable**: Supports all standard input props and custom styling
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **TypeScript Support**: Fully typed with proper TypeScript definitions
+
+## Props
+
+<TypeTable
+  type={{
+    placeholder: {
+      description: "Placeholder text for the input field.",
+      type: "string",
+      required: false,
+      default: "undefined",
+    },
+    disabled: {
+      description: "Whether the input is disabled.",
+      type: "boolean",
+      required: false,
+      default: "false",
+    },
+    value: {
+      description: "Controlled value of the input.",
+      type: "string",
+      required: false,
+      default: "undefined",
+    },
+    className: {
+      description: "Additional CSS classes for custom styling.",
+      type: "string",
+      required: false,
+      default: "undefined",
+    },
+    id: {
+      description: "HTML id attribute for the input element.",
+      type: "string",
+      required: false,
+      default: "undefined",
+    },
+  }}
+/>
+
+## Validation
+
+The PKInput component uses Solana's built-in public key validation to ensure entered values are valid Solana public keys. Invalid keys will:
+
+- Show a red border when the input loses focus
+- Set the `aria-invalid` attribute to `true` for screen readers
+- Display browser validation messages
+
+### Valid Public Key Format
+
+Solana public keys are base58-encoded strings that are typically 32-44 characters long. Examples of valid public keys:
+
+- `7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU`
+- `So11111111111111111111111111111111111111112`
+- `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`
+
+## Accessibility
+
+The PKInput component follows WAI-ARIA guidelines:
+
+- Uses `aria-invalid` to indicate validation state
+- Supports keyboard navigation
+- Compatible with screen readers
+- Proper focus management
+
+## Error Handling
+
+The component handles validation errors gracefully:
+
+```tsx
+// The component automatically validates on blur
+// Invalid keys will show visual feedback
+<PKInput
+  placeholder="Enter public key"
+  onBlur={(e) => {
+    // Custom blur handling if needed
+    console.log("Input blurred:", e.target.value);
+  }}
+/>
+```
+
+## Integration with Forms
+
+The PKInput works seamlessly with form libraries:
+
+```tsx
+import { useForm } from "react-hook-form";
+import { PKInput } from "@/components/soldevkit-ui/pk/pk-input";
+
+interface FormData {
+  publicKey: string;
+}
+
+export default function FormExample() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
+
+  const onSubmit = (data: FormData) => {
+    console.log("Valid public key:", data.publicKey);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <label htmlFor="publicKey">Public Key</label>
+        <PKInput
+          id="publicKey"
+          placeholder="Enter your public key"
+          {...register("publicKey", { required: "Public key is required" })}
+        />
+        {errors.publicKey && <p className="text-red-500 text-sm">{errors.publicKey.message}</p>}
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+## Wallet States
+
+The PKInput component is commonly used in these scenarios:
+
+- **Recipient Address**: When sending tokens or SOL to another wallet
+- **Delegate Address**: For staking or delegation operations
+- **Program Address**: When interacting with specific Solana programs
+- **Token Account**: For token-specific operations
+
+## Dependencies
+
+This component requires the following dependencies:
+
+```json
+{
+  "@solana/web3.js": "^1.87.0",
+  "react": "^18.0.0",
+  "class-variance-authority": "^0.7.0",
+  "clsx": "^2.0.0",
+  "tailwind-merge": "^2.0.0"
+}
+```
+
+---
+
+_Built with ❤️ for the Solana ecosystem. Contributions welcome!_

@@ -31,10 +31,30 @@ function StarLayer({
   ...props
 }: StarLayerProps) {
   const [boxShadow, setBoxShadow] = React.useState<string>("");
+  const [isDark, setIsDark] = React.useState(true);
 
   React.useEffect(() => {
-    setBoxShadow(generateStars(count, starColor));
-  }, [count, starColor]);
+    // Check if dark mode is active
+    const checkDarkMode = () => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    };
+
+    checkDarkMode();
+
+    // Listen for theme changes
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  React.useEffect(() => {
+    const effectiveStarColor = isDark ? starColor : "rgba(0, 0, 0, 0.3)";
+    setBoxShadow(generateStars(count, effectiveStarColor));
+  }, [count, starColor, isDark]);
 
   return (
     <motion.div
@@ -73,14 +93,14 @@ function StarsBackground({
   children,
   className,
   speed = 80,
-  starColor = "rgba(255, 255, 255, 0.6)",
+  starColor = "rgba(0, 0, 0, 0.3)",
   ...props
 }: StarsBackgroundProps) {
   return (
     <div
       data-slot="stars-background"
       className={cn(
-        "relative size-full overflow-hidden bg-[radial-gradient(ellipse_at_bottom,_#262626_0%,_#000_100%)]",
+        "relative size-full overflow-hidden bg-[radial-gradient(ellipse_at_bottom,_#f3f4f6_0%,_#e5e7eb_100%)] dark:bg-[radial-gradient(ellipse_at_bottom,_#262626_0%,_#000_100%)]",
         className,
       )}
       {...props}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-request-sol-airdrop",
+  "type": "registry:hook",
+  "title": "useRequestSolAirdrop",
+  "description": "A React hook for requesting SOL airdrops on Solana devnet/testnet with status tracking and error handling.",
+  "dependencies": [
+    "@solana/web3.js",
+    "react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "src/registry/default/hooks/token/use-request-sol-airdrop.tsx",
+      "content": "import { useState } from \"react\";\nimport { PublicKey, Connection, TransactionSignature } from \"@solana/web3.js\";\n\nexport type ErrorState = string | null;\nexport type StatusState = \"idle\" | \"loading\" | \"error\" | \"success\";\n\ntype AirdropResultState = {\n  transactionSignature: TransactionSignature;\n} | null;\n\n/**\n * Hook to request SOL airdrop for a given public key\n */\nexport function useRequestSolAirdrop(\n  publicKey: PublicKey | null,\n  connection: Connection,\n) {\n  const [error, setError] = useState<ErrorState>(null);\n  const [status, setStatus] = useState<StatusState>(\"idle\");\n  const [result, setResult] = useState<AirdropResultState>(null);\n\n  async function getSolAirdrop(\n    solana: number = 1,\n  ): Promise<AirdropResultState> {\n    try {\n      if (!publicKey) throw new Error(\"Wallet not connected\");\n\n      setStatus(\"loading\");\n      const lamports = solana * 1_000_000_000; // 1 SOL = 1_000_000_000 lamports\n\n      const transactionSignature = await connection.requestAirdrop(\n        publicKey,\n        lamports,\n      );\n\n      // Wait for confirmation\n      await connection.confirmTransaction(transactionSignature, \"confirmed\");\n\n      setResult({ transactionSignature });\n      setStatus(\"success\");\n\n      return { transactionSignature };\n    } catch (err) {\n      setError((err as Error).message);\n      setStatus(\"error\");\n      return null;\n    }\n  }\n\n  return { result, status, error, getSolAirdrop };\n}\n",
+      "type": "registry:hook",
+      "target": "hooks/use-request-sol-airdrop.tsx"
+    }
+  ]
+}

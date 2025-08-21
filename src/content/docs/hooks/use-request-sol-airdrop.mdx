@@ -1,0 +1,205 @@
+---
+title: useRequestSolAirdrop
+description: A React hook for requesting SOL airdrops on Solana devnet/testnet with status tracking and error handling.
+author:
+  name: Aman Satyawani
+  url: https://github.com/satyawaniaman
+---
+
+## Installation
+
+```bash
+npx shadcn@latest add https://soldevkit.com/r/use-request-sol-airdrop.json
+```
+
+### Manual Installation
+
+If you prefer to set up the hook manually:
+
+#### 1. Install required dependencies
+
+```bash
+npm install @solana/web3.js react
+```
+
+#### 2. Copy the hook file
+
+Copy the `use-request-sol-airdrop.tsx` hook from the registry and place it in your `hooks/` directory.
+
+## Usage
+
+### Basic Usage
+
+```tsx
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useRequestSolAirdrop } from '@/hooks/use-request-sol-airdrop';
+import { Button } from '@/components/ui/button';
+
+export function AirdropButton() {
+  const { connection } = useConnection();
+  const { publicKey } = useWallet();
+  const { result, status, error, getSolAirdrop } = useRequestSolAirdrop(
+    publicKey,
+    connection
+  );
+
+  const handleAirdrop = async () => {
+    await getSolAirdrop(1); // Request 1 SOL
+  };
+
+  return (
+    <div className="space-y-4">
+      <Button 
+        onClick={handleAirdrop}
+        disabled={!publicKey || status === 'loading'}
+      >
+        {status === 'loading' ? 'Requesting...' : 'Request 1 SOL Airdrop'}
+      </Button>
+      
+      {status === 'success' && result && (
+        <div className="p-4 bg-green-100 rounded">
+          <p className="text-green-800">Airdrop successful!</p>
+          <p className="text-sm text-green-600">
+            Transaction: {result.transactionSignature}
+          </p>
+        </div>
+      )}
+      
+      {status === 'error' && error && (
+        <div className="p-4 bg-red-100 rounded">
+          <p className="text-red-800">Error: {error}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Custom Amount
+
+```tsx
+import { useState } from 'react';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useRequestSolAirdrop } from '@/hooks/use-request-sol-airdrop';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+
+export function CustomAirdrop() {
+  const { connection } = useConnection();
+  const { publicKey } = useWallet();
+  const { result, status, error, getSolAirdrop } = useRequestSolAirdrop(
+    publicKey,
+    connection
+  );
+  const [amount, setAmount] = useState('1');
+
+  const handleAirdrop = async () => {
+    const solAmount = parseFloat(amount);
+    if (solAmount > 0) {
+      await getSolAirdrop(solAmount);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-2">
+        <Input
+          type="number"
+          placeholder="Amount (SOL)"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          min="0.1"
+          max="10"
+          step="0.1"
+        />
+        <Button 
+          onClick={handleAirdrop}
+          disabled={!publicKey || status === 'loading'}
+        >
+          {status === 'loading' ? 'Requesting...' : 'Request Airdrop'}
+        </Button>
+      </div>
+      
+      {status === 'success' && result && (
+        <div className="p-4 bg-green-100 rounded">
+          <p className="text-green-800">Airdrop of {amount} SOL successful!</p>
+          <p className="text-sm text-green-600 break-all">
+            Transaction: {result.transactionSignature}
+          </p>
+        </div>
+      )}
+      
+      {status === 'error' && error && (
+        <div className="p-4 bg-red-100 rounded">
+          <p className="text-red-800">Error: {error}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+## API Reference
+
+### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `publicKey` | `PublicKey \| null` | The wallet's public key |
+| `connection` | `Connection` | Solana RPC connection |
+
+### Return Value
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `result` | `{ transactionSignature: TransactionSignature } \| null` | Airdrop result with transaction signature |
+| `status` | `"idle" \| "loading" \| "error" \| "success"` | Current operation status |
+| `error` | `string \| null` | Error message if operation failed |
+| `getSolAirdrop` | `(solana?: number) => Promise<AirdropResultState>` | Function to request airdrop |
+
+### getSolAirdrop Function
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `solana` | `number` | `1` | Amount of SOL to request (in SOL units) |
+
+## Important Notes
+
+- **Network Limitation**: Airdrops only work on devnet and testnet networks, not on mainnet
+- **Rate Limiting**: Solana networks have rate limits for airdrops (typically 1-2 SOL per request)
+- **Wallet Connection**: Ensure the wallet is connected before calling `getSolAirdrop`
+- **Error Handling**: Always handle errors as airdrop requests can fail due to network issues or rate limits
+
+## Common Use Cases
+
+1. **Development Testing**: Get test SOL for development and testing
+2. **Demo Applications**: Provide users with test tokens for trying features
+3. **Onboarding**: Help new users get started with test tokens
+
+## Error Handling
+
+Common errors you might encounter:
+
+- `"Wallet not connected"`: User hasn't connected their wallet
+- `"Airdrop rate limit exceeded"`: Too many requests in a short time
+- `"Network error"`: RPC connection issues
+- `"Invalid public key"`: Malformed wallet address
+
+```tsx
+const handleAirdropWithErrorHandling = async () => {
+  try {
+    const result = await getSolAirdrop(1);
+    if (result) {
+      console.log('Airdrop successful:', result.transactionSignature);
+    }
+  } catch (err) {
+    console.error('Airdrop failed:', err);
+    // Handle specific error cases
+    if (err.message.includes('rate limit')) {
+      // Show rate limit message
+    } else if (err.message.includes('Wallet not connected')) {
+      // Prompt user to connect wallet
+    }
+  }
+};
+```

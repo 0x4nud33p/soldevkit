@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 interface UseEmailSubscriptionReturn {
   isLoading: boolean;
@@ -18,22 +18,22 @@ export function useEmailSubscription(): UseEmailSubscriptionReturn {
     setSuccess(false);
 
     try {
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to subscribe');
+        throw new Error(errorData.error || "Failed to subscribe");
       }
 
       setSuccess(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setIsLoading(false);
     }
