@@ -1,6 +1,6 @@
 import React from "react";
-import { WalletConnectButton } from "../../ui/wallet/wallet-connect-button";
-import { Wallet, Shield, Zap, Lock, Globe } from "lucide-react";
+import { WalletConnectButton } from "@/registry/default/ui/wallet/wallet-connect-button";
+import { Wallet, Shield, Zap, Lock } from "lucide-react";
 
 function walletConnectButtonDemo() {
   return (
@@ -106,50 +106,17 @@ function walletConnectButtonDemo() {
         </h3>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <div className="flex flex-col items-center gap-2">
-            <WalletConnectButton
-              variant="outline"
-              size="sm"
-              icon={<Globe className="h-3 w-3" />}
-            />
+            <WalletConnectButton variant="outline" size="sm" />
           </div>
 
           <div className="flex flex-col items-center gap-2">
-            <WalletConnectButton
-              variant="outline"
-              size="default"
-              icon={<Globe className="h-4 w-4" />}
-            />
+            <WalletConnectButton variant="outline" size="default" />
           </div>
 
           <div className="flex flex-col items-center gap-2">
-            <WalletConnectButton
-              variant="outline"
-              size="lg"
-              icon={<Globe className="h-5 w-5" />}
-            />
+            <WalletConnectButton variant="outline" size="lg" />
           </div>
         </div>
-      </div>
-
-      {/* Custom labels example */}
-      <div className="w-full max-w-md">
-        <h3 className="text-lg font-semibold mb-4 text-center">
-          Custom Labels
-        </h3>
-        <WalletConnectButton
-          variant="default"
-          size="lg"
-          className="w-full"
-          icon={<Wallet className="h-4 w-4" />}
-          labels={{
-            "has-wallet": "🚀 Launch Wallet",
-            connecting: "🔄 Launching...",
-            disconnect: "👋 Goodbye",
-            "change-wallet": "🔄 Switch Wallet",
-            "copy-address": "📋 Copy Address",
-            copied: "✅ Copied!",
-          }}
-        />
       </div>
     </div>
   );

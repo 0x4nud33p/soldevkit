@@ -1,5 +1,16 @@
 {
   "title": "Components",
   "root": true,
-  "pages": ["avatar", "wallet", "pk-input", "txn-settings", "txn-list"]
+  "pages": [
+    "avatar",
+    "wallet",
+    "pk-input",
+    "send-token",
+    "txn-settings",
+    "txn-list",
+    "swap",
+    "nft-card",
+    "nft-img",
+    "token-img"
+  ]
 }

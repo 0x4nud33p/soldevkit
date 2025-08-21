@@ -20,12 +20,7 @@ author:
 import { WalletConnectButton } from "@/components/soldevkit-ui/wallet/wallet-connect-button";
 
 export default function Example() {
-  return (
-    <WalletConnectButton
-      variant="outline"
-      size="lg"
-    />
-  );
+  return <WalletConnectButton variant="outline" size="lg" />;
 }
 ```
 
@@ -36,13 +31,7 @@ import { WalletConnectButton } from "@/components/soldevkit-ui/wallet/wallet-con
 import { Wallet } from "lucide-react";
 
 export default function ExampleWithIcon() {
-  return (
-    <WalletConnectButton
-      variant="default"
-      size="lg"
-      icon={<Wallet className="h-4 w-4" />}
-    />
-  );
+  return <WalletConnectButton variant="default" size="lg" icon={<Wallet className="h-4 w-4" />} />;
 }
 ```
 
@@ -143,7 +132,7 @@ import { Wallet, Shield, Zap, Lock, Globe } from "lucide-react";
 ### Icon Sizing Guidelines
 
 - **Small buttons**: Use `h-3 w-3` for icons
-- **Default buttons**: Use `h-4 w-4` for icons  
+- **Default buttons**: Use `h-4 w-4` for icons
 - **Large buttons**: Use `h-5 w-5` for icons
 
 ```tsx
@@ -161,7 +150,7 @@ const CustomIcon = () => (
   </svg>
 );
 
-<WalletConnectButton icon={<CustomIcon />} />
+<WalletConnectButton icon={<CustomIcon />} />;
 ```
 
 ## Label Customization

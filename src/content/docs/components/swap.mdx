@@ -1,0 +1,128 @@
+---
+title: Swap
+description: A token swap interface for Solana DeFi applications with wallet integration and dark theme support.
+author:
+  name: SolDevKit Team
+  url: https://github.com/soldevkit
+---
+
+<ComponentPreview name="swap-demo" />
+
+# Swap
+
+A modern token swap interface designed for Solana DeFi applications with wallet connectivity, token selection, and real-time balance display.
+
+## Installation
+
+<ComponentInstallation name="swap" />
+
+## Usage
+
+### Basic Usage
+
+```tsx
+import SwapUI from "@/registry/default/ui/swap/swap";
+
+export default function SwapExample() {
+  return <SwapUI />;
+}
+```
+
+### With Wallet Provider
+
+```tsx
+import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react";
+import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
+import { clusterApiUrl } from "@solana/web3.js";
+import SwapUI from "@/registry/default/ui/swap/swap";
+
+const wallets = [new PhantomWalletAdapter()];
+const endpoint = clusterApiUrl("devnet");
+
+export default function SwapWithProvider() {
+  return (
+    <ConnectionProvider endpoint={endpoint}>
+      <WalletProvider wallets={wallets} autoConnect>
+        <WalletModalProvider>
+          <SwapUI />
+        </WalletModalProvider>
+      </WalletProvider>
+    </ConnectionProvider>
+  );
+}
+```
+
+## Features
+
+- **Wallet Integration**: Seamless connection with Solana wallets
+- **Token Selection**: Interactive dropdown with Jupiter verified tokens
+- **Real-time Balance**: Displays current wallet balance
+- **Dark Theme Support**: Fully responsive dark/light theme switching
+- **Responsive Design**: Mobile-first approach with touch-friendly interactions
+- **Animation**: Smooth transitions using Framer Motion
+- **Accessibility**: Full ARIA support and keyboard navigation
+
+## Props
+
+<TypeTable
+  type={
+    {
+      // Currently no external props - component is self-contained
+      // Future versions may include configuration options
+    }
+  }
+/>
+
+_Note: The SwapUI component is currently self-contained and doesn't accept external props. All configuration is handled internally._
+
+## Token Selection
+
+The component fetches tokens from Jupiter's verified token list and provides:
+
+- Real-time token information and metadata
+- Visual indicators with token logos and symbols
+- Searchable dropdown interface
+
+## Wallet States
+
+The component handles different wallet connection states:
+
+- **Disconnected**: Shows wallet connection prompt with WalletConnectButton
+- **Connected**: Displays wallet balance and enables swap functionality
+- **Loading**: Shows loading indicators during balance fetching
+
+## Amount Handling
+
+Convenience features for amount input:
+
+- **MAX Button**: Sets the maximum available balance
+- **HALF Button**: Sets half of the available balance
+- **Real-time Conversion**: Automatic calculation of output amounts
+
+## Accessibility
+
+The Swap component follows WAI-ARIA guidelines:
+
+- Full keyboard navigation support
+- Screen reader compatibility
+- Proper focus management
+- High contrast mode support
+
+## Dependencies
+
+This component requires the following dependencies:
+
+```json
+{
+  "@solana/web3.js": "^1.87.0",
+  "@solana/wallet-adapter-react": "^0.15.0",
+  "motion/react": "^11.0.0",
+  "lucide-react": "^0.263.0",
+  "react": "^18.0.0"
+}
+```
+
+---
+
+_Built with ❤️ for the Solana ecosystem. Contributions welcome!_

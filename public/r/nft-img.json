@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "nft-img",
+  "type": "registry:ui",
+  "title": "NFT Image",
+  "description": "A component for displaying NFT images with loading states and fallback handling.",
+  "dependencies": [
+    "@solana/web3.js",
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "src/registry/default/ui/nft/nft-img.tsx",
+      "content": "\"use client\";\n\nimport React, { useState, useEffect } from \"react\";\nimport { PublicKey } from \"@solana/web3.js\";\nimport { Loader2, Image as ImageIcon } from \"lucide-react\";\n\nexport interface NFTImageProps {\n  /** The mint address of the NFT */\n  mintAddress: string | PublicKey;\n  /** Custom CSS classes */\n  className?: string;\n  /** Alt text for the image */\n  alt?: string;\n  /** Loading state */\n  isLoading?: boolean;\n}\n\nexport interface NFTMetadata {\n  image?: string;\n  name?: string;\n}\n\nconst fetchNFTMetadata = async (\n  mintAddress: string,\n): Promise<NFTMetadata | null> => {\n  try {\n    const rpcUrl = process.env.NEXT_PUBLIC_ALCHEMY_RPC_URL;\n    if (!rpcUrl) {\n      throw new Error(\"Alchemy RPC URL not configured\");\n    }\n\n    const response = await fetch(rpcUrl, {\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({\n        jsonrpc: \"2.0\",\n        id: 1,\n        method: \"getAsset\",\n        params: { id: mintAddress },\n      }),\n    });\n\n    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);\n\n    const data = await response.json();\n    if (data.error) throw new Error(data.error.message);\n\n    const asset = data.result;\n    if (!asset) return null;\n\n    return {\n      image: asset.content?.files?.[0]?.uri || asset.content?.links?.image,\n      name: asset.content?.metadata?.name,\n    };\n  } catch (error) {\n    console.error(\"Error fetching NFT metadata:\", error);\n    return null;\n  }\n};\n\nexport const NFTImage: React.FC<NFTImageProps> = ({\n  mintAddress,\n  className,\n  alt,\n  isLoading: externalLoading = false,\n}) => {\n  const mintStr =\n    typeof mintAddress === \"string\" ? mintAddress : mintAddress.toBase58();\n\n  const [metadata, setMetadata] = useState<NFTMetadata | null>(null);\n  const [loading, setLoading] = useState(false);\n\n  useEffect(() => {\n    if (mintStr) {\n      setLoading(true);\n      fetchNFTMetadata(mintStr)\n        .then((data) => setMetadata(data))\n        .finally(() => setLoading(false));\n    }\n  }, [mintStr]);\n\n  const isLoading = externalLoading || loading;\n\n  if (isLoading) {\n    return (\n      <div\n        className={`flex items-center justify-center bg-muted rounded-md ${className}`}\n      >\n        <Loader2 className=\"h-6 w-6 animate-spin text-muted-foreground\" />\n      </div>\n    );\n  }\n\n  if (!metadata?.image) {\n    return (\n      <div\n        className={`flex items-center justify-center bg-muted rounded-md ${className}`}\n      >\n        <ImageIcon className=\"h-6 w-6 text-muted-foreground\" />\n      </div>\n    );\n  }\n\n  return (\n    <img\n      src={metadata.image}\n      alt={alt || metadata.name || \"NFT\"}\n      className={`object-cover rounded-md ${className}`}\n      loading=\"lazy\"\n    />\n  );\n};\n",
+      "type": "registry:ui",
+      "target": "components/soldevkit-ui/nft/nft-img.tsx"
+    }
+  ]
+}

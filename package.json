@@ -81,7 +81,6 @@
     "sonner": "^2.0.7",
     "split-type": "^0.3.4",
     "tailwind-merge": "^3.3.0",
-    "three": "^0.179.1",
     "zod": "^3.25.7"
   },
   "devDependencies": {

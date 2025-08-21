@@ -1,0 +1,82 @@
+---
+title: NFT Card
+description: A component for displaying NFT metadata with image, attributes, and collection information using Alchemy API.
+author:
+  name: SolDevKit Team
+  url: https://github.com/soldevkit
+---
+
+<ComponentPreview name="nft-card-demo" />
+
+## Installation
+
+<ComponentInstallation name="nft-card" />
+
+## Usage
+
+### Basic Usage
+
+```tsx
+import { NFTCard } from "@/components/soldevkit-ui/nft/nft-card";
+
+export default function Example() {
+  return (
+    <NFTCard mintAddress="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU" />
+  );
+}
+```
+
+## Features
+
+- **Metadata Fetching**: Automatically fetches NFT metadata using Alchemy API
+- **Multiple Variants**: Default, compact, and detailed display options
+- **Attributes Display**: Optional display of NFT traits and attributes
+- **Collection Info**: Shows collection name and family information
+- **Loading States**: Skeleton loading while fetching metadata
+- **Error Handling**: Graceful error states for invalid or missing NFTs
+- **Responsive Design**: Works across different screen sizes
+- **Customizable Styling**: Supports custom CSS classes
+
+## Props
+
+<TypeTable
+  type={{
+    mintAddress: {
+      type: "string",
+      description: "The Solana mint address of the NFT",
+      required: true,
+    },
+    variant: {
+      type: "'default' | 'compact' | 'detailed'",
+      description: "Visual variant of the card",
+      default: "'default'",
+    },
+    showAttributes: {
+      type: "boolean",
+      description: "Whether to display NFT attributes/traits",
+      default: "false",
+    },
+    showCollection: {
+      type: "boolean",
+      description: "Whether to display collection information",
+      default: "false",
+    },
+    className: {
+      type: "string",
+      description: "Additional CSS classes for styling",
+    },
+  }}
+/>
+
+## Dependencies
+
+```json
+{
+  "@solana/web3.js": "^1.95.0",
+  "lucide-react": "^0.400.0"
+}
+```
+
+---
+
+*Built for the Solana ecosystem. Contributions welcome.*

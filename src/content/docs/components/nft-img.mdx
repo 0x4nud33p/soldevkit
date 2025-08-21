@@ -1,0 +1,79 @@
+---
+title: NFT Image
+description: A component for displaying NFT images with loading states and fallback handling.
+author:
+  name: SolDevKit Team
+  url: https://github.com/soldevkit
+---
+
+<ComponentPreview name="nft-img-demo" />
+
+## Installation
+
+<ComponentInstallation name="nft-img" />
+
+## Usage
+
+### Basic Usage
+
+```tsx
+import { NFTImage } from "@/components/soldevkit-ui/nft/nft-img";
+
+export default function Example() {
+  return (
+    <div className="w-48 h-48">
+      <NFTImage 
+        mintAddress="97jqKJUM87qKmSu5qgengChf2yMSjbDSh8ykyju2W6zh" 
+        className="w-full h-full" 
+      />
+    </div>
+  );
+}
+```
+
+## Features
+
+- **Automatic Image Fetching**: Fetches NFT metadata and displays the image
+- **Loading States**: Shows loading spinner while fetching metadata
+- **Fallback Handling**: Displays placeholder icon when image is unavailable
+- **Responsive Design**: Adapts to container size with proper aspect ratio
+- **Lazy Loading**: Optimized image loading for better performance
+- **Error Handling**: Graceful fallback for invalid or missing NFTs
+
+## Props
+
+<TypeTable
+  type={{
+    mintAddress: {
+      type: "string | PublicKey",
+      description: "The Solana mint address of the NFT",
+      required: true,
+    },
+    className: {
+      type: "string",
+      description: "Additional CSS classes for styling",
+    },
+    alt: {
+      type: "string",
+      description: "Alt text for the image",
+    },
+    isLoading: {
+      type: "boolean",
+      description: "External loading state override",
+      default: "false",
+    },
+  }}
+/>
+
+## Dependencies
+
+```json
+{
+  "@solana/web3.js": "^1.95.0",
+  "lucide-react": "^0.400.0"
+}
+```
+
+---
+
+*Built for the Solana ecosystem. Contributions welcome.*

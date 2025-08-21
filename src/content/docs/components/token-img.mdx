@@ -1,0 +1,120 @@
+---
+title: Token Image
+description: A component for displaying token images with loading states and fallback handling using Jupiter's token list.
+author:
+  name: SolDevKit Team
+  url: https://github.com/soldevkit
+---
+
+<ComponentPreview name="token-img-demo" />
+
+## Installation
+
+<ComponentInstallation name="token-img" />
+
+## Usage
+
+### Basic Usage
+
+```tsx
+import { TokenImage } from "@/components/soldevkit-ui/token/token-img";
+
+export default function Example() {
+  return (
+    <div className="flex items-center gap-4">
+      {/* By symbol */}
+      <TokenImage tokenAddressOrSymbol="SOL" size={48} />
+      
+      {/* By address */}
+      <TokenImage 
+        tokenAddressOrSymbol="EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" 
+        size={48} 
+      />
+    </div>
+  );
+}
+```
+
+### With Custom Styling
+
+```tsx
+import { TokenImage } from "@/components/soldevkit-ui/token/token-img";
+
+export default function Example() {
+  return (
+    <TokenImage 
+      tokenAddressOrSymbol="USDC" 
+      size={64}
+      className="border-2 border-primary"
+      alt="USDC Token"
+    />
+  );
+}
+```
+
+## Features
+
+- **Token Resolution**: Supports both token symbols (SOL, USDC) and mint addresses
+- **Jupiter Integration**: Uses Jupiter's verified token list for accurate metadata
+- **Loading States**: Shows loading spinner while fetching token data
+- **Fallback Handling**: Displays placeholder icon when token image is unavailable
+- **Customizable Size**: Configurable image size with responsive design
+- **Lazy Loading**: Optimized image loading for better performance
+- **Error Handling**: Graceful fallback for invalid or missing tokens
+
+## Props
+
+<TypeTable
+  type={{
+    tokenAddressOrSymbol: {
+      type: "string",
+      description: "The token mint address or symbol (e.g., 'SOL', 'USDC', or full mint address)",
+      required: true,
+    },
+    size: {
+      type: "number",
+      description: "Size of the image in pixels",
+      default: "32",
+    },
+    className: {
+      type: "string",
+      description: "Additional CSS classes for styling",
+    },
+    alt: {
+      type: "string",
+      description: "Alt text for the image",
+    },
+    isLoading: {
+      type: "boolean",
+      description: "External loading state override",
+      default: "false",
+    },
+  }}
+/>
+
+## Token Support
+
+The component supports:
+
+- **Popular Symbols**: SOL, USDC, USDT, and other verified tokens
+- **Mint Addresses**: Full Solana token mint addresses
+- **Jupiter Verified**: Only tokens from Jupiter's verified token list
+
+## Dependencies
+
+```json
+{
+  "lucide-react": "^0.400.0"
+}
+```
+
+## Data Source
+
+Token metadata is fetched from Jupiter's verified token list API:
+- **Endpoint**: `https://tokens.jup.ag/tokens?tags=verified`
+- **Updates**: Real-time token information
+- **Verification**: Only verified and trusted tokens
+
+---
+
+*Built for the Solana ecosystem. Contributions welcome.*

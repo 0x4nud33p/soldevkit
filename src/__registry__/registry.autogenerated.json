@@ -418,6 +418,89 @@
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "swap",
+      "type": "registry:ui",
+      "title": "Token Swap",
+      "description": "A modern token swap interface with wallet integration, dark theme support, and real-time token data from Jupiter's verified token list.",
+      "dependencies": [
+        "@solana/web3.js",
+        "@solana/wallet-adapter-react",
+        "motion/react",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "wallet-connect-button"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/ui/swap/swap.tsx",
+          "type": "registry:ui",
+          "target": "components/soldevkit-ui/swap/swap.tsx"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "nft-card",
+      "type": "registry:ui",
+      "title": "NFT Card",
+      "description": "A component for displaying NFT metadata with image, attributes, and collection information using Alchemy API.",
+      "dependencies": [
+        "@solana/web3.js",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "card",
+        "skeleton",
+        "badge"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/ui/nft/nft-card.tsx",
+          "type": "registry:ui",
+          "target": "components/soldevkit-ui/nft/nft-card.tsx"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "nft-img",
+      "type": "registry:ui",
+      "title": "NFT Image",
+      "description": "A component for displaying NFT images with loading states and fallback handling.",
+      "dependencies": [
+        "@solana/web3.js",
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "src/registry/default/ui/nft/nft-img.tsx",
+          "type": "registry:ui",
+          "target": "components/soldevkit-ui/nft/nft-img.tsx"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "token-img",
+      "type": "registry:ui",
+      "title": "Token Image",
+      "description": "A component for displaying token images with loading states and fallback handling using Jupiter's token list.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "src/registry/default/ui/token/token-img.tsx",
+          "type": "registry:ui",
+          "target": "components/soldevkit-ui/token/token-img.tsx"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "use-request-sol-airdrop",
       "type": "registry:hook",
       "title": "useRequestSolAirdrop",

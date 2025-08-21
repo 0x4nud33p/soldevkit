@@ -10,7 +10,7 @@ export const examples: Registry["items"] = [
     registryDependencies: ["https://soldevkit.com/r/wallet-connect-button"],
     files: [
       {
-        path: "default/examples/wallet/wallet-connect-button-demo.tsx",
+        path: "default/examples/wallet-connect-button-demo.tsx",
         type: "registry:example",
         target:
           "components/soldevkit-ui/demo/wallet/wallet-connect-button-demo.tsx",
@@ -88,6 +88,66 @@ export const examples: Registry["items"] = [
         path: "default/examples/send-token-demo.tsx",
         type: "registry:example",
         target: "components/soldevkit-ui/demo/send-token-demo.tsx",
+      },
+    ],
+  },
+  {
+    name: "swap-demo",
+    type: "registry:example",
+    title: "Token Swap Demo",
+    description:
+      "Demo showcasing token swap interface with wallet integration, dark theme support, and real-time token data.",
+    registryDependencies: ["https://soldevkit.com/r/swap"],
+    files: [
+      {
+        path: "default/examples/swap-demo.tsx",
+        type: "registry:example",
+        target: "components/soldevkit-ui/demo/swap-demo.tsx",
+      },
+    ],
+  },
+  {
+    name: "nft-card-demo",
+    type: "registry:example",
+    title: "NFT Card Demo",
+    description:
+      "Demo showcasing NFT card component with different variants and configurations.",
+    registryDependencies: ["https://soldevkit.com/r/nft-card"],
+    files: [
+      {
+        path: "default/examples/nft-card-demo.tsx",
+        type: "registry:example",
+        target: "components/soldevkit-ui/demo/nft/nft-card-demo.tsx",
+      },
+    ],
+  },
+  {
+    name: "nft-img-demo",
+    type: "registry:example",
+    title: "NFT Image Demo",
+    description:
+      "Demo showcasing NFT image component with different sizes and loading states.",
+    registryDependencies: ["https://soldevkit.com/r/nft-img"],
+    files: [
+      {
+        path: "default/examples/nft-img-demo.tsx",
+        type: "registry:example",
+        target: "components/soldevkit-ui/demo/nft-img-demo.tsx",
+      },
+    ],
+  },
+  {
+    name: "token-img-demo",
+    type: "registry:example",
+    title: "Token Image Demo",
+    description:
+      "Demo showcasing token image component with different tokens and sizes.",
+    registryDependencies: ["https://soldevkit.com/r/token-img"],
+    files: [
+      {
+        path: "default/examples/token-img-demo.tsx",
+        type: "registry:example",
+        target: "components/soldevkit-ui/demo/token-img-demo.tsx",
       },
     ],
   },
