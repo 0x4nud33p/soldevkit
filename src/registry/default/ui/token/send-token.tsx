@@ -65,8 +65,8 @@ export type TokenInfo = {
 };
 
 // Custom resolver
-const customResolver = (data: any) => {
-  const errors: any = {};
+const customResolver = (data: FormValues) => {
+  const errors: Record<string, { type: string; message: string }> = {};
 
   if (!data.destination) {
     errors.destination = {
@@ -80,12 +80,12 @@ const customResolver = (data: any) => {
     };
   }
 
-  if (data.amount === undefined || data.amount === null || data.amount === "") {
+  if (data.amount === undefined || data.amount === null) {
     errors.amount = {
       type: "required",
       message: "Amount is required",
     };
-  } else if (Number(data.amount) <= 0) {
+  } else if (data.amount <= 0) {
     errors.amount = {
       type: "min",
       message: "Amount must be greater than 0",
@@ -123,7 +123,7 @@ export function SendTokenForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedToken, setSelectedToken] = useState<TokenInfo | null>(null);
   const [isLoadingTokens, setIsLoadingTokens] = useState(false);
-  const [isUpdatingBalance, setIsUpdatingBalance] = useState(false);
+  const [isUpdatingBalance] = useState(false);
   const { publicKey, connected, sendTransaction } = useWallet();
   const { connection } = useConnection();
   const [amountValue, setAmountValue] = useState<string>("");
