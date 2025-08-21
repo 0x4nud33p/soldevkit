@@ -192,7 +192,9 @@ const SwapUIContent: React.FC = () => {
           <p className="text-sm text-muted-foreground mb-2">
             Connect your wallet to start swapping tokens
           </p>
-          <WalletConnectButton variant="default" size="sm" />
+          <div className="flex justify-center">
+            <WalletConnectButton variant="default" size="sm" />
+          </div>
         </div>
       )}
 
