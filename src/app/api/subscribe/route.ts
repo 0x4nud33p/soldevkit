@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     // Send email using Resend
     const { data, error } = await resend.emails.send({
-      from: process.env.FROM_EMAIL || "soldevkit@gmail.com",
+      from: process.env.FROM_EMAIL || "noreply@soldevkit.com",
       to: [email],
       subject: "Welcome to SolDevKit!",
       react: WelcomeEmailTemplate(),

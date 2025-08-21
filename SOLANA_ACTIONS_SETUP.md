@@ -29,7 +29,26 @@ SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
 
 # Your domain
 NEXT_PUBLIC_DOMAIN=https://yourdomain.com
+
+# Resend Email Service Configuration
+# Get your API key from https://resend.com/api-keys
+RESEND_API_KEY=your_resend_api_key_here
+# Email address must be from a verified domain at https://resend.com/domains
+FROM_EMAIL=noreply@yourdomain.com
 ```
+
+### Email Service Setup
+
+The project includes an email subscription feature powered by Resend. To set it up:
+
+1. **Create a Resend account** at [resend.com](https://resend.com)
+2. **Get your API key** from [resend.com/api-keys](https://resend.com/api-keys)
+3. **Verify your domain** at [resend.com/domains](https://resend.com/domains)
+4. **Update environment variables**:
+   - Set `RESEND_API_KEY` to your API key
+   - Set `FROM_EMAIL` to an email address using your verified domain (e.g., `noreply@yourdomain.com`)
+
+**Important**: Without domain verification, you can only send emails to your own email address. To send to other recipients, domain verification is required.
 
 ### 2. Install Required Dependencies
 
