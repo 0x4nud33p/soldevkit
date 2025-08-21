@@ -19,55 +19,47 @@ A component for displaying a list of Solana transactions with details like signa
 ## Usage
 
 ```tsx
-import { TxnList } from "@/components/soldevkit-ui/transaction/txn-list";
+import TxnList from "@/components/soldevkit-ui/transaction/txn-list";
+import { VersionedTransactionResponse } from "@solana/web3.js";
 
-const transactions = [
-  {
-    signature: "5VfYmGBjvxKjKjFxwlZQpxJGYmGBjvxKjKjFxwlZQpxJGYmGBjvxKjKjFxwlZQpxJGYmGBjvxKjKjFxwlZQpxJGY",
-    block: 245678901,
-    time: "2 mins ago",
-    sender: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM",
-    fee: 0.000005,
-  },
-  // ... more transactions
+// transactions should be VersionedTransactionResponse objects from Solana
+const transactions: VersionedTransactionResponse[] = [
+  // ... your transaction objects
 ];
 
 export default function Example() {
-  return <TxnList transactions={transactions} loading={false} className="border rounded-lg" />;
+  return (
+    <TxnList
+      transactions={transactions}
+      onClick={(txn) => console.log("Transaction clicked:", txn.transaction.signatures[0])}
+    />
+  );
 }
 ```
 
 ## Features
 
-- **Solscan Integration**: Direct links to transaction details on Solscan
-- **Loading States**: Built-in skeleton loading animation
+- **Solscan Integration**: Direct links to transaction details and accounts on Solscan
+- **Real-time Block Time**: Calculates estimated transaction time using current slot and average block time
 - **Empty States**: Graceful handling when no transactions are available
 - **Responsive Design**: Mobile-friendly table layout
-- **Time Formatting**: Human-readable relative time display
+- **Time Formatting**: Human-readable relative time display using date-fns
 - **Fee Display**: Properly formatted SOL fee amounts
 - **Address Truncation**: Shortened addresses for better readability
+- **Click Handling**: Optional callback for transaction row interactions
 
 ## Props
 
 <TypeTable
   type={{
     transactions: {
-      description: "Array of Solana transaction objects",
+      description: "Array of Solana transaction response objects",
       type: "VersionedTransactionResponse[]",
-      default: "[]",
-    },
-    loading: {
-      description: "Shows skeleton loading state when true",
-      type: "boolean",
-      default: "false",
+      required: true,
     },
     onClick: {
-      description: "Callback when a transaction row is clicked",
+      description: "Optional callback when a transaction row is clicked",
       type: "(txn: VersionedTransactionResponse) => void",
-    },
-    className: {
-      description: "Additional CSS classes for the container",
-      type: "string",
     },
   }}
 />

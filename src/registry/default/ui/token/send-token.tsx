@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { ArrowRight, Loader2, Wallet } from "lucide-react";
@@ -28,8 +28,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/soldevkit-ui/form";
-import { Input } from "@/components/soldevkit-ui/input";
+} from "@/registry/soldevkit-ui/form";
+import { Input } from "@/registry/soldevkit-ui/input";
 import {
   Select,
   SelectContent,
@@ -37,14 +37,15 @@ import {
   SelectTrigger,
   SelectValue,
   SelectGroup,
-} from "@/components/soldevkit-ui/select";
+} from "@/registry/soldevkit-ui/select";
 import { WalletConnectButton } from "@/registry/default/ui/wallet/wallet-connect-button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/soldevkit-ui/card";
+} from "@/registry/soldevkit-ui/card";
+import { OptimizedImage } from "@/registry/default/ui/optimized-image";
 
 // Type for our form values
 type FormValues = {
@@ -53,7 +54,7 @@ type FormValues = {
   token: string;
 };
 
-// Type for token options
+// Custom token info type
 export type TokenInfo = {
   id: string;
   symbol: string;
@@ -64,9 +65,21 @@ export type TokenInfo = {
   icon?: string;
 };
 
-// Custom resolver
-const customResolver = (data: FormValues) => {
-  const errors: Record<string, { type: string; message: string }> = {};
+// Type for form validation errors
+type FormError = {
+  type: string;
+  message: string;
+};
+
+// Type for resolver return value
+type ResolverResult = {
+  values: FormValues | Record<string, never>;
+  errors: Record<string, FormError>;
+};
+
+// Custom resolver for form validation
+const customResolver = (data: FormValues): ResolverResult => {
+  const errors: Record<string, FormError> = {};
 
   if (!data.destination) {
     errors.destination = {
@@ -164,83 +177,86 @@ export function SendTokenForm({
   }, [connection]);
 
   // Fetch token accounts
-  const fetchTokenAccounts = async (ownerPublicKey: PublicKey) => {
-    try {
-      setIsLoadingTokens(true);
-
-      let solBalance = 0;
+  const fetchTokenAccounts = useCallback(
+    async (ownerPublicKey: PublicKey) => {
       try {
-        solBalance =
-          (await connection.getBalance(ownerPublicKey)) / LAMPORTS_PER_SOL;
-      } catch (error) {
-        console.error("Error fetching SOL balance:", error);
-      }
+        setIsLoadingTokens(true);
 
-      const defaultTokens: TokenInfo[] = [
-        {
-          id: "sol",
-          symbol: "SOL",
-          name: "Solana",
-          balance: solBalance,
-          decimals: 9,
-          mintAddress: "So11111111111111111111111111111111111111112",
-          icon: "/logo/solana-logo.svg",
-        },
-      ];
-
-      const splTokens: TokenInfo[] = [];
-      try {
-        const tokenAccounts = await connection.getParsedTokenAccountsByOwner(
-          ownerPublicKey,
-          {
-            programId: new PublicKey(
-              "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
-            ),
-          },
-        );
-
-        for (const account of tokenAccounts.value) {
-          const accountData = account.account.data.parsed.info;
-          const mintAddress = accountData.mint;
-          const tokenAmount = accountData.tokenAmount;
-
-          if (tokenAmount.uiAmount > 0) {
-            const registryInfo = tokenMap.get(mintAddress);
-
-            splTokens.push({
-              id: mintAddress,
-              symbol:
-                registryInfo?.symbol || mintAddress.substring(0, 4) + "...",
-              name:
-                registryInfo?.name || "Token " + mintAddress.substring(0, 6),
-              balance: tokenAmount.uiAmount,
-              decimals: tokenAmount.decimals,
-              mintAddress: mintAddress,
-              icon: registryInfo?.logoURI,
-            });
-          }
+        let solBalance = 0;
+        try {
+          solBalance =
+            (await connection.getBalance(ownerPublicKey)) / LAMPORTS_PER_SOL;
+        } catch (error) {
+          console.error("Error fetching SOL balance:", error);
         }
-      } catch (error) {
-        console.error("Error fetching SPL token accounts:", error);
-      }
 
-      return [...defaultTokens, ...splTokens];
-    } catch (error) {
-      console.error("Error fetching token accounts:", error);
-      return [
-        {
-          id: "sol",
-          symbol: "SOL",
-          name: "Solana",
-          balance: 0,
-          decimals: 9,
-          icon: "/crypto-logos/solana-logo.svg",
-        },
-      ];
-    } finally {
-      setIsLoadingTokens(false);
-    }
-  };
+        const defaultTokens: TokenInfo[] = [
+          {
+            id: "sol",
+            symbol: "SOL",
+            name: "Solana",
+            balance: solBalance,
+            decimals: 9,
+            mintAddress: "So11111111111111111111111111111111111111112",
+            icon: "/logo/solana-logo.svg",
+          },
+        ];
+
+        const splTokens: TokenInfo[] = [];
+        try {
+          const tokenAccounts = await connection.getParsedTokenAccountsByOwner(
+            ownerPublicKey,
+            {
+              programId: new PublicKey(
+                "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+              ),
+            },
+          );
+
+          for (const account of tokenAccounts.value) {
+            const accountData = account.account.data.parsed.info;
+            const mintAddress = accountData.mint;
+            const tokenAmount = accountData.tokenAmount;
+
+            if (tokenAmount.uiAmount > 0) {
+              const registryInfo = tokenMap.get(mintAddress);
+
+              splTokens.push({
+                id: mintAddress,
+                symbol:
+                  registryInfo?.symbol || mintAddress.substring(0, 4) + "...",
+                name:
+                  registryInfo?.name || "Token " + mintAddress.substring(0, 6),
+                balance: tokenAmount.uiAmount,
+                decimals: tokenAmount.decimals,
+                mintAddress: mintAddress,
+                icon: registryInfo?.logoURI,
+              });
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching SPL token accounts:", error);
+        }
+
+        return [...defaultTokens, ...splTokens];
+      } catch (error) {
+        console.error("Error fetching token accounts:", error);
+        return [
+          {
+            id: "sol",
+            symbol: "SOL",
+            name: "Solana",
+            balance: 0,
+            decimals: 9,
+            icon: "/crypto-logos/solana-logo.svg",
+          },
+        ];
+      } finally {
+        setIsLoadingTokens(false);
+      }
+    },
+    [connection, tokenMap],
+  );
 
   useEffect(() => {
     if (tokens) {
@@ -264,7 +280,7 @@ export function SendTokenForm({
           ]);
         });
     }
-  }, [tokens, connected, publicKey, tokenMap]);
+  }, [tokens, connected, publicKey, tokenMap, fetchTokenAccounts]);
 
   // ✅ Add back handleSubmit
   async function handleSubmit(values: FormValues) {
@@ -354,13 +370,12 @@ export function SendTokenForm({
         <div className="flex items-center">
           {token.icon && (
             <div className="w-5 h-5 mr-2 rounded-full overflow-hidden flex items-center justify-center">
-              <img
+              <OptimizedImage
                 src={token.icon || "/placeholder.svg"}
                 alt={token.symbol}
                 className="w-4 h-4 object-contain"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = "none";
-                }}
+                fallbackSrc="/placeholder.svg"
+                lazy={false}
               />
             </div>
           )}

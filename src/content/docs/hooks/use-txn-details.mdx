@@ -31,16 +31,16 @@ Copy the `use-txn-details.tsx` hook from the registry and place it in your `hook
 ### Basic Usage
 
 ```tsx
-import { useConnection } from '@solana/wallet-adapter-react';
-import { useTxnDetails } from '@/hooks/use-txn-details';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useState } from 'react';
+import { useConnection } from "@solana/wallet-adapter-react";
+import { useTxnDetails } from "@/hooks/use-txn-details";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
 
 export function TransactionDetailsViewer() {
   const { connection } = useConnection();
-  const [signature, setSignature] = useState('');
+  const [signature, setSignature] = useState("");
   const { result, status, error, getTransactionDetails } = useTxnDetails(connection);
 
   const handleFetch = async () => {
@@ -58,15 +58,12 @@ export function TransactionDetailsViewer() {
           onChange={(e) => setSignature(e.target.value)}
           className="flex-1"
         />
-        <Button 
-          onClick={handleFetch}
-          disabled={status === 'loading' || !signature}
-        >
-          {status === 'loading' ? 'Loading...' : 'Get Details'}
+        <Button onClick={handleFetch} disabled={status === "loading" || !signature}>
+          {status === "loading" ? "Loading..." : "Get Details"}
         </Button>
       </div>
-      
-      {status === 'success' && result && (
+
+      {status === "success" && result && (
         <Card>
           <CardHeader>
             <CardTitle>Transaction Details</CardTitle>
@@ -76,29 +73,29 @@ export function TransactionDetailsViewer() {
               <strong>Signature:</strong>
               <p className="font-mono text-sm break-all">{signature}</p>
             </div>
-            
+
             <div>
               <strong>Slot:</strong>
               <p>{result.slot}</p>
             </div>
-            
+
             <div>
               <strong>Block Time:</strong>
-              <p>{result.blockTime ? new Date(result.blockTime * 1000).toLocaleString() : 'N/A'}</p>
+              <p>{result.blockTime ? new Date(result.blockTime * 1000).toLocaleString() : "N/A"}</p>
             </div>
-            
+
             <div>
               <strong>Fee:</strong>
-              <p>{result.meta?.fee ? `${result.meta.fee / 1_000_000_000} SOL` : 'N/A'}</p>
+              <p>{result.meta?.fee ? `${result.meta.fee / 1_000_000_000} SOL` : "N/A"}</p>
             </div>
-            
+
             <div>
               <strong>Status:</strong>
-              <p className={result.meta?.err ? 'text-red-600' : 'text-green-600'}>
-                {result.meta?.err ? 'Failed' : 'Success'}
+              <p className={result.meta?.err ? "text-red-600" : "text-green-600"}>
+                {result.meta?.err ? "Failed" : "Success"}
               </p>
             </div>
-            
+
             {result.meta?.err && (
               <div>
                 <strong>Error:</strong>
@@ -108,8 +105,8 @@ export function TransactionDetailsViewer() {
           </CardContent>
         </Card>
       )}
-      
-      {status === 'error' && error && (
+
+      {status === "error" && error && (
         <div className="p-4 bg-red-100 rounded">
           <p className="text-red-800">Error: {error}</p>
         </div>
@@ -122,12 +119,12 @@ export function TransactionDetailsViewer() {
 ### Advanced Transaction Analysis
 
 ```tsx
-import { useConnection } from '@solana/wallet-adapter-react';
-import { useTxnDetails } from '@/hooks/use-txn-details';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { ExternalLink } from 'lucide-react';
+import { useConnection } from "@solana/wallet-adapter-react";
+import { useTxnDetails } from "@/hooks/use-txn-details";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { ExternalLink } from "lucide-react";
 
 interface TransactionAnalyzerProps {
   signature: string;
@@ -143,11 +140,11 @@ export function TransactionAnalyzer({ signature }: TransactionAnalyzerProps) {
     }
   }, [signature, getTransactionDetails]);
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return <div className="p-4">Loading transaction details...</div>;
   }
 
-  if (status === 'error') {
+  if (status === "error") {
     return (
       <div className="p-4 bg-red-100 rounded">
         <p className="text-red-800">Error: {error}</p>
@@ -171,9 +168,7 @@ export function TransactionAnalyzer({ signature }: TransactionAnalyzerProps) {
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             Transaction Overview
-            <Badge variant={isSuccess ? 'default' : 'destructive'}>
-              {isSuccess ? 'Success' : 'Failed'}
-            </Badge>
+            <Badge variant={isSuccess ? "default" : "destructive"}>{isSuccess ? "Success" : "Failed"}</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -182,33 +177,33 @@ export function TransactionAnalyzer({ signature }: TransactionAnalyzerProps) {
               <strong>Signature:</strong>
               <p className="font-mono text-sm break-all">{signature}</p>
             </div>
-            
+
             <div>
               <strong>Slot:</strong>
               <p>{result.slot.toLocaleString()}</p>
             </div>
-            
+
             <div>
               <strong>Block Time:</strong>
-              <p>{result.blockTime ? new Date(result.blockTime * 1000).toLocaleString() : 'N/A'}</p>
+              <p>{result.blockTime ? new Date(result.blockTime * 1000).toLocaleString() : "N/A"}</p>
             </div>
-            
+
             <div>
               <strong>Fee:</strong>
               <p>{fee.toFixed(9)} SOL</p>
             </div>
-            
+
             <div>
               <strong>Compute Units:</strong>
               <p>{computeUnitsConsumed.toLocaleString()}</p>
             </div>
-            
+
             <div>
               <strong>Recent Blockhash:</strong>
               <p className="font-mono text-sm break-all">{transaction.message.recentBlockhash}</p>
             </div>
           </div>
-          
+
           <div className="flex space-x-2">
             <a
               href={`https://explorer.solana.com/tx/${signature}`}
@@ -234,12 +229,10 @@ export function TransactionAnalyzer({ signature }: TransactionAnalyzerProps) {
               <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
                 <span className="font-mono text-sm">{key.toBase58()}</span>
                 <div className="flex space-x-2">
-                  {index < transaction.message.header.numRequiredSignatures && (
-                    <Badge variant="outline">Signer</Badge>
-                  )}
-                  {index < transaction.message.header.numReadonlySignedAccounts + transaction.message.header.numRequiredSignatures && (
-                    <Badge variant="secondary">Read-only</Badge>
-                  )}
+                  {index < transaction.message.header.numRequiredSignatures && <Badge variant="outline">Signer</Badge>}
+                  {index <
+                    transaction.message.header.numReadonlySignedAccounts +
+                      transaction.message.header.numRequiredSignatures && <Badge variant="secondary">Read-only</Badge>}
                 </div>
               </div>
             ))}
@@ -262,18 +255,18 @@ export function TransactionAnalyzer({ signature }: TransactionAnalyzerProps) {
                     Program: {transaction.message.accountKeys[instruction.programIdIndex].toBase58().slice(0, 8)}...
                   </Badge>
                 </div>
-                
+
                 <div className="space-y-2 text-sm">
                   <div>
                     <strong>Program ID Index:</strong> {instruction.programIdIndex}
                   </div>
                   <div>
-                    <strong>Accounts:</strong> [{instruction.accounts.join(', ')}]
+                    <strong>Accounts:</strong> [{instruction.accounts.join(", ")}]
                   </div>
                   <div>
                     <strong>Data:</strong>
                     <p className="font-mono text-xs break-all bg-gray-100 p-2 rounded mt-1">
-                      {Buffer.from(instruction.data).toString('hex')}
+                      {Buffer.from(instruction.data).toString("hex")}
                     </p>
                   </div>
                 </div>
@@ -295,19 +288,18 @@ export function TransactionAnalyzer({ signature }: TransactionAnalyzerProps) {
                 const postBalance = meta.postBalances[index];
                 const change = postBalance - preBalance;
                 const account = transaction.message.accountKeys[index];
-                
+
                 if (change === 0) return null;
-                
+
                 return (
                   <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
                     <span className="font-mono text-sm">
                       {account.toBase58().slice(0, 8)}...{account.toBase58().slice(-8)}
                     </span>
                     <div className="text-right">
-                      <div className={`font-medium ${
-                        change > 0 ? 'text-green-600' : 'text-red-600'
-                      }`}>
-                        {change > 0 ? '+' : ''}{(change / 1_000_000_000).toFixed(9)} SOL
+                      <div className={`font-medium ${change > 0 ? "text-green-600" : "text-red-600"}`}>
+                        {change > 0 ? "+" : ""}
+                        {(change / 1_000_000_000).toFixed(9)} SOL
                       </div>
                       <div className="text-xs text-gray-500">
                         {(preBalance / 1_000_000_000).toFixed(9)} → {(postBalance / 1_000_000_000).toFixed(9)}
@@ -328,9 +320,7 @@ export function TransactionAnalyzer({ signature }: TransactionAnalyzerProps) {
             <CardTitle className="text-red-600">Transaction Error</CardTitle>
           </CardHeader>
           <CardContent>
-            <pre className="bg-red-50 p-4 rounded text-sm overflow-x-auto">
-              {JSON.stringify(meta.err, null, 2)}
-            </pre>
+            <pre className="bg-red-50 p-4 rounded text-sm overflow-x-auto">{JSON.stringify(meta.err, null, 2)}</pre>
           </CardContent>
         </Card>
       )}
@@ -342,12 +332,12 @@ export function TransactionAnalyzer({ signature }: TransactionAnalyzerProps) {
 ### Transaction History Component
 
 ```tsx
-import { useConnection } from '@solana/wallet-adapter-react';
-import { useTxnDetails } from '@/hooks/use-txn-details';
-import { useState, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { useConnection } from "@solana/wallet-adapter-react";
+import { useTxnDetails } from "@/hooks/use-txn-details";
+import { useState, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface TransactionHistoryItem {
   signature: string;
@@ -361,24 +351,27 @@ export function useTransactionHistory() {
   const [history, setHistory] = useState<TransactionHistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const addTransaction = useCallback(async (signature: string) => {
-    setIsLoading(true);
-    try {
-      const details = await getTransactionDetails(signature);
-      if (details) {
-        const item: TransactionHistoryItem = {
-          signature,
-          details,
-          timestamp: Date.now(),
-        };
-        setHistory(prev => [item, ...prev.filter(h => h.signature !== signature)]);
+  const addTransaction = useCallback(
+    async (signature: string) => {
+      setIsLoading(true);
+      try {
+        const details = await getTransactionDetails(signature);
+        if (details) {
+          const item: TransactionHistoryItem = {
+            signature,
+            details,
+            timestamp: Date.now(),
+          };
+          setHistory((prev) => [item, ...prev.filter((h) => h.signature !== signature)]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch transaction details:", error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Failed to fetch transaction details:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [getTransactionDetails]);
+    },
+    [getTransactionDetails],
+  );
 
   const clearHistory = useCallback(() => {
     setHistory([]);
@@ -393,13 +386,13 @@ export function useTransactionHistory() {
 }
 
 export function TransactionHistory() {
-  const [signature, setSignature] = useState('');
+  const [signature, setSignature] = useState("");
   const { history, isLoading, addTransaction, clearHistory } = useTransactionHistory();
 
   const handleAdd = () => {
     if (signature.trim()) {
       addTransaction(signature.trim());
-      setSignature('');
+      setSignature("");
     }
   };
 
@@ -419,7 +412,7 @@ export function TransactionHistory() {
               className="flex-1"
             />
             <Button onClick={handleAdd} disabled={isLoading || !signature.trim()}>
-              {isLoading ? 'Adding...' : 'Add'}
+              {isLoading ? "Adding..." : "Add"}
             </Button>
             {history.length > 0 && (
               <Button variant="outline" onClick={clearHistory}>
@@ -434,23 +427,17 @@ export function TransactionHistory() {
         {history.map((item) => {
           const isSuccess = !item.details.meta?.err;
           const fee = item.details.meta?.fee ? item.details.meta.fee / 1_000_000_000 : 0;
-          
+
           return (
             <Card key={item.signature}>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <div className="font-mono text-sm break-all mb-1">
-                      {item.signature}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {new Date(item.timestamp).toLocaleString()}
-                    </div>
+                    <div className="font-mono text-sm break-all mb-1">{item.signature}</div>
+                    <div className="text-xs text-gray-500">{new Date(item.timestamp).toLocaleString()}</div>
                   </div>
                   <div className="flex items-center space-x-2 ml-4">
-                    <Badge variant={isSuccess ? 'default' : 'destructive'}>
-                      {isSuccess ? 'Success' : 'Failed'}
-                    </Badge>
+                    <Badge variant={isSuccess ? "default" : "destructive"}>{isSuccess ? "Success" : "Failed"}</Badge>
                     <span className="text-sm">{fee.toFixed(6)} SOL</span>
                   </div>
                 </div>
@@ -474,23 +461,23 @@ export function TransactionHistory() {
 
 ### Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter    | Type         | Description           |
+| ------------ | ------------ | --------------------- |
 | `connection` | `Connection` | Solana RPC connection |
 
 ### Return Value
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `result` | `TransactionResponse \| null` | Transaction details from Solana RPC |
-| `status` | `"idle" \| "loading" \| "error" \| "success"` | Current operation status |
-| `error` | `string \| null` | Error message if operation failed |
+| Property                | Type                                                          | Description                           |
+| ----------------------- | ------------------------------------------------------------- | ------------------------------------- |
+| `result`                | `TransactionResponse \| null`                                 | Transaction details from Solana RPC   |
+| `status`                | `"idle" \| "loading" \| "error" \| "success"`                 | Current operation status              |
+| `error`                 | `string \| null`                                              | Error message if operation failed     |
 | `getTransactionDetails` | `(signature: string) => Promise<TransactionResponse \| null>` | Function to fetch transaction details |
 
 ### getTransactionDetails Function
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter   | Type     | Description                                |
+| ----------- | -------- | ------------------------------------------ |
 | `signature` | `string` | Transaction signature to fetch details for |
 
 **Returns**: `Promise<TransactionResponse | null>` - Transaction details or null if not found
@@ -559,15 +546,15 @@ const handleFetchWithErrorHandling = async (signature: string) => {
   try {
     const details = await getTransactionDetails(signature);
     if (details) {
-      console.log('Transaction details:', details);
+      console.log("Transaction details:", details);
     } else {
-      console.log('Transaction not found');
+      console.log("Transaction not found");
     }
   } catch (err) {
-    console.error('Failed to fetch details:', err);
-    if (err.message.includes('not found')) {
+    console.error("Failed to fetch details:", err);
+    if (err.message.includes("not found")) {
       // Handle transaction not found
-    } else if (err.message.includes('Invalid signature')) {
+    } else if (err.message.includes("Invalid signature")) {
       // Handle invalid signature format
     }
   }

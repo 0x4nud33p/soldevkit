@@ -10,13 +10,13 @@ import {
   DialogTitle,
   DialogFooter,
   DialogClose,
-} from "@/components/soldevkit-ui/dialog";
-import { Input } from "@/components/soldevkit-ui/input";
-import { Button } from "@/components/soldevkit-ui/button";
+} from "@/registry/soldevkit-ui/dialog";
+import { Input } from "@/registry/soldevkit-ui/input";
+import { Button } from "@/registry/soldevkit-ui/button";
 import {
   ToggleGroup,
   ToggleGroupItem,
-} from "@/components/soldevkit-ui/toggle-group";
+} from "@/registry/soldevkit-ui/toggle-group";
 type TxnSettingsType = {
   priority: string;
   priorityFeeCap: "dynamic" | number;

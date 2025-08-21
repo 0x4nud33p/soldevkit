@@ -4,7 +4,6 @@ import { RootProvider } from "fumadocs-ui/provider";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

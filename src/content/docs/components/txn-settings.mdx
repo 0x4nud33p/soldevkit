@@ -16,6 +16,32 @@ A comprehensive transaction settings dialog with priority fee, slippage, and oth
 
 <ComponentInstallation name="txn-settings" />
 
+## Usage
+
+```tsx
+import { TxnSettings, TxnSettingsProvider } from "@/components/soldevkit-ui/transaction/txn-settings";
+import { Button } from "@/components/soldevkit-ui/button";
+import { Settings } from "lucide-react";
+
+export default function Example() {
+  return (
+    <TxnSettingsProvider>
+      {/* Default trigger */}
+      <TxnSettings />
+
+      {/* Custom trigger */}
+      <TxnSettings
+        trigger={
+          <Button variant="outline" size="icon">
+            <Settings size={16} />
+          </Button>
+        }
+      />
+    </TxnSettingsProvider>
+  );
+}
+```
+
 ## Features
 
 - **Priority Fee Configuration**: Choose between Normal, Medium, and Turbo priority levels

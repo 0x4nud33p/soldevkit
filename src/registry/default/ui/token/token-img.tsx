@@ -1,10 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { cn, findToken, type TokenInfo } from "@/lib/utils";
 import { Loader2, Image as ImageIcon } from "lucide-react";
+import { APIErrorBoundary } from "@/components/error-boundary";
+import { OptimizedImage } from "../optimized-image";
 
-export interface TokenImageProps {
-  /** The token mint address or symbol */
+interface TokenImageProps {
+  /** Token address or symbol */
   tokenAddressOrSymbol: string;
   /** Custom CSS classes */
   className?: string;
@@ -16,15 +19,7 @@ export interface TokenImageProps {
   size?: number;
 }
 
-type TokenInfo = {
-  address: string;
-  name: string;
-  symbol: string;
-  logoURI?: string;
-  decimals: number;
-};
-
-export const TokenImage: React.FC<TokenImageProps> = ({
+const TokenImageContent: React.FC<TokenImageProps> = ({
   tokenAddressOrSymbol,
   className,
   alt,
@@ -33,43 +28,38 @@ export const TokenImage: React.FC<TokenImageProps> = ({
 }) => {
   const [token, setToken] = useState<TokenInfo | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchToken = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(
-          "https://tokens.jup.ag/tokens?tags=verified",
-        );
-        const data: TokenInfo[] = await response.json();
-
-        // Try to find by address or symbol
-        const found = data.find(
-          (t) =>
-            t.address.toLowerCase() === tokenAddressOrSymbol.toLowerCase() ||
-            t.symbol.toLowerCase() === tokenAddressOrSymbol.toLowerCase(),
-        );
-
-        setToken(found || null);
-      } catch (error) {
-        console.error("Error fetching token metadata:", error);
-        setToken(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (tokenAddressOrSymbol) {
-      fetchToken();
+  const fetchTokenData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const found = await findToken(tokenAddressOrSymbol);
+      setToken(found);
+    } catch (error) {
+      console.error("Error fetching token metadata:", error);
+      setError(error instanceof Error ? error.message : "Failed to load token");
+      setToken(null);
+    } finally {
+      setLoading(false);
     }
   }, [tokenAddressOrSymbol]);
+
+  useEffect(() => {
+    if (tokenAddressOrSymbol) {
+      fetchTokenData();
+    }
+  }, [tokenAddressOrSymbol, fetchTokenData]);
 
   const isLoading = externalLoading || loading;
 
   if (isLoading) {
     return (
       <div
-        className={`flex items-center justify-center bg-muted rounded-full ${className}`}
+        className={cn(
+          "flex items-center justify-center bg-muted rounded-full",
+          className,
+        )}
         style={{ width: size, height: size }}
       >
         <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
@@ -77,10 +67,17 @@ export const TokenImage: React.FC<TokenImageProps> = ({
     );
   }
 
+  if (error) {
+    throw new Error(error);
+  }
+
   if (!token?.logoURI) {
     return (
       <div
-        className={`flex items-center justify-center bg-muted rounded-full ${className}`}
+        className={cn(
+          "flex items-center justify-center bg-muted rounded-full",
+          className,
+        )}
         style={{ width: size, height: size }}
       >
         <ImageIcon className="h-4 w-4 text-muted-foreground" />
@@ -89,12 +86,25 @@ export const TokenImage: React.FC<TokenImageProps> = ({
   }
 
   return (
-    <img
+    <OptimizedImage
       src={token.logoURI}
       alt={alt || token.symbol}
-      className={`rounded-full object-contain ${className}`}
-      style={{ width: size, height: size }}
-      loading="lazy"
+      className={cn("rounded-full object-contain", className)}
+      width={size}
+      height={size}
+      lazy={true}
+      fallbackSrc="/placeholder-token.png"
     />
+  );
+};
+
+export const TokenImage: React.FC<TokenImageProps> = (props) => {
+  return (
+    <APIErrorBoundary
+      onRetry={() => window.location.reload()}
+      className="inline-block"
+    >
+      <TokenImageContent {...props} />
+    </APIErrorBoundary>
   );
 };

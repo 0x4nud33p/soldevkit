@@ -132,6 +132,26 @@
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "error-boundary",
+      "type": "registry:ui",
+      "title": "Error Boundary",
+      "description": "Error boundary components for handling UI errors and API failures with retry functionality.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/registry/components/ui/error-boundary.tsx",
+          "type": "registry:ui",
+          "target": "components/error-boundary.tsx"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "wallet-connect-button",
       "type": "registry:ui",
       "title": "Wallet Connect Button",
@@ -155,7 +175,9 @@
         "collapsible",
         "dropdown-menu",
         "badge",
-        "provider"
+        "provider",
+        "utils",
+        "optimized-image"
       ],
       "files": [
         {
@@ -241,7 +263,8 @@
         "@solana/web3.js"
       ],
       "registryDependencies": [
-        "input"
+        "input",
+        "utils"
       ],
       "files": [
         {
@@ -303,7 +326,8 @@
         "button",
         "dialog",
         "input",
-        "toggle-group"
+        "toggle-group",
+        "utils"
       ],
       "files": [
         {
@@ -357,7 +381,8 @@
       ],
       "registryDependencies": [
         "table",
-        "skeleton"
+        "skeleton",
+        "utils"
       ],
       "files": [
         {
@@ -376,6 +401,9 @@
       "dependencies": [
         "@solana/web3.js",
         "minidenticon"
+      ],
+      "registryDependencies": [
+        "utils"
       ],
       "files": [
         {
@@ -406,7 +434,8 @@
         "wallet-connect-button",
         "select",
         "form",
-        "card"
+        "card",
+        "utils"
       ],
       "files": [
         {
@@ -429,7 +458,9 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "wallet-connect-button"
+        "wallet-connect-button",
+        "utils",
+        "error-boundary"
       ],
       "files": [
         {
@@ -447,18 +478,39 @@
       "description": "A component for displaying NFT metadata with image, attributes, and collection information using Alchemy API.",
       "dependencies": [
         "@solana/web3.js",
-        "lucide-react"
+        "lucide-react",
+        "motion/react"
       ],
       "registryDependencies": [
         "card",
         "skeleton",
-        "badge"
+        "badge",
+        "utils",
+        "error-boundary"
       ],
       "files": [
         {
           "path": "src/registry/default/ui/nft/nft-card.tsx",
           "type": "registry:ui",
           "target": "components/soldevkit-ui/nft/nft-card.tsx"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "optimized-image",
+      "type": "registry:ui",
+      "title": "Optimized Image",
+      "description": "A framework-agnostic image component with Next.js optimization detection, lazy loading, error handling, and accessibility features.",
+      "dependencies": [],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/ui/optimized-image.tsx",
+          "type": "registry:ui",
+          "target": "components/soldevkit-ui/optimized-image.tsx"
         }
       ]
     },
@@ -472,7 +524,11 @@
         "@solana/web3.js",
         "lucide-react"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "utils",
+        "error-boundary",
+        "optimized-image"
+      ],
       "files": [
         {
           "path": "src/registry/default/ui/nft/nft-img.tsx",
@@ -490,7 +546,11 @@
       "dependencies": [
         "lucide-react"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "utils",
+        "error-boundary",
+        "optimized-image"
+      ],
       "files": [
         {
           "path": "src/registry/default/ui/token/token-img.tsx",

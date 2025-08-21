@@ -24,12 +24,9 @@ export default function Example() {
     <div className="flex items-center gap-4">
       {/* By symbol */}
       <TokenImage tokenAddressOrSymbol="SOL" size={48} />
-      
+
       {/* By address */}
-      <TokenImage 
-        tokenAddressOrSymbol="EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" 
-        size={48} 
-      />
+      <TokenImage tokenAddressOrSymbol="EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" size={48} />
     </div>
   );
 }
@@ -41,14 +38,7 @@ export default function Example() {
 import { TokenImage } from "@/components/soldevkit-ui/token/token-img";
 
 export default function Example() {
-  return (
-    <TokenImage 
-      tokenAddressOrSymbol="USDC" 
-      size={64}
-      className="border-2 border-primary"
-      alt="USDC Token"
-    />
-  );
+  return <TokenImage tokenAddressOrSymbol="USDC" size={64} className="border-2 border-primary" alt="USDC Token" />;
 }
 ```
 
@@ -111,10 +101,11 @@ The component supports:
 ## Data Source
 
 Token metadata is fetched from Jupiter's verified token list API:
+
 - **Endpoint**: `https://tokens.jup.ag/tokens?tags=verified`
 - **Updates**: Real-time token information
 - **Verification**: Only verified and trusted tokens
 
 ---
 
-*Built for the Solana ecosystem. Contributions welcome.*
+_Built for the Solana ecosystem. Contributions welcome._

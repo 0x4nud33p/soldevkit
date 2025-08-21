@@ -31,9 +31,9 @@ A component for displaying unique visual identifiers for Solana wallet addresses
 <TypeTable
   type={{
     address: {
-      description: "The Solana wallet address to generate avatar for",
-      type: "PublicKey",
-      required: true,
+      description: "The Solana wallet address to generate avatar for (optional - shows placeholder if not provided)",
+      type: "PublicKey | string",
+      required: false,
     },
     size: {
       description: "Size of the avatar in pixels",

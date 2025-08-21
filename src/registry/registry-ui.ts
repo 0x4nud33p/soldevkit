@@ -123,6 +123,23 @@ export const ui: ExtendedRegistryItem[] = [
   },
   {
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "error-boundary",
+    type: "registry:ui",
+    title: "Error Boundary",
+    description:
+      "Error boundary components for handling UI errors and API failures with retry functionality.",
+    dependencies: ["lucide-react"],
+    registryDependencies: ["utils"],
+    files: [
+      {
+        path: "components/ui/error-boundary.tsx",
+        type: "registry:ui",
+        target: "components/error-boundary.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
     name: "wallet-connect-button",
     type: "registry:ui",
     title: "Wallet Connect Button",
@@ -148,6 +165,8 @@ export const ui: ExtendedRegistryItem[] = [
       "dropdown-menu",
       "badge",
       "provider",
+      "utils",
+      "optimized-image",
     ],
     providers: ["solana-wallet"],
     files: [
@@ -232,7 +251,7 @@ export const ui: ExtendedRegistryItem[] = [
     description:
       "A specialized input component for Solana public key validation with real-time validation feedback.",
     dependencies: ["@solana/web3.js"],
-    registryDependencies: ["input"],
+    registryDependencies: ["input", "utils"],
     files: [
       {
         path: "default/ui/pk/pk-input.tsx",
@@ -280,7 +299,13 @@ export const ui: ExtendedRegistryItem[] = [
     description:
       "A comprehensive transaction settings dialog with priority fee, slippage, and other configuration options.",
     dependencies: ["@radix-ui/react-dialog", "lucide-react"],
-    registryDependencies: ["button", "dialog", "input", "toggle-group"],
+    registryDependencies: [
+      "button",
+      "dialog",
+      "input",
+      "toggle-group",
+      "utils",
+    ],
     files: [
       {
         path: "default/ui/transaction/txn-settings.tsx",
@@ -333,7 +358,7 @@ export const ui: ExtendedRegistryItem[] = [
       "date-fns",
       "lucide-react",
     ],
-    registryDependencies: ["table", "skeleton"],
+    registryDependencies: ["table", "skeleton", "utils"],
     files: [
       {
         path: "default/ui/transaction/txn-list.tsx",
@@ -350,6 +375,7 @@ export const ui: ExtendedRegistryItem[] = [
     description:
       "A component for displaying Solana address avatars using Minidenticons with customizable sizes and styling.",
     dependencies: ["@solana/web3.js", "minidenticon"],
+    registryDependencies: ["utils"],
     files: [
       {
         path: "default/ui/avatar/avatar.tsx",
@@ -369,7 +395,7 @@ export const ui: ExtendedRegistryItem[] = [
       "@solana/web3.js",
       "@solana/wallet-adapter-react",
       "@solana/spl-token",
-      "@solana/spl-token-registry", // ✅ added
+      "@solana/spl-token-registry",
       "react-hook-form",
       "sonner",
       "lucide-react",
@@ -381,6 +407,7 @@ export const ui: ExtendedRegistryItem[] = [
       "select",
       "form",
       "card",
+      "utils",
     ],
     files: [
       {
@@ -403,9 +430,7 @@ export const ui: ExtendedRegistryItem[] = [
       "motion/react",
       "lucide-react",
     ],
-    registryDependencies: [
-      "wallet-connect-button",
-    ],
+    registryDependencies: ["wallet-connect-button", "utils", "error-boundary"],
     providers: ["solana-wallet"],
     files: [
       {
@@ -422,11 +447,14 @@ export const ui: ExtendedRegistryItem[] = [
     title: "NFT Card",
     description:
       "A component for displaying NFT metadata with image, attributes, and collection information using Alchemy API.",
-    dependencies: [
-      "@solana/web3.js",
-      "lucide-react",
+    dependencies: ["@solana/web3.js", "lucide-react", "motion/react"],
+    registryDependencies: [
+      "card",
+      "skeleton",
+      "badge",
+      "utils",
+      "error-boundary",
     ],
-    registryDependencies: ["card", "skeleton", "badge"],
     files: [
       {
         path: "default/ui/nft/nft-card.tsx",
@@ -437,16 +465,30 @@ export const ui: ExtendedRegistryItem[] = [
   },
   {
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "optimized-image",
+    type: "registry:ui",
+    title: "Optimized Image",
+    description:
+      "A framework-agnostic image component with Next.js optimization detection, lazy loading, error handling, and accessibility features.",
+    dependencies: [],
+    registryDependencies: ["utils"],
+    files: [
+      {
+        path: "default/ui/optimized-image.tsx",
+        type: "registry:ui",
+        target: "components/soldevkit-ui/optimized-image.tsx",
+      },
+    ],
+  },
+  {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
     name: "nft-img",
     type: "registry:ui",
     title: "NFT Image",
     description:
       "A component for displaying NFT images with loading states and fallback handling.",
-    dependencies: [
-      "@solana/web3.js",
-      "lucide-react",
-    ],
-    registryDependencies: [],
+    dependencies: ["@solana/web3.js", "lucide-react"],
+    registryDependencies: ["utils", "error-boundary", "optimized-image"],
     files: [
       {
         path: "default/ui/nft/nft-img.tsx",
@@ -462,10 +504,8 @@ export const ui: ExtendedRegistryItem[] = [
     title: "Token Image",
     description:
       "A component for displaying token images with loading states and fallback handling using Jupiter's token list.",
-    dependencies: [
-      "lucide-react",
-    ],
-    registryDependencies: [],
+    dependencies: ["lucide-react"],
+    registryDependencies: ["utils", "error-boundary", "optimized-image"],
     files: [
       {
         path: "default/ui/token/token-img.tsx",

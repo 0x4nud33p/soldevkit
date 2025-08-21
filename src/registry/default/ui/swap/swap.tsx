@@ -6,24 +6,18 @@ import { clusterApiUrl, Connection, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Repeat, ChevronDown } from "lucide-react";
 import { WalletConnectButton } from "@/registry/default/ui/wallet/wallet-connect-button";
-import { cn } from "@/lib/utils";
-
-type Token = {
-  address: string;
-  name: string;
-  symbol: string;
-  decimals: number;
-  logoURI: string;
-};
+import { cn, fetchJupiterTokens, type TokenInfo } from "@/lib/utils";
+import { APIErrorBoundary } from "@/components/error-boundary";
+import { OptimizedImage } from "@/registry/default/ui/optimized-image";
 
 const TokenDropdown: React.FC<{
-  selectedToken: Token | null;
-  onSelect: (token: Token) => void;
-  tokens: Token[];
+  selectedToken: TokenInfo | null;
+  onSelect: (token: TokenInfo) => void;
+  tokens: TokenInfo[];
 }> = ({ selectedToken, onSelect, tokens }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const handleSelect = (token: Token) => {
+  const handleSelect = (token: TokenInfo) => {
     onSelect(token);
     setIsOpen(false);
   };
@@ -37,10 +31,12 @@ const TokenDropdown: React.FC<{
       >
         {selectedToken ? (
           <div className="flex items-center w-28">
-            <img
-              src={selectedToken.logoURI}
+            <OptimizedImage
+              src={selectedToken.logoURI || "/placeholder-token.png"}
               alt={`${selectedToken.name} logo`}
               className="w-6 h-6 mr-2 rounded-full"
+              fallbackSrc="/placeholder-token.png"
+              lazy={false}
             />
             <span className="font-medium text-foreground">
               {selectedToken.symbol}
@@ -73,10 +69,12 @@ const TokenDropdown: React.FC<{
                   onClick={() => handleSelect(token)}
                   className="w-full p-2 text-left hover:bg-muted flex items-center transition-colors duration-200"
                 >
-                  <img
-                    src={token.logoURI}
+                  <OptimizedImage
+                    src={token.logoURI || "/placeholder-token.png"}
                     alt={`${token.name} logo`}
                     className="w-6 h-6 mr-2 rounded-full"
+                    fallbackSrc="/placeholder-token.png"
+                    lazy={false}
                   />
                   <span className="font-medium text-foreground">
                     {token.symbol}
@@ -91,29 +89,31 @@ const TokenDropdown: React.FC<{
   );
 };
 
-const SwapUI: React.FC = () => {
+const SwapUIContent: React.FC = () => {
   const { publicKey, connected } = useWallet();
-  const [fromToken, setFromToken] = useState<Token | null>(null);
-  const [toToken, setToToken] = useState<Token | null>(null);
+  const [fromToken, setFromToken] = useState<TokenInfo | null>(null);
+  const [toToken, setToToken] = useState<TokenInfo | null>(null);
   const [fromAmount, setFromAmount] = useState<string>("");
   const [toAmount, setToAmount] = useState<string>("");
-  const [tokens, setTokens] = useState<Token[]>([]);
+  const [tokens, setTokens] = useState<TokenInfo[]>([]);
   const [solBalance, setSolBalance] = useState<number>(0);
   const [conversionRate, setConversionRate] = useState<number>(2);
+  const [tokenError, setTokenError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchTokens = async () => {
+    const loadTokens = async () => {
       try {
-        const response = await fetch(
-          "https://tokens.jup.ag/tokens?tags=verified",
-        );
-        const data = await response.json();
+        setTokenError(null);
+        const data = await fetchJupiterTokens();
         setTokens(data);
       } catch (error) {
         console.error("Failed to fetch tokens", error);
+        setTokenError(
+          error instanceof Error ? error.message : "Failed to load tokens",
+        );
       }
     };
-    fetchTokens();
+    loadTokens();
   }, []);
 
   useEffect(() => {
@@ -133,6 +133,11 @@ const SwapUI: React.FC = () => {
     };
     fetchSolBalance();
   }, [publicKey, connected]);
+
+  // Throw error if token loading fails
+  if (tokenError) {
+    throw new Error(tokenError);
+  }
 
   const handleMaxClick = () => {
     setFromAmount(solBalance.toString());
@@ -312,6 +317,14 @@ const SwapUI: React.FC = () => {
         </button>
       </motion.div>
     </motion.div>
+  );
+};
+
+const SwapUI: React.FC = () => {
+  return (
+    <APIErrorBoundary onRetry={() => window.location.reload()}>
+      <SwapUIContent />
+    </APIErrorBoundary>
   );
 };
 

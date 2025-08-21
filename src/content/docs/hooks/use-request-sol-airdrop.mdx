@@ -31,17 +31,14 @@ Copy the `use-request-sol-airdrop.tsx` hook from the registry and place it in yo
 ### Basic Usage
 
 ```tsx
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { useRequestSolAirdrop } from '@/hooks/use-request-sol-airdrop';
-import { Button } from '@/components/ui/button';
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useRequestSolAirdrop } from "@/hooks/use-request-sol-airdrop";
+import { Button } from "@/components/ui/button";
 
 export function AirdropButton() {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
-  const { result, status, error, getSolAirdrop } = useRequestSolAirdrop(
-    publicKey,
-    connection
-  );
+  const { result, status, error, getSolAirdrop } = useRequestSolAirdrop(publicKey, connection);
 
   const handleAirdrop = async () => {
     await getSolAirdrop(1); // Request 1 SOL
@@ -49,23 +46,18 @@ export function AirdropButton() {
 
   return (
     <div className="space-y-4">
-      <Button 
-        onClick={handleAirdrop}
-        disabled={!publicKey || status === 'loading'}
-      >
-        {status === 'loading' ? 'Requesting...' : 'Request 1 SOL Airdrop'}
+      <Button onClick={handleAirdrop} disabled={!publicKey || status === "loading"}>
+        {status === "loading" ? "Requesting..." : "Request 1 SOL Airdrop"}
       </Button>
-      
-      {status === 'success' && result && (
+
+      {status === "success" && result && (
         <div className="p-4 bg-green-100 rounded">
           <p className="text-green-800">Airdrop successful!</p>
-          <p className="text-sm text-green-600">
-            Transaction: {result.transactionSignature}
-          </p>
+          <p className="text-sm text-green-600">Transaction: {result.transactionSignature}</p>
         </div>
       )}
-      
-      {status === 'error' && error && (
+
+      {status === "error" && error && (
         <div className="p-4 bg-red-100 rounded">
           <p className="text-red-800">Error: {error}</p>
         </div>
@@ -78,20 +70,17 @@ export function AirdropButton() {
 ### Custom Amount
 
 ```tsx
-import { useState } from 'react';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { useRequestSolAirdrop } from '@/hooks/use-request-sol-airdrop';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useState } from "react";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useRequestSolAirdrop } from "@/hooks/use-request-sol-airdrop";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export function CustomAirdrop() {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
-  const { result, status, error, getSolAirdrop } = useRequestSolAirdrop(
-    publicKey,
-    connection
-  );
-  const [amount, setAmount] = useState('1');
+  const { result, status, error, getSolAirdrop } = useRequestSolAirdrop(publicKey, connection);
+  const [amount, setAmount] = useState("1");
 
   const handleAirdrop = async () => {
     const solAmount = parseFloat(amount);
@@ -112,24 +101,19 @@ export function CustomAirdrop() {
           max="10"
           step="0.1"
         />
-        <Button 
-          onClick={handleAirdrop}
-          disabled={!publicKey || status === 'loading'}
-        >
-          {status === 'loading' ? 'Requesting...' : 'Request Airdrop'}
+        <Button onClick={handleAirdrop} disabled={!publicKey || status === "loading"}>
+          {status === "loading" ? "Requesting..." : "Request Airdrop"}
         </Button>
       </div>
-      
-      {status === 'success' && result && (
+
+      {status === "success" && result && (
         <div className="p-4 bg-green-100 rounded">
           <p className="text-green-800">Airdrop of {amount} SOL successful!</p>
-          <p className="text-sm text-green-600 break-all">
-            Transaction: {result.transactionSignature}
-          </p>
+          <p className="text-sm text-green-600 break-all">Transaction: {result.transactionSignature}</p>
         </div>
       )}
-      
-      {status === 'error' && error && (
+
+      {status === "error" && error && (
         <div className="p-4 bg-red-100 rounded">
           <p className="text-red-800">Error: {error}</p>
         </div>
@@ -143,25 +127,25 @@ export function CustomAirdrop() {
 
 ### Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `publicKey` | `PublicKey \| null` | The wallet's public key |
-| `connection` | `Connection` | Solana RPC connection |
+| Parameter    | Type                | Description             |
+| ------------ | ------------------- | ----------------------- |
+| `publicKey`  | `PublicKey \| null` | The wallet's public key |
+| `connection` | `Connection`        | Solana RPC connection   |
 
 ### Return Value
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `result` | `{ transactionSignature: TransactionSignature } \| null` | Airdrop result with transaction signature |
-| `status` | `"idle" \| "loading" \| "error" \| "success"` | Current operation status |
-| `error` | `string \| null` | Error message if operation failed |
-| `getSolAirdrop` | `(solana?: number) => Promise<AirdropResultState>` | Function to request airdrop |
+| Property        | Type                                                     | Description                               |
+| --------------- | -------------------------------------------------------- | ----------------------------------------- |
+| `result`        | `{ transactionSignature: TransactionSignature } \| null` | Airdrop result with transaction signature |
+| `status`        | `"idle" \| "loading" \| "error" \| "success"`            | Current operation status                  |
+| `error`         | `string \| null`                                         | Error message if operation failed         |
+| `getSolAirdrop` | `(solana?: number) => Promise<AirdropResultState>`       | Function to request airdrop               |
 
 ### getSolAirdrop Function
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `solana` | `number` | `1` | Amount of SOL to request (in SOL units) |
+| Parameter | Type     | Default | Description                             |
+| --------- | -------- | ------- | --------------------------------------- |
+| `solana`  | `number` | `1`     | Amount of SOL to request (in SOL units) |
 
 ## Important Notes
 
@@ -190,14 +174,14 @@ const handleAirdropWithErrorHandling = async () => {
   try {
     const result = await getSolAirdrop(1);
     if (result) {
-      console.log('Airdrop successful:', result.transactionSignature);
+      console.log("Airdrop successful:", result.transactionSignature);
     }
   } catch (err) {
-    console.error('Airdrop failed:', err);
+    console.error("Airdrop failed:", err);
     // Handle specific error cases
-    if (err.message.includes('rate limit')) {
+    if (err.message.includes("rate limit")) {
       // Show rate limit message
-    } else if (err.message.includes('Wallet not connected')) {
+    } else if (err.message.includes("Wallet not connected")) {
       // Prompt user to connect wallet
     }
   }

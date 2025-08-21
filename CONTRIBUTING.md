@@ -1,6 +1,6 @@
 # Contributing to Soldevkit UI
 
-Thank you for your interest in **contributing to Soldevkit UI**! 
+Thank you for your interest in **contributing to Soldevkit UI**!
 
 **Note:** You only need to modify a few files to add a new component, and it should take you around 10 minutes to complete.
 
@@ -79,10 +79,10 @@ To **add a new component to Soldevkit UI**, you will need to update several file
 Create your main component in `src/registry/default/ui/my-component.tsx`.
 
 ```tsx title="src/registry/default/ui/my-component.tsx"
-import * as React from 'react';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-export interface MyComponentProps extends React.ComponentProps<'div'> {
+export interface MyComponentProps extends React.ComponentProps<"div"> {
   myProp: string;
 }
 
@@ -91,16 +91,16 @@ export const MyComponent = React.forwardRef<HTMLDivElement, MyComponentProps>(
     return (
       <div
         ref={ref}
-        className={cn('your-component-styles', className)}
+        className={cn("your-component-styles", className)}
         {...props}
       >
         {/* Your component implementation */}
       </div>
     );
-  }
+  },
 );
 
-MyComponent.displayName = 'MyComponent';
+MyComponent.displayName = "MyComponent";
 ```
 
 ### Step 2: Create the Demo Component
@@ -108,7 +108,7 @@ MyComponent.displayName = 'MyComponent';
 Create your demo component in `src/registry/default/examples/my-component-demo.tsx`.
 
 ```tsx title="src/registry/default/examples/my-component-demo.tsx"
-import { MyComponent } from '../ui/my-component';
+import { MyComponent } from "../ui/my-component";
 
 export default function MyComponentDemo() {
   return (
@@ -150,22 +150,22 @@ export const ui: Registry["items"] = [
 Add your demo to the registry by updating `src/registry/registry-examples.ts`:
 
 ```tsx title="src/registry/registry-examples.ts"
-import type { Registry } from 'shadcn/registry';
+import type { Registry } from "shadcn/registry";
 
-export const examples: Registry['items'] = [
+export const examples: Registry["items"] = [
   // ... existing examples
   {
-    name: 'my-component-demo',
-    type: 'registry:example',
-    title: 'My Component Demo',
-    description: 'Demo showcasing my component',
+    name: "my-component-demo",
+    type: "registry:example",
+    title: "My Component Demo",
+    description: "Demo showcasing my component",
     files: [
       {
-        path: 'default/examples/my-component-demo.tsx',
-        type: 'registry:example',
+        path: "default/examples/my-component-demo.tsx",
+        type: "registry:example",
       },
     ],
-    registryDependencies: ['https://soldevkit.com/r/my-component.json'],
+    registryDependencies: ["https://soldevkit.com/r/my-component.json"],
   },
 ];
 ```
@@ -177,10 +177,7 @@ Add your component to the documentation sidebar by updating `src/content/docs/co
 ```json title="src/content/docs/components/meta.json"
 {
   "title": "Components",
-  "pages": [
-    "floating-label-input",
-    "my-component"
-  ]
+  "pages": ["floating-label-input", "my-component"]
 }
 ```
 
@@ -188,7 +185,7 @@ Add your component to the documentation sidebar by updating `src/content/docs/co
 
 Create an MDX file to document your component in `src/content/docs/components/my-component.mdx`.
 
-```mdx title="src/content/docs/components/my-component.mdx"
+````mdx title="src/content/docs/components/my-component.mdx"
 ---
 title: My Component
 description: Description for the new component
@@ -196,7 +193,7 @@ description: Description for the new component
 
 ## Preview
 
-<Tabs items={['preview', 'code']}>
+<Tabs items={["preview", "code"]}>
   <Tab>
     <ComponentPreview name="my-component-demo" />
   </Tab>
@@ -209,15 +206,12 @@ description: Description for the new component
 
 ### CLI
 
-<Tabs items={['npm', 'pnpm']}>
+<Tabs items={["npm", "pnpm"]}>
   <Tab>
-    ```sh
-    npx shadcn@latest add https://soldevkit.com/r/my-component.json
-    ```
+    ```sh npx shadcn@latest add https://soldevkit.com/r/my-component.json ```
   </Tab>
   <Tab>
-    ```sh
-    pnpm dlx shadcn@latest add https://soldevkit.com/r/my-component.json
+    ```sh pnpm dlx shadcn@latest add https://soldevkit.com/r/my-component.json
     ```
   </Tab>
 </Tabs>
@@ -228,17 +222,9 @@ description: Description for the new component
 
 <Step>Install the following dependencies</Step>
 
-<Tabs items={['npm', 'pnpm']}>
-  <Tab>
-    ```sh
-    npm install clsx tailwind-merge [other-dependencies]
-    ```
-  </Tab>
-  <Tab>
-    ```sh
-    pnpm add clsx tailwind-merge [other-dependencies]
-    ```
-  </Tab>
+<Tabs items={["npm", "pnpm"]}>
+  <Tab>```sh npm install clsx tailwind-merge [other-dependencies] ```</Tab>
+  <Tab>```sh pnpm add clsx tailwind-merge [other-dependencies] ```</Tab>
 </Tabs>
 
 <Step>Copy and paste the following code into your project</Step>
@@ -250,26 +236,28 @@ description: Description for the new component
 ## Usage
 
 ```tsx
-import { MyComponent } from '@/components/soldevkit-ui/my-component';
+import { MyComponent } from "@/components/soldevkit-ui/my-component";
 
 export default function Example() {
   return <MyComponent myProp="example" />;
 }
 ```
+````
 
 ## API Reference
 
 ### MyComponent
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| myProp | string | - | Description of the prop |
-| className | string | - | Additional CSS classes |
+| Prop      | Type   | Default | Description             |
+| --------- | ------ | ------- | ----------------------- |
+| myProp    | string | -       | Description of the prop |
+| className | string | -       | Additional CSS classes  |
 
 ## Credits
 
 - Credits to [you](https://link-to-your-profile.com) for creating the component
-```
+
+````
 
 ### Step 7: Build the Registry
 
@@ -277,9 +265,10 @@ To update the registry and generate the necessary files, run:
 
 ```bash
 pnpm build:registry
-```
+````
 
 This command will:
+
 1. Run the internal registry build script (`build:registry:internal`)
 2. Generate the external registry files (`build:registry:external`)
 

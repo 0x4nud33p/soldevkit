@@ -11,20 +11,21 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/soldevkit-ui/dialog";
+} from "@/registry/soldevkit-ui/dialog";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/soldevkit-ui/collapsible";
+} from "@/registry/soldevkit-ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/soldevkit-ui/dropdown-menu";
-import { Badge } from "@/components/soldevkit-ui/badge";
+} from "@/registry/soldevkit-ui/dropdown-menu";
+import { Badge } from "@/registry/soldevkit-ui/badge";
 import { Loader2, ChevronDown } from "lucide-react";
+import { OptimizedImage } from "@/registry/default/ui/optimized-image";
 
 // Constants
 const LABELS = {
@@ -116,13 +117,12 @@ export const WalletModal: React.FC<{
             >
               <div className="flex items-center gap-2">
                 {wallet.adapter.icon && (
-                  <img
+                  <OptimizedImage
                     src={wallet.adapter.icon}
                     alt={`${wallet.adapter.name} icon`}
                     className="h-5 w-5"
-                    onError={(e) => {
-                      e.currentTarget.src = "/placeholder.svg";
-                    }}
+                    fallbackSrc="/placeholder.svg"
+                    lazy={false}
                   />
                 )}
                 <span className="font-medium">{wallet.adapter.name}</span>
@@ -157,13 +157,12 @@ export const WalletModal: React.FC<{
                   >
                     <div className="flex items-center gap-2">
                       {wallet.adapter.icon && (
-                        <img
+                        <OptimizedImage
                           src={wallet.adapter.icon}
                           alt={`${wallet.adapter.name} icon`}
                           className="h-5 w-5"
-                          onError={(e) => {
-                            e.currentTarget.src = "/placeholder.svg";
-                          }}
+                          fallbackSrc="/placeholder.svg"
+                          lazy={false}
                         />
                       )}
                       <span className="font-medium">{wallet.adapter.name}</span>
@@ -237,13 +236,12 @@ export function WalletConnectButton({
         <div className="flex items-center gap-2">
           {icon && <span className="flex-shrink-0">{icon}</span>}
           {wallet?.adapter.icon && (
-            <img
+            <OptimizedImage
               src={wallet.adapter.icon}
               alt={`${wallet.adapter.name} icon`}
               className="h-5 w-5"
-              onError={(e) => {
-                e.currentTarget.src = "/placeholder.svg";
-              }}
+              fallbackSrc="/placeholder.svg"
+              lazy={false}
             />
           )}
           <span>

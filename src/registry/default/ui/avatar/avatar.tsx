@@ -2,6 +2,7 @@ import React from "react";
 import { PublicKey } from "@solana/web3.js";
 import { minidenticon } from "minidenticons";
 import { cn } from "@/lib/utils";
+import { OptimizedImage } from "@/registry/default/ui/optimized-image";
 
 type AvatarProps = {
   address?: PublicKey | string; // allow optional
@@ -46,7 +47,14 @@ const Avatar = ({ address, size = 48, className, alt }: AvatarProps) => {
       )}
       style={{ width: size, height: size }}
     >
-      <img src={identicon} alt={alt || pubkeyStr} width={size} height={size} />
+      <OptimizedImage
+        src={identicon}
+        alt={alt || pubkeyStr}
+        width={size}
+        height={size}
+        fallbackSrc="/placeholder-avatar.png"
+        lazy={false}
+      />
     </div>
   );
 };

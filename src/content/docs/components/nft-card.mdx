@@ -20,9 +20,7 @@ author:
 import { NFTCard } from "@/components/soldevkit-ui/nft/nft-card";
 
 export default function Example() {
-  return (
-    <NFTCard mintAddress="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU" />
-  );
+  return <NFTCard mintAddress="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU" />;
 }
 ```
 
@@ -42,7 +40,7 @@ export default function Example() {
 <TypeTable
   type={{
     mintAddress: {
-      type: "string",
+      type: "string | PublicKey",
       description: "The Solana mint address of the NFT",
       required: true,
     },
@@ -59,11 +57,24 @@ export default function Example() {
     showCollection: {
       type: "boolean",
       description: "Whether to display collection information",
-      default: "false",
+      default: "true",
     },
     className: {
       type: "string",
       description: "Additional CSS classes for styling",
+    },
+    isLoading: {
+      type: "boolean",
+      description: "External loading state override",
+      default: "false",
+    },
+    onClick: {
+      type: "() => void",
+      description: "Click handler for the card",
+    },
+    metadata: {
+      type: "NFTMetadata",
+      description: "Custom metadata to bypass API fetching",
     },
   }}
 />
@@ -73,10 +84,11 @@ export default function Example() {
 ```json
 {
   "@solana/web3.js": "^1.95.0",
-  "lucide-react": "^0.400.0"
+  "lucide-react": "^0.400.0",
+  "motion/react": "^11.0.0"
 }
 ```
 
 ---
 
-*Built for the Solana ecosystem. Contributions welcome.*
+_Built for the Solana ecosystem. Contributions welcome._

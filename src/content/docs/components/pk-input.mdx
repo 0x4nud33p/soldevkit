@@ -114,8 +114,22 @@ export default function ExampleDisabled() {
       required: false,
       default: "undefined",
     },
+    onChange: {
+      description: "Callback fired when the input value changes.",
+      type: "(event: React.ChangeEvent<HTMLInputElement>) => void",
+      required: false,
+      default: "undefined",
+    },
+    onBlur: {
+      description: "Callback fired when the input loses focus.",
+      type: "(event: React.FocusEvent<HTMLInputElement>) => void",
+      required: false,
+      default: "undefined",
+    },
   }}
 />
+
+**Note**: This component extends all standard HTML input props via `React.ComponentPropsWithoutRef<"input">`.
 
 ## Validation
 

@@ -35,10 +35,7 @@ import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 /**
  * Convert lamports to SOL
  */
-export function getLamportsToSol(
-  lamports: number,
-  digitsToDisplay?: number,
-): { sol: number } {
+export function getLamportsToSol(lamports: number, digitsToDisplay?: number): { sol: number } {
   const sol = lamports / LAMPORTS_PER_SOL;
   return { sol: digitsToDisplay ? toFixed(sol, digitsToDisplay) : sol };
 }
@@ -102,10 +99,12 @@ console.log(rounded); // 3.14
 Converts lamports to SOL with optional decimal formatting.
 
 **Parameters:**
+
 - `lamports` (number): The amount in lamports to convert
 - `digitsToDisplay` (number, optional): Number of decimal places to display
 
 **Returns:**
+
 - `{ sol: number }`: Object containing the SOL amount
 
 ### `getSolToLamports`
@@ -113,9 +112,11 @@ Converts lamports to SOL with optional decimal formatting.
 Converts SOL to lamports.
 
 **Parameters:**
+
 - `sol` (number): The amount in SOL to convert
 
 **Returns:**
+
 - `{ lamports: number }`: Object containing the lamports amount
 
 ### `toFixed`
@@ -123,10 +124,12 @@ Converts SOL to lamports.
 Rounds a number to a specified number of decimal places.
 
 **Parameters:**
+
 - `num` (number): The number to round
 - `digits` (number): Number of decimal places
 
 **Returns:**
+
 - `number`: The rounded number
 
 ## Examples
@@ -175,7 +178,7 @@ function TransactionForm() {
   const handleSubmit = () => {
     const sol = parseFloat(solAmount);
     const { lamports } = getSolToLamports(sol);
-    
+
     // Use lamports for transaction
     console.log(`Sending ${lamports} lamports`);
   };

@@ -5,11 +5,11 @@ import { Search } from "lucide-react";
 export function SearchDialog() {
   const handleSearchClick = () => {
     // Trigger the Fumadocs search by dispatching the keyboard event
-    const event = new KeyboardEvent('keydown', {
-      key: 'k',
+    const event = new KeyboardEvent("keydown", {
+      key: "k",
       metaKey: true,
       ctrlKey: true,
-      bubbles: true
+      bubbles: true,
     });
     document.dispatchEvent(event);
   };

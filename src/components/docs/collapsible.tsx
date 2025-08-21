@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Collapsible as CollapsiblePrimitive } from 'radix-ui';
+import * as React from "react";
+import { Collapsible as CollapsiblePrimitive } from "radix-ui";
 import {
   AnimatePresence,
   motion,
   type HTMLMotionProps,
   type Transition,
-} from 'motion/react';
+} from "motion/react";
 
 type CollapsibleContextType = {
   isOpen: boolean;
@@ -20,7 +20,7 @@ const CollapsibleContext = React.createContext<
 const useCollapsible = (): CollapsibleContextType => {
   const context = React.useContext(CollapsibleContext);
   if (!context) {
-    throw new Error('useCollapsible must be used within a Collapsible');
+    throw new Error("useCollapsible must be used within a Collapsible");
   }
   return context;
 };
@@ -70,14 +70,14 @@ function CollapsibleTrigger(props: CollapsibleTriggerProps) {
 type CollapsibleContentProps = React.ComponentProps<
   typeof CollapsiblePrimitive.Content
 > &
-  HTMLMotionProps<'div'> & {
+  HTMLMotionProps<"div"> & {
     transition?: Transition;
   };
 
 function CollapsibleContent({
   className,
   children,
-  transition = { type: 'spring', stiffness: 150, damping: 22 },
+  transition = { type: "spring", stiffness: 150, damping: 22 },
   ...props
 }: CollapsibleContentProps) {
   const { isOpen } = useCollapsible();
@@ -90,9 +90,9 @@ function CollapsibleContent({
             key="collapsible-content"
             data-slot="collapsible-content"
             layout
-            initial={{ opacity: 0, height: 0, overflow: 'hidden' }}
-            animate={{ opacity: 1, height: 'auto', overflow: 'hidden' }}
-            exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
+            initial={{ opacity: 0, height: 0, overflow: "hidden" }}
+            animate={{ opacity: 1, height: "auto", overflow: "hidden" }}
+            exit={{ opacity: 0, height: 0, overflow: "hidden" }}
             transition={transition}
             className={className}
             {...props}

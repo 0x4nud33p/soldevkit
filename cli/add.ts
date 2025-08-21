@@ -27,7 +27,9 @@ function saveConfig(config: Config) {
 export async function addComponent(name: string) {
   const config = loadConfig();
 
-  const component = registry.items.find((i) => i.name === name) as ExtendedRegistryItem | undefined;
+  const component = registry.items.find((i) => i.name === name) as
+    | ExtendedRegistryItem
+    | undefined;
   if (!component) throw new Error(`Component ${name} not found`);
 
   // Example: find required providers for this component

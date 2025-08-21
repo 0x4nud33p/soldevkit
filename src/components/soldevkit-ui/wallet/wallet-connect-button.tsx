@@ -19,6 +19,7 @@ import {
   DialogClose,
 } from "@/components/soldevkit-ui/dialog";
 import { Button } from "@/components/soldevkit-ui/button";
+import { OptimizedImage } from "@/registry/default/ui/optimized-image";
 
 type ConnectWalletDialogProps = {
   trigger?: React.ReactNode;
@@ -64,11 +65,13 @@ const ConnectWalletDialog = ({
                   }}
                   disabled={connecting}
                 >
-                  <img
+                  <OptimizedImage
                     src={walletItem.adapter.icon}
                     alt={walletItem.adapter.name}
                     width={20}
                     height={20}
+                    fallbackSrc="/placeholder-wallet.png"
+                    lazy={false}
                   />
                   {walletItem.adapter.name}
                   {connecting &&

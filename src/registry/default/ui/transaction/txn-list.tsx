@@ -20,8 +20,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/soldevkit-ui/table";
-import { Skeleton } from "@/components/soldevkit-ui/skeleton";
+} from "@/registry/soldevkit-ui/table";
+import { Skeleton } from "@/registry/soldevkit-ui/skeleton";
 
 type TxnListProps = {
   transactions: VersionedTransactionResponse[];

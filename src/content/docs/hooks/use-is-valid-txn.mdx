@@ -31,15 +31,15 @@ Copy the `use-is-valid-txn.tsx` hook from the registry and place it in your `hoo
 ### Basic Usage
 
 ```tsx
-import { useConnection } from '@solana/wallet-adapter-react';
-import { useIsValidTxn } from '@/hooks/use-is-valid-txn';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useState } from 'react';
+import { useConnection } from "@solana/wallet-adapter-react";
+import { useIsValidTxn } from "@/hooks/use-is-valid-txn";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
 export function TransactionValidator() {
   const { connection } = useConnection();
-  const [signature, setSignature] = useState('');
+  const [signature, setSignature] = useState("");
   const { result, status, error, checkTransaction } = useIsValidTxn(connection);
 
   const handleCheck = async () => {
@@ -55,24 +55,19 @@ export function TransactionValidator() {
         value={signature}
         onChange={(e) => setSignature(e.target.value)}
       />
-      <Button 
-        onClick={handleCheck}
-        disabled={status === 'loading' || !signature}
-      >
-        {status === 'loading' ? 'Checking...' : 'Check Transaction'}
+      <Button onClick={handleCheck} disabled={status === "loading" || !signature}>
+        {status === "loading" ? "Checking..." : "Check Transaction"}
       </Button>
-      
-      {status === 'success' && result !== null && (
-        <div className={`p-4 rounded ${
-          result ? 'bg-green-100' : 'bg-red-100'
-        }`}>
-          <p className={result ? 'text-green-800' : 'text-red-800'}>
-            Transaction is {result ? 'valid (confirmed)' : 'invalid or not found'}
+
+      {status === "success" && result !== null && (
+        <div className={`p-4 rounded ${result ? "bg-green-100" : "bg-red-100"}`}>
+          <p className={result ? "text-green-800" : "text-red-800"}>
+            Transaction is {result ? "valid (confirmed)" : "invalid or not found"}
           </p>
         </div>
       )}
-      
-      {status === 'error' && error && (
+
+      {status === "error" && error && (
         <div className="p-4 bg-red-100 rounded">
           <p className="text-red-800">Error: {error}</p>
         </div>
@@ -85,10 +80,10 @@ export function TransactionValidator() {
 ### Transaction Status Display
 
 ```tsx
-import { useConnection } from '@solana/wallet-adapter-react';
-import { useIsValidTxn } from '@/hooks/use-is-valid-txn';
-import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, Clock } from 'lucide-react';
+import { useConnection } from "@solana/wallet-adapter-react";
+import { useIsValidTxn } from "@/hooks/use-is-valid-txn";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle, XCircle, Clock } from "lucide-react";
 
 interface TransactionStatusProps {
   signature: string;
@@ -106,26 +101,26 @@ export function TransactionStatus({ signature }: TransactionStatusProps) {
   }, [signature, checkTransaction]);
 
   const getStatusIcon = () => {
-    if (status === 'loading') return <Clock className="h-4 w-4" />;
-    if (status === 'error') return <XCircle className="h-4 w-4" />;
+    if (status === "loading") return <Clock className="h-4 w-4" />;
+    if (status === "error") return <XCircle className="h-4 w-4" />;
     if (result === true) return <CheckCircle className="h-4 w-4" />;
     if (result === false) return <XCircle className="h-4 w-4" />;
     return null;
   };
 
   const getStatusText = () => {
-    if (status === 'loading') return 'Checking...';
-    if (status === 'error') return 'Error';
-    if (result === true) return 'Confirmed';
-    if (result === false) return 'Not Found';
-    return 'Unknown';
+    if (status === "loading") return "Checking...";
+    if (status === "error") return "Error";
+    if (result === true) return "Confirmed";
+    if (result === false) return "Not Found";
+    return "Unknown";
   };
 
   const getStatusVariant = () => {
-    if (status === 'loading') return 'secondary';
-    if (status === 'error' || result === false) return 'destructive';
-    if (result === true) return 'default';
-    return 'secondary';
+    if (status === "loading") return "secondary";
+    if (status === "error" || result === false) return "destructive";
+    if (result === true) return "default";
+    return "secondary";
   };
 
   return (
@@ -134,9 +129,7 @@ export function TransactionStatus({ signature }: TransactionStatusProps) {
         {getStatusIcon()}
         <span>{getStatusText()}</span>
       </Badge>
-      {error && (
-        <span className="text-sm text-red-600">{error}</span>
-      )}
+      {error && <span className="text-sm text-red-600">{error}</span>}
     </div>
   );
 }
@@ -145,9 +138,9 @@ export function TransactionStatus({ signature }: TransactionStatusProps) {
 ### Batch Transaction Validation
 
 ```tsx
-import { useConnection } from '@solana/wallet-adapter-react';
-import { useIsValidTxn } from '@/hooks/use-is-valid-txn';
-import { useState, useCallback } from 'react';
+import { useConnection } from "@solana/wallet-adapter-react";
+import { useIsValidTxn } from "@/hooks/use-is-valid-txn";
+import { useState, useCallback } from "react";
 
 interface TransactionResult {
   signature: string;
@@ -161,29 +154,32 @@ export function useBatchTransactionValidator() {
   const [results, setResults] = useState<TransactionResult[]>([]);
   const [isChecking, setIsChecking] = useState(false);
 
-  const validateTransactions = useCallback(async (signatures: string[]) => {
-    setIsChecking(true);
-    const newResults: TransactionResult[] = [];
+  const validateTransactions = useCallback(
+    async (signatures: string[]) => {
+      setIsChecking(true);
+      const newResults: TransactionResult[] = [];
 
-    for (const signature of signatures) {
-      try {
-        const result = await checkTransaction(signature);
-        newResults.push({
-          signature,
-          isValid: result,
-        });
-      } catch (error) {
-        newResults.push({
-          signature,
-          isValid: null,
-          error: error.message,
-        });
+      for (const signature of signatures) {
+        try {
+          const result = await checkTransaction(signature);
+          newResults.push({
+            signature,
+            isValid: result,
+          });
+        } catch (error) {
+          newResults.push({
+            signature,
+            isValid: null,
+            error: error.message,
+          });
+        }
       }
-    }
 
-    setResults(newResults);
-    setIsChecking(false);
-  }, [checkTransaction]);
+      setResults(newResults);
+      setIsChecking(false);
+    },
+    [checkTransaction],
+  );
 
   return {
     results,
@@ -193,15 +189,15 @@ export function useBatchTransactionValidator() {
 }
 
 export function BatchTransactionValidator() {
-  const [signatures, setSignatures] = useState('');
+  const [signatures, setSignatures] = useState("");
   const { results, isChecking, validateTransactions } = useBatchTransactionValidator();
 
   const handleValidate = () => {
     const signatureList = signatures
-      .split('\n')
-      .map(s => s.trim())
-      .filter(s => s.length > 0);
-    
+      .split("\n")
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+
     if (signatureList.length > 0) {
       validateTransactions(signatureList);
     }
@@ -210,9 +206,7 @@ export function BatchTransactionValidator() {
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium mb-2">
-          Transaction Signatures (one per line)
-        </label>
+        <label className="block text-sm font-medium mb-2">Transaction Signatures (one per line)</label>
         <textarea
           className="w-full h-32 p-2 border rounded"
           value={signatures}
@@ -220,26 +214,19 @@ export function BatchTransactionValidator() {
           placeholder="Enter transaction signatures, one per line"
         />
       </div>
-      
-      <Button 
-        onClick={handleValidate}
-        disabled={isChecking || !signatures.trim()}
-      >
-        {isChecking ? 'Validating...' : 'Validate Transactions'}
+
+      <Button onClick={handleValidate} disabled={isChecking || !signatures.trim()}>
+        {isChecking ? "Validating..." : "Validate Transactions"}
       </Button>
-      
+
       {results.length > 0 && (
         <div className="space-y-2">
           <h3 className="font-medium">Results:</h3>
           {results.map((result, index) => (
             <div key={index} className="flex items-center justify-between p-2 border rounded">
-              <span className="font-mono text-sm truncate flex-1 mr-2">
-                {result.signature}
-              </span>
-              <Badge 
-                variant={result.isValid ? 'default' : 'destructive'}
-              >
-                {result.error ? 'Error' : result.isValid ? 'Valid' : 'Invalid'}
+              <span className="font-mono text-sm truncate flex-1 mr-2">{result.signature}</span>
+              <Badge variant={result.isValid ? "default" : "destructive"}>
+                {result.error ? "Error" : result.isValid ? "Valid" : "Invalid"}
               </Badge>
             </div>
           ))}
@@ -253,10 +240,10 @@ export function BatchTransactionValidator() {
 ### Integration with Transaction Toast
 
 ```tsx
-import { useConnection } from '@solana/wallet-adapter-react';
-import { useIsValidTxn } from '@/hooks/use-is-valid-txn';
-import { useTxnToast } from '@/hooks/use-txn-toast';
-import { useEffect } from 'react';
+import { useConnection } from "@solana/wallet-adapter-react";
+import { useIsValidTxn } from "@/hooks/use-is-valid-txn";
+import { useTxnToast } from "@/hooks/use-txn-toast";
+import { useEffect } from "react";
 
 export function useTransactionMonitor(signature: string | null) {
   const { connection } = useConnection();
@@ -268,19 +255,15 @@ export function useTransactionMonitor(signature: string | null) {
 
     const monitorTransaction = async () => {
       // Show pending toast
-      const toastId = txnToast(
-        signature,
-        'Monitoring transaction...',
-        { variant: 'pending' }
-      );
+      const toastId = txnToast(signature, "Monitoring transaction...", { variant: "pending" });
 
       try {
         const isValid = await checkTransaction(signature);
-        
+
         if (isValid) {
-          txnToast.confirm(signature, 'Transaction confirmed!');
+          txnToast.confirm(signature, "Transaction confirmed!");
         } else {
-          txnToast.error('Transaction not found or failed');
+          txnToast.error("Transaction not found or failed");
         }
       } catch (error) {
         txnToast.error(`Error checking transaction: ${error.message}`);
@@ -298,23 +281,23 @@ export function useTransactionMonitor(signature: string | null) {
 
 ### Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter    | Type         | Description           |
+| ------------ | ------------ | --------------------- |
 | `connection` | `Connection` | Solana RPC connection |
 
 ### Return Value
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `result` | `boolean \| null` | Transaction validity result - `true` if confirmed, `false` if not found/failed, `null` if not checked yet |
-| `status` | `"idle" \| "loading" \| "error" \| "success"` | Current operation status |
-| `error` | `string \| null` | Error message if operation failed |
-| `checkTransaction` | `(signature: string) => Promise<boolean>` | Function to check transaction validity |
+| Property           | Type                                          | Description                                                                                               |
+| ------------------ | --------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `result`           | `boolean \| null`                             | Transaction validity result - `true` if confirmed, `false` if not found/failed, `null` if not checked yet |
+| `status`           | `"idle" \| "loading" \| "error" \| "success"` | Current operation status                                                                                  |
+| `error`            | `string \| null`                              | Error message if operation failed                                                                         |
+| `checkTransaction` | `(signature: string) => Promise<boolean>`     | Function to check transaction validity                                                                    |
 
 ### checkTransaction Function
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter   | Type     | Description                       |
+| ----------- | -------- | --------------------------------- |
 | `signature` | `string` | Transaction signature to validate |
 
 **Returns**: `Promise<boolean>` - `true` if transaction is confirmed, `false` otherwise
@@ -345,12 +328,12 @@ Common errors you might encounter:
 const handleCheckWithErrorHandling = async (signature: string) => {
   try {
     const isValid = await checkTransaction(signature);
-    console.log('Transaction is valid:', isValid);
+    console.log("Transaction is valid:", isValid);
   } catch (err) {
-    console.error('Validation failed:', err);
-    if (err.message.includes('Invalid transaction signature')) {
+    console.error("Validation failed:", err);
+    if (err.message.includes("Invalid transaction signature")) {
       // Handle invalid signature format
-    } else if (err.message.includes('Network error')) {
+    } else if (err.message.includes("Network error")) {
       // Handle network issues
     }
   }

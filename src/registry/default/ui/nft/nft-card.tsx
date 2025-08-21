@@ -2,24 +2,16 @@
 
 import React, { useState, useEffect } from "react";
 import { PublicKey } from "@solana/web3.js";
-import { cn, shortAddress } from "@/lib/utils"; // ✅ import shortAddress
+import {
+  cn,
+  shortAddress,
+  fetchNFTMetadata,
+  type NFTMetadata,
+} from "@/lib/utils";
 import { motion } from "motion/react";
 import { ExternalLink, Image as ImageIcon, Loader2 } from "lucide-react";
-
-export interface NFTMetadata {
-  name?: string;
-  description?: string;
-  image?: string;
-  external_url?: string;
-  attributes?: Array<{
-    trait_type: string;
-    value: string | number;
-  }>;
-  collection?: {
-    name?: string;
-    family?: string;
-  };
-}
+import { APIErrorBoundary } from "@/components/error-boundary";
+import { OptimizedImage } from "@/registry/default/ui/optimized-image";
 
 export interface NFTCardProps {
   /** The mint address of the NFT */
@@ -40,73 +32,7 @@ export interface NFTCardProps {
   metadata?: NFTMetadata;
 }
 
-const fetchNFTMetadata = async (
-  mintAddress: string,
-): Promise<NFTMetadata | null> => {
-  try {
-    const rpcUrl = process.env.NEXT_PUBLIC_ALCHEMY_RPC_URL;
-    if (!rpcUrl) {
-      throw new Error("Alchemy RPC URL not configured");
-    }
-
-    // Fetch NFT metadata using Alchemy's enhanced API
-    const response = await fetch(rpcUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        jsonrpc: "2.0",
-        id: 1,
-        method: "getAsset",
-        params: {
-          id: mintAddress,
-        },
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    if (data.error) {
-      throw new Error(data.error.message);
-    }
-
-    const asset = data.result;
-    if (!asset) {
-      return null;
-    }
-
-    // Transform Alchemy response to our metadata format
-    return {
-      name: asset.content?.metadata?.name || "Unknown NFT",
-      description: asset.content?.metadata?.description,
-      image: asset.content?.files?.[0]?.uri || asset.content?.links?.image,
-      external_url: asset.content?.links?.external_url,
-      attributes: asset.content?.metadata?.attributes?.map(
-        (attr: { trait_type: string; value: string | number }) => ({
-          trait_type: attr.trait_type,
-          value: attr.value,
-        }),
-      ),
-      collection: {
-        name: asset.grouping?.find(
-          (g: { group_key: string; group_value: string }) =>
-            g.group_key === "collection",
-        )?.group_value,
-        family: asset.content?.metadata?.symbol,
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching NFT metadata:", error);
-    return null;
-  }
-};
-
-const NFTCard = React.forwardRef<HTMLDivElement, NFTCardProps>(
+const NFTCardContent = React.forwardRef<HTMLDivElement, NFTCardProps>(
   (
     {
       mintAddress,
@@ -144,6 +70,7 @@ const NFTCard = React.forwardRef<HTMLDivElement, NFTCardProps>(
           .catch((err) => {
             setError(err);
             setQueryLoading(false);
+            throw err;
           });
       }
     }, [mintStr, customMetadata]);
@@ -190,7 +117,11 @@ const NFTCard = React.forwardRef<HTMLDivElement, NFTCardProps>(
       );
     }
 
-    if (error || !finalMetadata) {
+    if (error) {
+      throw error;
+    }
+
+    if (!finalMetadata) {
       return (
         <div
           ref={ref}
@@ -210,7 +141,7 @@ const NFTCard = React.forwardRef<HTMLDivElement, NFTCardProps>(
             <ImageIcon className="h-8 w-8 text-muted-foreground" />
           </div>
           <div className="space-y-1">
-            <h3 className="font-semibold text-sm">Failed to load NFT</h3>
+            <h3 className="font-semibold text-sm">No NFT data</h3>
             <p className="text-xs text-muted-foreground">
               {shortAddress(mintStr)}
             </p>
@@ -241,11 +172,12 @@ const NFTCard = React.forwardRef<HTMLDivElement, NFTCardProps>(
           )}
         >
           {finalMetadata.image ? (
-            <img
+            <OptimizedImage
               src={finalMetadata.image}
               alt={finalMetadata.name || shortAddress(mintStr)} // ✅ fallback to short address
               className="h-full w-full object-cover transition-transform duration-200 hover:scale-105"
-              loading="lazy"
+              fallbackSrc="/placeholder-nft.png"
+              lazy={true}
             />
           ) : (
             <div className="flex h-full items-center justify-center">
@@ -328,6 +260,16 @@ const NFTCard = React.forwardRef<HTMLDivElement, NFTCardProps>(
     );
   },
 );
+
+NFTCardContent.displayName = "NFTCardContent";
+
+const NFTCard = React.forwardRef<HTMLDivElement, NFTCardProps>((props, ref) => {
+  return (
+    <APIErrorBoundary onRetry={() => window.location.reload()}>
+      <NFTCardContent {...props} ref={ref} />
+    </APIErrorBoundary>
+  );
+});
 
 NFTCard.displayName = "NFTCard";
 

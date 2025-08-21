@@ -87,7 +87,7 @@ export default function Example() {
     tokens: {
       description: "Array of available tokens for selection.",
       type: "TokenInfo[]",
-      required: true,
+      required: false,
       default: "undefined",
     },
     isLoading: {
@@ -104,9 +104,8 @@ export default function Example() {
     },
     validateDestination: {
       description: "Custom validation function for destination address.",
-      type: "(address: string) => Promise<boolean | string>",
+      type: "(address: string) => Promise<boolean>",
       required: false,
-      default: "undefined",
     },
     className: {
       description: "Additional CSS classes.",
@@ -179,13 +178,13 @@ export default function Example() {
       default: "undefined",
     },
     mintAddress: {
-      description: "The mint address of the SPL token.",
+      description: "The mint address of the token (optional for SOL).",
       type: "string",
       required: false,
       default: "undefined",
     },
     icon: {
-      description: "URL or path to the token icon.",
+      description: "URL to the token icon.",
       type: "string",
       required: false,
       default: "undefined",
