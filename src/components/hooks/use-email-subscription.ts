@@ -4,7 +4,7 @@ interface UseEmailSubscriptionReturn {
   isLoading: boolean;
   error: string | null;
   success: boolean;
-  subscribe: (email: string) => Promise<void>;
+  subscribe: (email: string, firstName?: string) => Promise<void>;
 }
 
 export function useEmailSubscription(): UseEmailSubscriptionReturn {
@@ -12,7 +12,7 @@ export function useEmailSubscription(): UseEmailSubscriptionReturn {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const subscribe = async (email: string) => {
+  const subscribe = async (email: string, firstName?: string) => {
     setIsLoading(true);
     setError(null);
     setSuccess(false);
@@ -23,7 +23,7 @@ export function useEmailSubscription(): UseEmailSubscriptionReturn {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, firstName }),
       });
 
       if (!response.ok) {

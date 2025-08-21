@@ -1,6 +1,10 @@
 import * as React from "react";
 
-export function WelcomeEmailTemplate() {
+interface EmailTemplateProps {
+  firstName?: string;
+}
+
+export function EmailTemplate({ firstName }: EmailTemplateProps) {
   return (
     <div
       style={{
@@ -10,17 +14,12 @@ export function WelcomeEmailTemplate() {
         padding: "20px",
       }}
     >
-      <h2 style={{ color: "#333", marginBottom: "20px" }}>
-        Welcome to SolDevKit Updates!
-      </h2>
+      <h1 style={{ color: "#333", marginBottom: "20px" }}>
+        Welcome{firstName ? `, ${firstName}` : ""}!
+      </h1>
 
       <p style={{ color: "#666", lineHeight: "1.6", marginBottom: "15px" }}>
-        Hi there,
-      </p>
-
-      <p style={{ color: "#666", lineHeight: "1.6", marginBottom: "15px" }}>
-        Thank you for subscribing to SolDevKit updates! You&apos;ll be the first
-        to know about:
+        Thank you for joining SolDevKit! You&apos;ll be the first to know about:
       </p>
 
       <ul style={{ color: "#666", lineHeight: "1.6", marginBottom: "20px" }}>

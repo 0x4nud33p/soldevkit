@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
-import { WelcomeEmailTemplate } from "@/components/email/email-template";
+import { EmailTemplate } from "@/components/email/email-template";
 
 // Validation schema
 const subscribeSchema = z.object({
   email: z.string().email("Invalid email address"),
+  firstName: z.string().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -14,7 +15,7 @@ export async function POST(request: NextRequest) {
 
     // Validate input
     const validatedData = subscribeSchema.parse(body);
-    const { email } = validatedData;
+    const { email, firstName } = validatedData;
 
     // Check if required environment variables are set
     if (!process.env.RESEND_API_KEY) {
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
       from: process.env.FROM_EMAIL || "noreply@soldevkit.com",
       to: [email],
       subject: "Welcome to SolDevKit!",
-      react: WelcomeEmailTemplate(),
+      react: EmailTemplate({ firstName }),
     });
 
     if (error) {
