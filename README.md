@@ -4,7 +4,7 @@
     A fully animated, open-source component distribution built with React, TypeScript, Tailwind CSS.
 </p>
 
-<a href="https://github.com/soldevkit-ui/soldevkit-ui/stargazers"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/soldevkit-ui/soldevkit-ui?style=for-the-badge"></a>
+<a href="https://github.com/satyawaniaman/soldevkit/stargazers"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/satyawaniaman/soldevkit?style=for-the-badge"></a>
 <a href="https://twitter.com/soldevkit_ui"><img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/soldevkit_ui?style=for-the-badge&logo=x"></a>
 <a href="https://github.com/satyawaniaman/soldevkit-UI/LICENSE.md"><img alt="License" src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge"></a>
 
