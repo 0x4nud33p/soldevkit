@@ -134,7 +134,7 @@ export const ui: ExtendedRegistryItem[] = [
       {
         path: "default/ui/error-boundary/error-boundary.tsx",
         type: "registry:ui",
-        target: "components/soldevkit-ui/error-boundary.tsx",
+        target: "components/soldevkit-ui/error-boundary/error-boundary.tsx",
       },
     ],
   },
@@ -454,6 +454,7 @@ export const ui: ExtendedRegistryItem[] = [
       "badge",
       "utils",
       "error-boundary",
+      "optimized-image",
     ],
     files: [
       {
