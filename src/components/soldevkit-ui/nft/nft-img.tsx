@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react";
 import { PublicKey } from "@solana/web3.js";
 import { Loader2, Image as ImageIcon } from "lucide-react";
 import { fetchNFTMetadata, type NFTMetadata, cn } from "@/lib/utils";
-import { APIErrorBoundary } from "@/components/soldevkit-ui/error-boundary/error-boundary";
-import { OptimizedImage } from "@/components/soldevkit-ui/optimized-image/optimized-image";
+import { APIErrorBoundary } from "@/components/error-boundary";
+import { OptimizedImage } from "../optimized-image/optimized-image";
 
 export interface NFTImageProps {
   /** The mint address of the NFT */

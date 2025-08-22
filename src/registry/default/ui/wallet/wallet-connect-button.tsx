@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletName, WalletReadyState } from "@solana/wallet-adapter-base";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/soldevkit-ui/button";
 import {
   Dialog,
   DialogClose,
@@ -11,21 +11,21 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/registry/soldevkit-ui/dialog";
+} from "@/components/soldevkit-ui/dialog";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/registry/soldevkit-ui/collapsible";
+} from "@/components/soldevkit-ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/registry/soldevkit-ui/dropdown-menu";
-import { Badge } from "@/registry/soldevkit-ui/badge";
+} from "@/components/soldevkit-ui/dropdown-menu";
+import { Badge } from "@/components/soldevkit-ui/badge";
 import { Loader2, ChevronDown } from "lucide-react";
-import { OptimizedImage } from "@/registry/default/ui/optimized-image";
+import { OptimizedImage } from "@/components/soldevkit-ui/optimized-image/optimized-image";
 
 // Constants
 const LABELS = {

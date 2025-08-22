@@ -12,6 +12,47 @@ author:
 
 <ComponentInstallation name="nft-card" />
 
+## Setup
+
+### Environment Variables
+
+Add your Alchemy API key to your environment file:
+
+```bash
+# .env.local (for Next.js) or .env
+ALCHEMY_API_KEY=your_alchemy_api_key_here
+```
+
+### Next.js Configuration
+
+If you're using Next.js, you need to configure image domains for NFT images. Add the following to your `next.config.js` or `next.config.ts`:
+
+```typescript
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'arweave.net',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.arweave.net',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+```
+
+> **Note**: After updating your Next.js configuration, restart your development server for the changes to take effect.
+
 ## Usage
 
 ### Basic Usage

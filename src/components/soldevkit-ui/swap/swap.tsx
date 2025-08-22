@@ -5,10 +5,10 @@ import { motion } from "motion/react";
 import { clusterApiUrl, Connection, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Repeat, ChevronDown } from "lucide-react";
-import { WalletConnectButton } from "@/components/soldevkit-ui/wallet/wallet-connect-button";
+import { WalletConnectButton } from "@/registry/default/ui/wallet/wallet-connect-button";
 import { cn, fetchJupiterTokens, type TokenInfo } from "@/lib/utils";
-import { APIErrorBoundary } from "@/components/soldevkit-ui/error-boundary/error-boundary";
-import { OptimizedImage } from "@/components/soldevkit-ui/optimized-image/optimized-image";
+import { APIErrorBoundary } from "@/components/error-boundary";
+import { OptimizedImage } from "@/registry/default/ui/optimized-image/optimized-image";
 
 const TokenDropdown: React.FC<{
   selectedToken: TokenInfo | null;

@@ -37,7 +37,7 @@ export const ui: ExtendedRegistryItem[] = [
     ],
     files: [
       {
-        path: "provider/wallet-provider.tsx",
+        path: "default/ui/provider/wallet-provider.tsx",
         type: "registry:ui",
         target: "components/soldevkit-ui/provider/wallet-provider.tsx",
       },
@@ -132,9 +132,9 @@ export const ui: ExtendedRegistryItem[] = [
     registryDependencies: ["utils"],
     files: [
       {
-        path: "components/ui/error-boundary.tsx",
+        path: "default/ui/error-boundary/error-boundary.tsx",
         type: "registry:ui",
-        target: "components/error-boundary.tsx",
+        target: "components/soldevkit-ui/error-boundary.tsx",
       },
     ],
   },
@@ -374,7 +374,7 @@ export const ui: ExtendedRegistryItem[] = [
     title: "Avatar",
     description:
       "A component for displaying Solana address avatars using Minidenticons with customizable sizes and styling.",
-    dependencies: ["@solana/web3.js", "minidenticon"],
+    dependencies: ["@solana/web3.js", "minidenticons"],
     registryDependencies: ["utils"],
     files: [
       {
@@ -427,7 +427,7 @@ export const ui: ExtendedRegistryItem[] = [
     dependencies: [
       "@solana/web3.js",
       "@solana/wallet-adapter-react",
-      "motion/react",
+      "motion",
       "lucide-react",
     ],
     registryDependencies: ["wallet-connect-button", "utils", "error-boundary"],
@@ -447,7 +447,7 @@ export const ui: ExtendedRegistryItem[] = [
     title: "NFT Card",
     description:
       "A component for displaying NFT metadata with image, attributes, and collection information using Alchemy API.",
-    dependencies: ["@solana/web3.js", "lucide-react", "motion/react"],
+    dependencies: ["@solana/web3.js", "lucide-react", "motion"],
     registryDependencies: [
       "card",
       "skeleton",
@@ -474,9 +474,9 @@ export const ui: ExtendedRegistryItem[] = [
     registryDependencies: ["utils"],
     files: [
       {
-        path: "default/ui/optimized-image.tsx",
+        path: "default/ui/optimized-image/optimized-image.tsx",
         type: "registry:ui",
-        target: "components/soldevkit-ui/optimized-image.tsx",
+        target: "components/soldevkit-ui/optimized-image/optimized-image.tsx",
       },
     ],
   },

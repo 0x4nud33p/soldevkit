@@ -125,7 +125,46 @@ Add these CSS variables to your `globals.css`:
 }
 ```
 
-### 2. Create Utils File
+### 2. Environment Variables
+
+For components that use external APIs (like NFT components), create an environment file:
+
+```bash
+# .env.local (for Next.js) or .env
+ALCHEMY_API_KEY=your_alchemy_api_key_here
+```
+
+### 3. Next.js Configuration
+
+If you're using Next.js with NFT components, configure image domains in your `next.config.js` or `next.config.ts`:
+
+```typescript
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'arweave.net',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.arweave.net',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+```
+
+> **Note**: After updating your Next.js configuration, restart your development server for the changes to take effect.
+
+### 4. Create Utils File
 
 Create `lib/utils.ts`:
 
@@ -138,7 +177,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 ```
 
-### 3. Copy Component Files
+### 5. Copy Component Files
 
 1. Create the components directory:
 

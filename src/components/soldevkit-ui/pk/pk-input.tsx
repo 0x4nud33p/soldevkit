@@ -2,7 +2,7 @@
 import React from "react";
 
 import { validatePublicKey, cn } from "@/lib/utils";
-import { Input } from "@/components/soldevkit-ui/input";
+import { Input } from "@/registry/soldevkit-ui/input";
 
 export const PKInput = ({
   ...props

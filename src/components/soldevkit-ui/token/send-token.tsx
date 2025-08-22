@@ -20,7 +20,7 @@ import {
   TokenInfo as RegistryTokenInfo,
 } from "@solana/spl-token-registry";
 
-import { Button } from "@/components/soldevkit-ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -28,8 +28,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/soldevkit-ui/form";
-import { Input } from "@/components/soldevkit-ui/input";
+} from "@/registry/soldevkit-ui/form";
+import { Input } from "@/registry/soldevkit-ui/input";
 import {
   Select,
   SelectContent,
@@ -37,15 +37,15 @@ import {
   SelectTrigger,
   SelectValue,
   SelectGroup,
-} from "@/components/soldevkit-ui/select";
-import { WalletConnectButton } from "@/components/soldevkit-ui/wallet/wallet-connect-button";
+} from "@/registry/soldevkit-ui/select";
+import { WalletConnectButton } from "@/registry/default/ui/wallet/wallet-connect-button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/soldevkit-ui/card";
-import { OptimizedImage } from "@/components/soldevkit-ui/optimized-image/optimized-image";
+} from "@/registry/soldevkit-ui/card";
+import { OptimizedImage } from "@/registry/default/ui/optimized-image/optimized-image";
 
 // Type for our form values
 type FormValues = {

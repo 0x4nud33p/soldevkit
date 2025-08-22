@@ -1,5 +1,5 @@
 {
-  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "$schema": "http://localhost:3000/schema/registry.json",
   "name": "soldevkit-ui",
   "homepage": "https://soldevkit.com",
   "items": [
@@ -36,7 +36,7 @@
       ],
       "files": [
         {
-          "path": "src/registry/provider/wallet-provider.tsx",
+          "path": "src/registry/default/ui/provider/wallet-provider.tsx",
           "type": "registry:ui",
           "target": "components/soldevkit-ui/provider/wallet-provider.tsx"
         }
@@ -140,13 +140,13 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "utils"
+        "http://localhost:3000/r/utils.json"
       ],
       "files": [
         {
-          "path": "src/registry/components/ui/error-boundary.tsx",
+          "path": "src/registry/default/ui/error-boundary/error-boundary.tsx",
           "type": "registry:ui",
-          "target": "components/error-boundary.tsx"
+          "target": "components/soldevkit-ui/error-boundary.tsx"
         }
       ]
     },
@@ -170,14 +170,14 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button",
-        "dialog",
-        "collapsible",
-        "dropdown-menu",
-        "badge",
-        "provider",
-        "utils",
-        "optimized-image"
+        "http://localhost:3000/r/button.json",
+        "http://localhost:3000/r/dialog.json",
+        "http://localhost:3000/r/collapsible.json",
+        "http://localhost:3000/r/dropdown-menu.json",
+        "http://localhost:3000/r/badge.json",
+        "http://localhost:3000/r/provider.json",
+        "http://localhost:3000/r/utils.json",
+        "http://localhost:3000/r/optimized-image.json"
       ],
       "files": [
         {
@@ -263,8 +263,8 @@
         "@solana/web3.js"
       ],
       "registryDependencies": [
-        "input",
-        "utils"
+        "http://localhost:3000/r/input.json",
+        "http://localhost:3000/r/utils.json"
       ],
       "files": [
         {
@@ -302,7 +302,7 @@
         "@radix-ui/react-toggle-group"
       ],
       "registryDependencies": [
-        "toggle"
+        "http://localhost:3000/r/toggle.json"
       ],
       "files": [
         {
@@ -323,11 +323,11 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button",
-        "dialog",
-        "input",
-        "toggle-group",
-        "utils"
+        "http://localhost:3000/r/button.json",
+        "http://localhost:3000/r/dialog.json",
+        "http://localhost:3000/r/input.json",
+        "http://localhost:3000/r/toggle-group.json",
+        "http://localhost:3000/r/utils.json"
       ],
       "files": [
         {
@@ -380,9 +380,9 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "table",
-        "skeleton",
-        "utils"
+        "http://localhost:3000/r/table.json",
+        "http://localhost:3000/r/skeleton.json",
+        "http://localhost:3000/r/utils.json"
       ],
       "files": [
         {
@@ -400,10 +400,10 @@
       "description": "A component for displaying Solana address avatars using Minidenticons with customizable sizes and styling.",
       "dependencies": [
         "@solana/web3.js",
-        "minidenticon"
+        "minidenticons"
       ],
       "registryDependencies": [
-        "utils"
+        "http://localhost:3000/r/utils.json"
       ],
       "files": [
         {
@@ -429,13 +429,13 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button",
-        "input",
-        "wallet-connect-button",
-        "select",
-        "form",
-        "card",
-        "utils"
+        "http://localhost:3000/r/button.json",
+        "http://localhost:3000/r/input.json",
+        "http://localhost:3000/r/wallet-connect-button.json",
+        "http://localhost:3000/r/select.json",
+        "http://localhost:3000/r/form.json",
+        "http://localhost:3000/r/card.json",
+        "http://localhost:3000/r/utils.json"
       ],
       "files": [
         {
@@ -454,13 +454,13 @@
       "dependencies": [
         "@solana/web3.js",
         "@solana/wallet-adapter-react",
-        "motion/react",
+        "motion",
         "lucide-react"
       ],
       "registryDependencies": [
-        "wallet-connect-button",
-        "utils",
-        "error-boundary"
+        "http://localhost:3000/r/wallet-connect-button.json",
+        "http://localhost:3000/r/utils.json",
+        "http://localhost:3000/r/error-boundary.json"
       ],
       "files": [
         {
@@ -479,14 +479,14 @@
       "dependencies": [
         "@solana/web3.js",
         "lucide-react",
-        "motion/react"
+        "motion"
       ],
       "registryDependencies": [
-        "card",
-        "skeleton",
-        "badge",
-        "utils",
-        "error-boundary"
+        "http://localhost:3000/r/card.json",
+        "http://localhost:3000/r/skeleton.json",
+        "http://localhost:3000/r/badge.json",
+        "http://localhost:3000/r/utils.json",
+        "http://localhost:3000/r/error-boundary.json"
       ],
       "files": [
         {
@@ -504,13 +504,13 @@
       "description": "A framework-agnostic image component with Next.js optimization detection, lazy loading, error handling, and accessibility features.",
       "dependencies": [],
       "registryDependencies": [
-        "utils"
+        "http://localhost:3000/r/utils.json"
       ],
       "files": [
         {
-          "path": "src/registry/default/ui/optimized-image.tsx",
+          "path": "src/registry/default/ui/optimized-image/optimized-image.tsx",
           "type": "registry:ui",
-          "target": "components/soldevkit-ui/optimized-image.tsx"
+          "target": "components/soldevkit-ui/optimized-image/optimized-image.tsx"
         }
       ]
     },
@@ -525,9 +525,9 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "utils",
-        "error-boundary",
-        "optimized-image"
+        "http://localhost:3000/r/utils.json",
+        "http://localhost:3000/r/error-boundary.json",
+        "http://localhost:3000/r/optimized-image.json"
       ],
       "files": [
         {
@@ -547,9 +547,9 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "utils",
-        "error-boundary",
-        "optimized-image"
+        "http://localhost:3000/r/utils.json",
+        "http://localhost:3000/r/error-boundary.json",
+        "http://localhost:3000/r/optimized-image.json"
       ],
       "files": [
         {

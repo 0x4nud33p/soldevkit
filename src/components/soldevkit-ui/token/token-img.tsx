@@ -3,8 +3,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { cn, findToken, type TokenInfo } from "@/lib/utils";
 import { Loader2, Image as ImageIcon } from "lucide-react";
-import { APIErrorBoundary } from "@/components/soldevkit-ui/error-boundary/error-boundary";
-import { OptimizedImage } from "@/components/soldevkit-ui/optimized-image/optimized-image";
+import { APIErrorBoundary } from "@/components/error-boundary";
+import { OptimizedImage } from "../optimized-image/optimized-image";
 
 interface TokenImageProps {
   /** Token address or symbol */

@@ -2,7 +2,7 @@ import React from "react";
 import { PublicKey } from "@solana/web3.js";
 import { minidenticon } from "minidenticons";
 import { cn } from "@/lib/utils";
-import { OptimizedImage } from "@/components/soldevkit-ui/optimized-image/optimized-image";
+import { OptimizedImage } from "@/registry/default/ui/optimized-image/optimized-image";
 
 type AvatarProps = {
   address?: PublicKey | string; // allow optional

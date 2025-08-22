@@ -10,8 +10,8 @@ import {
 } from "@/lib/utils";
 import { motion } from "motion/react";
 import { ExternalLink, Image as ImageIcon, Loader2 } from "lucide-react";
-import { APIErrorBoundary } from "@/components/soldevkit-ui/error-boundary/error-boundary";
-import { OptimizedImage } from "@/components/soldevkit-ui/optimized-image/optimized-image";
+import { APIErrorBoundary } from "@/components/error-boundary";
+import { OptimizedImage } from "@/registry/default/ui/optimized-image/optimized-image";
 
 export interface NFTCardProps {
   /** The mint address of the NFT */
