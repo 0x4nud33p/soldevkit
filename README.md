@@ -10,7 +10,7 @@
 
 </div>
 
-![hero](https://soldevkit.com/og-image.png)
+![hero](https://www.soldevkit.com/_next/image?url=%2Fhero-img.png&w=3840&q=75)
 
 ## v1.0
 
