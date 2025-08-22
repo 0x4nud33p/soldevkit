@@ -10,7 +10,7 @@ Thank you for your interest in **contributing to Soldevkit UI**!
 
 #### 1. Fork the Repository
 
-Click [here](https://github.com/satyawaniaman/soldevkit-ui/fork) to fork the repository.
+Click [here](https://github.com/satyawaniaman/soldevkit/fork) to fork the repository.
 
 #### 2. Clone your Fork to Your Local Machine
 
@@ -295,6 +295,6 @@ src/
 
 ## Ask for Help
 
-If you need any assistance or have questions, please feel free to open a [GitHub issue](https://github.com/satyawaniaman/soldevkit-ui/issues/new). We are here to help!
+If you need any assistance or have questions, please feel free to open a [GitHub issue](https://github.com/satyawaniaman/soldevkit/issues/new). We are here to help!
 
 Thank you again for your contribution to Soldevkit UI! We look forward to seeing your improvements and new components.

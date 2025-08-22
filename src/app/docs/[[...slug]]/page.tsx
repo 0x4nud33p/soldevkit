@@ -33,7 +33,7 @@ export default async function Page(props: {
   const MDX = page.data.body;
 
   // Generate URLs for the components
-  const githubUrl = `https://github.com/satyawaniaman/soldevkit-UI/tree/main/src/content/docs/${params.slug ? `${params.slug.join("/")}.mdx` : "index.mdx"}`;
+  const githubUrl = `https://github.com/satyawaniaman/soldevkit/tree/main/src/content/docs/${params.slug ? `${params.slug.join("/")}.mdx` : "index.mdx"}`;
   const markdownUrl = `${params.slug ? `/${params.slug.join("/")}` : ""}`;
 
   return (
@@ -108,7 +108,7 @@ export async function generateMetadata(props: {
         ]
       : {
           name: "Aman Satyawani",
-          url: "https://github.com/satyawaniaman/soldevkit-UI",
+          url: "https://github.com/satyawaniaman/soldevkit",
         },
     openGraph: {
       title: page.data.title,

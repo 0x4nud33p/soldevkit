@@ -14,7 +14,7 @@ export async function submitFeedback(
 
   // For now, we'll create a mock GitHub URL
   // In a real implementation, you might use GitHub's API to create an issue
-  const githubUrl = `https://github.com/satyawaniaman/soldevkit-UI/issues/new?title=${encodeURIComponent(
+  const githubUrl = `https://github.com/satyawaniaman/soldevkit/issues/new?title=${encodeURIComponent(
     `Feedback for ${url}`,
   )}&body=${encodeURIComponent(
     `**Page:** ${url}\n**Opinion:** ${feedback.opinion}\n**Message:** ${feedback.message}`,

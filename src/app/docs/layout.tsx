@@ -35,7 +35,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             </a>
           </Banner>
           <DocsLayout
-            githubUrl="https://github.com/satyawaniaman/soldevkit-UI"
+            githubUrl="https://github.com/satyawaniaman/soldevkit"
             links={[
               {
                 icon: <XIcon />,

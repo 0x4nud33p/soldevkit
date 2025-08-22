@@ -6,7 +6,7 @@
 
 <a href="https://github.com/satyawaniaman/soldevkit/stargazers"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/satyawaniaman/soldevkit?style=for-the-badge"></a>
 <a href="https://twitter.com/soldevkit"><img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/soldevkit_ui?style=for-the-badge&logo=x"></a>
-<a href="https://github.com/satyawaniaman/soldevkit-UI/LICENSE.md"><img alt="License" src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge"></a>
+<a href="https://github.com/satyawaniaman/soldevkit/LICENSE.md"><img alt="License" src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge"></a>
 
 </div>
 
@@ -22,8 +22,8 @@ Visit [soldevkit.com](https://soldevkit.com/docs) to view the documentation.
 
 ## Contributing
 
-Visit our [contributing guide](https://github.com/satyawaniaman/soldevkit-UI/CONTRIBUTING.md) to learn how to contribute.
+Visit our [contributing guide](https://github.com/satyawaniaman/soldevkit/CONTRIBUTING.md) to learn how to contribute.
 
 ## License
 
-Licensed under the [MIT license](https://github.com/satyawaniaman/soldevkit-UI/main/LICENSE.md).
+Licensed under the [MIT license](https://github.com/satyawaniaman/soldevkit/main/LICENSE.md).

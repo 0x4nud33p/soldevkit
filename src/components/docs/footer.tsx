@@ -15,7 +15,7 @@ export const Footer = () => {
             </a>
             . The source code is available on{" "}
             <a
-              href="https://github.com/satyawaniaman/soldevkit-UI"
+              href="https://github.com/satyawaniaman/soldevkit"
               rel="noopener noreferrer"
               target="_blank"
             >
