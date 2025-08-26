@@ -6,8 +6,6 @@ import { TokenImage } from "@/registry/default/ui/token/token-img";
 export default function TokenImageDemo() {
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-lg font-semibold">Token Image Demo</h2>
-
       <div className="flex items-center gap-4">
         {/* By symbol */}
         <div className="flex flex-col items-center">
