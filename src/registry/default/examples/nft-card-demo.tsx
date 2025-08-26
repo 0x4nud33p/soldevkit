@@ -8,22 +8,16 @@ export default function NFTCardDemo() {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Default Variant */}
+      {/* Default Variant with Price */}
       <div>
         <div className="w-64">
           <NFTCard
             mintAddress={mintAddress}
             variant="default"
             showCollection
-            showAttributes
+            showPrice
+            // showAttributes
           />
-        </div>
-      </div>
-
-      {/* Compact Variant */}
-      <div>
-        <div className="w-48">
-          <NFTCard mintAddress={mintAddress} variant="compact" showCollection />
         </div>
       </div>
     </div>

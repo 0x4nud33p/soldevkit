@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/soldevkit-ui/table";
-import { Skeleton } from "@/components/soldevkit-ui/skeleton";
+
 
 type TxnListProps = {
   transactions: VersionedTransactionResponse[];
@@ -74,6 +74,14 @@ const TxnList = ({ transactions, onClick }: TxnListProps) => {
     });
   };
 
+  if (transactions.length === 0) {
+    return (
+      <div className="text-center py-8">
+        Loading transactions...
+      </div>
+    );
+  }
+
   return (
     <Table>
       <TableHeader>
@@ -86,65 +94,51 @@ const TxnList = ({ transactions, onClick }: TxnListProps) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {transactions.length === 0 ? (
-          <>
-            {[...Array(5)].map((_, index) => (
-              <TableRow key={index} className="hover:bg-transparent">
-                {[...Array(5)].map((_, index) => (
-                  <TableCell key={index}>
-                    <Skeleton className="h-[22px] w-full" />
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </>
-        ) : (
-          transactions.map((txn) => (
-            <TableRow
-              key={txn.transaction.signatures[0]}
-              className={cn(
-                "group odd:bg-muted/25 hover:bg-transparent hover:text-primary hover:odd:bg-muted/25",
-                onClick && "cursor-pointer",
-              )}
-              onClick={() => onClick && onClick(txn)}
-            >
-              <TableCell>
-                <Link
-                  href={`https://solscan.io/tx/${txn.transaction.signatures[0]}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-1"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <ExternalLinkIcon size={16} />
-                  <span className="border-b border-transparent group-hover:border-border">
-                    {shortAddress(txn.transaction.signatures[0])}
-                  </span>
-                  {txn.meta?.err && (
-                    <AlertCircleIcon className="h-4 w-4 text-destructive" />
-                  )}
-                </Link>
-              </TableCell>
-              <TableCell>{txn.blockTime}</TableCell>
-              <TableCell>{estimateTimestamp(txn.slot)}</TableCell>
-              <TableCell>
-                <Link
-                  href={`https://solscan.io/account/${txn.transaction.message.staticAccountKeys[0]}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-1"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <ExternalLinkIcon size={16} />
-                  <span className="border-b border-transparent group-hover:border-border">
-                    {shortAddress(txn.transaction.message.staticAccountKeys[0])}
-                  </span>
-                </Link>
-              </TableCell>
-              <TableCell>{(txn.meta?.fee || 0) / LAMPORTS_PER_SOL}</TableCell>
-            </TableRow>
-          ))
-        )}
+        {transactions.map((txn) => (
+          <TableRow
+            key={txn.transaction.signatures[0]}
+            className={cn(
+              "group odd:bg-muted/25 hover:bg-transparent hover:text-primary hover:odd:bg-muted/25",
+              onClick && "cursor-pointer",
+            )}
+            onClick={() => onClick && onClick(txn)}
+          >
+            <TableCell>
+              <Link
+                href={`https://solscan.io/tx/${txn.transaction.signatures[0]}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-1"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ExternalLinkIcon size={16} />
+                <span className="border-b border-transparent group-hover:border-border">
+                  {shortAddress(txn.transaction.signatures[0])}
+                </span>
+                {txn.meta?.err && (
+                  <AlertCircleIcon className="h-4 w-4 text-destructive" />
+                )}
+              </Link>
+            </TableCell>
+            <TableCell>{txn.blockTime}</TableCell>
+            <TableCell>{estimateTimestamp(txn.slot)}</TableCell>
+            <TableCell>
+              <Link
+                href={`https://solscan.io/account/${txn.transaction.message.staticAccountKeys[0]}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-1"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ExternalLinkIcon size={16} />
+                <span className="border-b border-transparent group-hover:border-border">
+                  {shortAddress(txn.transaction.message.staticAccountKeys[0])}
+                </span>
+              </Link>
+            </TableCell>
+            <TableCell>{(txn.meta?.fee || 0) / LAMPORTS_PER_SOL}</TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );
