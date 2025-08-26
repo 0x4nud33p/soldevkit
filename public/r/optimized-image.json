@@ -6,7 +6,7 @@
   "description": "A framework-agnostic image component with Next.js optimization detection, lazy loading, error handling, and accessibility features.",
   "dependencies": [],
   "registryDependencies": [
-    "http://localhost:3000/r/utils.json"
+    "https://soldevkit.com/r/utils.json"
   ],
   "files": [
     {

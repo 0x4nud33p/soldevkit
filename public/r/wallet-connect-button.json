@@ -18,14 +18,14 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "http://localhost:3000/r/button.json",
-    "http://localhost:3000/r/dialog.json",
-    "http://localhost:3000/r/collapsible.json",
-    "http://localhost:3000/r/dropdown-menu.json",
-    "http://localhost:3000/r/badge.json",
-    "http://localhost:3000/r/provider.json",
-    "http://localhost:3000/r/utils.json",
-    "http://localhost:3000/r/optimized-image.json"
+    "https://soldevkit.com/r/button.json",
+    "https://soldevkit.com/r/dialog.json",
+    "https://soldevkit.com/r/collapsible.json",
+    "https://soldevkit.com/r/dropdown-menu.json",
+    "https://soldevkit.com/r/badge.json",
+    "https://soldevkit.com/r/provider.json",
+    "https://soldevkit.com/r/utils.json",
+    "https://soldevkit.com/r/optimized-image.json"
   ],
   "files": [
     {

@@ -8,8 +8,8 @@
     "@solana/web3.js"
   ],
   "registryDependencies": [
-    "http://localhost:3000/r/input.json",
-    "http://localhost:3000/r/utils.json"
+    "https://soldevkit.com/r/input.json",
+    "https://soldevkit.com/r/utils.json"
   ],
   "files": [
     {

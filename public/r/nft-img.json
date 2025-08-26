@@ -9,9 +9,9 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "http://localhost:3000/r/utils.json",
-    "http://localhost:3000/r/error-boundary.json",
-    "http://localhost:3000/r/optimized-image.json"
+    "https://soldevkit.com/r/utils.json",
+    "https://soldevkit.com/r/error-boundary.json",
+    "https://soldevkit.com/r/optimized-image.json"
   ],
   "files": [
     {

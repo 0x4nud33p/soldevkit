@@ -9,7 +9,7 @@
     "minidenticons"
   ],
   "registryDependencies": [
-    "http://localhost:3000/r/utils.json"
+    "https://soldevkit.com/r/utils.json"
   ],
   "files": [
     {

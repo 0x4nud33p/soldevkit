@@ -11,9 +11,9 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "http://localhost:3000/r/wallet-connect-button.json",
-    "http://localhost:3000/r/utils.json",
-    "http://localhost:3000/r/error-boundary.json"
+    "https://soldevkit.com/r/wallet-connect-button.json",
+    "https://soldevkit.com/r/utils.json",
+    "https://soldevkit.com/r/error-boundary.json"
   ],
   "files": [
     {

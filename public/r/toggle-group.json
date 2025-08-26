@@ -8,7 +8,7 @@
     "@radix-ui/react-toggle-group"
   ],
   "registryDependencies": [
-    "http://localhost:3000/r/toggle.json"
+    "https://soldevkit.com/r/toggle.json"
   ],
   "files": [
     {

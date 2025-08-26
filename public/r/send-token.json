@@ -14,13 +14,13 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "http://localhost:3000/r/button.json",
-    "http://localhost:3000/r/input.json",
-    "http://localhost:3000/r/wallet-connect-button.json",
-    "http://localhost:3000/r/select.json",
-    "http://localhost:3000/r/form.json",
-    "http://localhost:3000/r/card.json",
-    "http://localhost:3000/r/utils.json"
+    "https://soldevkit.com/r/button.json",
+    "https://soldevkit.com/r/input.json",
+    "https://soldevkit.com/r/wallet-connect-button.json",
+    "https://soldevkit.com/r/select.json",
+    "https://soldevkit.com/r/form.json",
+    "https://soldevkit.com/r/card.json",
+    "https://soldevkit.com/r/utils.json"
   ],
   "files": [
     {
