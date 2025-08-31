@@ -23,6 +23,7 @@ import { submitFeedback } from "@/lib/feedback-action";
 
 // Add these imports
 import { LLMCopyButton, ViewOptions } from "@/components/docs/view-button";
+import { Pagination } from "@/components/docs/pagination";
 
 export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;
@@ -79,6 +80,9 @@ export default async function Page(props: {
 
       {/* Add feedback component */}
       <Rate onRateAction={submitFeedback} />
+
+      {/* pagination component */}
+      <Pagination list={params.slug} />
     </DocsPage>
   );
 }
@@ -126,5 +130,5 @@ export async function generateMetadata(props: {
       description: page.data.description,
       images: image,
     },
-  };
+  }; 
 }
