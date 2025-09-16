@@ -50,9 +50,12 @@ export default async function Page(props: {
         {page.data.description}
       </DocsDescription>
 
-      {page.data.author && (
-        <DocsAuthor name={page.data.author.name} url={page.data.author?.url} />
-      )}
+      {page.data.author && typeof page.data.author === 'object' && 'name' in page.data.author ? (
+        <DocsAuthor 
+          name={(page.data.author as { name: string; url?: string }).name} 
+          url={(page.data.author as { name: string; url?: string }).url} 
+        />
+      ) : null}
 
       <div className="rounded-full w-full h-[2px] bg-gradient-to-r dark:from-transparent dark:via-zinc-600 dark:to-transparent mt-2 mb-4"></div>
       <div className="flex flex-row gap-2 items-center pb-6">
@@ -103,11 +106,11 @@ export async function generateMetadata(props: {
   return {
     title: page.data.title,
     description: page.data.description,
-    authors: page.data?.author
+    authors: page.data?.author && typeof page.data.author === 'object' && 'name' in page.data.author
       ? [
           {
-            name: page.data.author.name,
-            ...(page.data.author?.url && { url: page.data.author.url }),
+            name: (page.data.author as { name: string; url?: string }).name,
+            ...((page.data.author as { name: string; url?: string }).url && { url: (page.data.author as { name: string; url?: string }).url }),
           },
         ]
       : {

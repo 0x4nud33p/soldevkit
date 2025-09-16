@@ -1,5 +1,14 @@
-import type { BuildPageTreeOptions } from "fumadocs-core/source";
 import { cn } from "@/lib/utils";
+
+interface PageTreeNode {
+  name: React.ReactNode;
+}
+
+interface FileData {
+  data: {
+    data: Record<string, unknown>;
+  };
+}
 
 const Badge = ({
   name,
@@ -25,7 +34,7 @@ const Badge = ({
   );
 };
 
-export const attachFile: BuildPageTreeOptions["attachFile"] = (node, file) => {
+export const attachFile = (node: PageTreeNode, file: FileData | null) => {
   if (!file) return node;
   const data = file.data.data as object;
 
