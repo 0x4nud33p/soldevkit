@@ -25,6 +25,7 @@ export function WalletProviderWrapper({
   const endpoint = useMemo(
     () =>
       process.env.NEXT_PUBLIC_ALCHEMY_RPC_URL ||
+      process.env.NEXT_PUBLIC_RPC_URL ||
       "https://api.devnet.solana.com",
     [],
   );
